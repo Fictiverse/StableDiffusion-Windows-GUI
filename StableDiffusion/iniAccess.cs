@@ -2,36 +2,28 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Reflection.Emit;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using static StableDiffusion.myFunctions;
 
 namespace StableDiffusion
 {
     class iniAccess
     {
 
-        public static void SaveAnacondaPath(string value)
+        public static void SaveEnvPath(string value)
         {
             IniFile SettingFile = new IniFile("Settings.ini");
-            SettingFile.Write("AnacondaPath", value, "Settings");
+            SettingFile.Write("EnvPath", value, "Settings");
         }
-        public static string LoadAnacondaPath()
+        public static string LoadEnvPath()
         {
             IniFile SettingFile = new IniFile("Settings.ini");
-            return SettingFile.Read("AnacondaPath", "Settings");
+            return SettingFile.Read("EnvPath", "Settings");
         }
 
-        public static void SaveEnvName(string value)
-        {
-            IniFile SettingFile = new IniFile("Settings.ini");
-            SettingFile.Write("EnvName", value, "Settings");
-        }
-        public static string LoadEnvName()
-        {
-            IniFile SettingFile = new IniFile("Settings.ini");
-            return SettingFile.Read("EnvName", "Settings");
-        }
 
         public static void SaveTxt2imgPath(string value)
         {
@@ -69,6 +61,25 @@ namespace StableDiffusion
         }
 
 
+
+
+        public static void SavePrompt(string value)
+        {
+            IniFile SettingFile = new IniFile("Settings.ini");
+            SettingFile.Write("Prompt", value, "Settings");
+        }
+        public static string LoadPrompt()
+        {
+            IniFile SettingFile = new IniFile("Settings.ini");
+            return SettingFile.Read("Prompt", "Settings");
+        }
+
+
+
+
+
+
+
         public static void SaveSeed(string value)
         {
             IniFile SettingFile = new IniFile("Settings.ini");
@@ -91,12 +102,13 @@ namespace StableDiffusion
         public static Int16 LoadIteration()
         {
             IniFile SettingFile = new IniFile("Settings.ini");
-            return Convert.ToInt16(Convert.ToInt16(SettingFile.Read("Iteration", "Settings")) / 25);
+            return Convert.ToInt16(Convert.ToDouble(ConvertStringToInt(SettingFile.Read("Iteration", "Settings"))) / 25);
         }
 
 
 
-        public static void SaveN_iter(decimal value)
+
+            public static void SaveN_iter(decimal value)
         {
             IniFile SettingFile = new IniFile("Settings.ini");
             SettingFile.Write("N_iter", value.ToString(), "Settings");
@@ -105,7 +117,7 @@ namespace StableDiffusion
         public static Int16 LoadN_iter()
         {
             IniFile SettingFile = new IniFile("Settings.ini");
-            return Convert.ToInt16(SettingFile.Read("N_iter", "Settings"));
+            return Convert.ToInt16(ConvertStringToInt(SettingFile.Read("N_iter", "Settings")));
         }
 
 
@@ -119,86 +131,225 @@ namespace StableDiffusion
         public static Int16 LoadN_samples()
         {
             IniFile SettingFile = new IniFile("Settings.ini");
-            return Convert.ToInt16(SettingFile.Read("N_samples", "Settings"));
+            return Convert.ToInt16(ConvertStringToInt(SettingFile.Read("N_samples", "Settings")));
+
         }
 
 
+
+        public static void SaveGuidance(decimal value)
+        {
+            IniFile SettingFile = new IniFile("Settings.ini");
+            SettingFile.Write("Guidance", ((float)value / 2).ToString(), "Settings");
+        }
+
+        public static Int16 LoadGuidance()
+        {
+            IniFile SettingFile = new IniFile("Settings.ini");
+            return Convert.ToInt16(ConvertStringToInt(SettingFile.Read("Guidance", "Settings")) * 2);
+        }
+
+
+        public static void SaveChannels(decimal value)
+        {
+            IniFile SettingFile = new IniFile("Settings.ini");
+            SettingFile.Write("Channels", ((float)value * 4).ToString(), "Settings");
+        }
+
+        public static Int16 LoadChannels()
+        {
+            IniFile SettingFile = new IniFile("Settings.ini");
+
+            return Convert.ToInt16(Convert.ToDouble(ConvertStringToInt(SettingFile.Read("Channels", "Settings"))) / 4);
+        }
 
         public static void SaveStrength(decimal value)
         {
 
             IniFile SettingFile = new IniFile("Settings.ini");
-            SettingFile.Write("Strength", ((float)value / 20).ToString().ToString(), "Settings");
+            SettingFile.Write("Strength", ((float)value / 20).ToString(), "Settings");
         }
 
         public static Int16 LoadStrength()
         {
             IniFile SettingFile = new IniFile("Settings.ini");
-            return Convert.ToInt16(Convert.ToDouble(SettingFile.Read("Strength", "Settings")) * 20);
+            return Convert.ToInt16(ConvertStringToInt(SettingFile.Read("Strength", "Settings")) * 20);
         }
 
 
 
-        public static string[] LoadStyles()
+        public static List<string> LoadPresets()
         {
             IniFile SettingFile = new IniFile("Settings.ini");
-            return SettingFile.Read("StyleList", "Settings").Split(',');
+
+            string[] list = SettingFile.Read("Presets", "Settings").Split(',');
+            List<string> listclean = new List<string>();
+            foreach (string str in list)
+            {
+                foreach (char ch in str)
+                {
+                    if (!char.IsLetterOrDigit(ch))
+                        str.Trim(ch);
+                }
+                if (!string.IsNullOrEmpty(str))
+                    listclean.Add(str);           
+            }
+            return listclean;
         }
 
 
-        public static string[] LoadSubStyles(string style)
+        public static List<string> LoadSubStyles(string style)
         {
 
             style = style.Replace(" ", "_");
             IniFile SettingFile = new IniFile("Settings.ini");
-            return SettingFile.Read(style, "Styles").Split(',');
-        }
 
-
-
-        public static void SaveSelected(string Style, string value)
-        {
-            IniFile SettingFile = new IniFile("Settings.ini");
-            SettingFile.Write(Style, value, "Selection");
-        }
-
-        public static void SaveFX(ListBox list)
-        {
-            IniFile SettingFile = new IniFile("Settings.ini");
-
-
-            string Styles = list.Items[0].ToString();
-
-            for (int i = 1; i < list.Items.Count; i++)
+            string[] list = SettingFile.Read(style, "Styles").Split(',');
+            List<string> listclean = new List<string>();
+            foreach (string str in list)
             {
-                Styles = Styles + "," + list.Items[i];
-            }
-
-
-            SettingFile.Write("Styles", Styles, "Settings");
-        }
-
-        public static void SaveSelectedFX(ListBox list)
-        {
-            IniFile SettingFile = new IniFile("Settings.ini");
-            string Selection = "";
-
-            if (list.SelectedIndices.Count > 0)
-            {
-
-                Selection = list.SelectedIndices[0].ToString();
-
-                for (int i = 1; i < list.SelectedIndices.Count; i++)
+                foreach (char ch in str)
                 {
-                    Selection = Selection + "," + list.SelectedIndices[i];
+                    if (!char.IsLetterOrDigit(ch))
+                        str.Trim(ch);
+                }
+                if (!string.IsNullOrEmpty(str))
+                    listclean.Add(str);
+            }
+            return listclean;
+        }
+
+        public static List<string> LoadGenericStyles()
+        {
+            IniFile SettingFile = new IniFile("Settings.ini");
+
+            string[] list = SettingFile.Read("GenericStyles", "Settings").Split(',');
+            List<string> listclean = new List<string>();
+            foreach (string str in list)
+            {
+                foreach (char ch in str)
+                {
+                    if (!char.IsLetterOrDigit(ch))
+                        str.Trim(ch);
+                }
+                if (!string.IsNullOrEmpty(str))
+                    listclean.Add(str);
+            }
+            return listclean;
+        }
+        public static List<string> LoadSelectedStyles()
+        {
+
+            IniFile SettingFile = new IniFile("Settings.ini");
+
+            string[] list = SettingFile.Read("SelectedStyles", "Settings").Split(',');
+            List<string> listclean = new List<string>();
+            foreach (string str in list)
+            {
+                foreach (char ch in str)
+                {
+                    if (!char.IsLetterOrDigit(ch))
+                        str.Trim(ch);
+                }
+                if (!string.IsNullOrEmpty(str))
+                    listclean.Add(str);
+            }
+            return listclean;
+        }
+
+
+
+        public static void SavePreset(ListBox list)
+        {
+            IniFile SettingFile = new IniFile("Settings.ini");
+
+            string selection = "";
+
+            if (list.Items.Count > 0)
+            {
+
+                selection = list.Items[0].ToString();
+
+                for (int i = 1; i < list.Items.Count; i++)
+                {
+                    selection = selection + "," + list.Items[i];
                 }
 
             }
 
+            SettingFile.Write("Presets", selection, "Settings");
+        }
+
+        private void RemovePreset(string preset)
+        {
+            IniFile SettingFile = new IniFile("Settings.ini");
+
+            SettingFile.DeleteKey(preset.Replace(" ", "_"), "Styles");
+
+        }
+
+        public static void SaveSubStyles(ListBox list, string preset)
+        {
+            IniFile SettingFile = new IniFile("Settings.ini");
+
+            string selection = "";
+
+            if (list.Items.Count > 0)
+            {
+
+                selection = list.Items[0].ToString();
+
+                for (int i = 1; i < list.Items.Count; i++)
+                {
+                    selection = selection + "," + list.Items[i];
+                }
+
+            }
+
+            SettingFile.Write(preset, selection, "Styles");
+        }
+
+        public static void SaveSelectedStyles(ListBox list)
+        {
+            IniFile SettingFile = new IniFile("Settings.ini");
+            string Selection = "";
+
+            if (list.Items.Count > 0)
+            {
+
+                Selection = list.Items[0].ToString();
+
+                for (int i = 1; i < list.Items.Count; i++)
+                {
+                    Selection = Selection + "," + list.Items[i];
+                }
+
+            }
 
             SettingFile.Write("SelectedStyles", Selection, "Settings");
 
+        }
 
+
+        public static void SaveGenericStyles(ListBox list)
+        {
+            IniFile SettingFile = new IniFile("Settings.ini");
+
+            string selection = "";
+
+            if (list.Items.Count > 0)
+            {
+
+                selection = list.Items[0].ToString();
+
+                for (int i = 1; i < list.Items.Count; i++)
+                {
+                    selection = selection + "," + list.Items[i];
+                }
+
+            }
+
+            SettingFile.Write("GenericStyles", selection, "Settings");
         }
 
 
