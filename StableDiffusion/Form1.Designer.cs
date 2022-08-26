@@ -1724,6 +1724,7 @@
             this.buttonRemoveGenericStyle.Size = new System.Drawing.Size(32, 42);
             this.buttonRemoveGenericStyle.TabIndex = 45;
             this.buttonRemoveGenericStyle.UseVisualStyleBackColor = false;
+            this.buttonRemoveGenericStyle.Click += new System.EventHandler(this.buttonRemoveGenericStyle_Click);
             // 
             // buttonAddGenericStyle
             // 
@@ -1792,6 +1793,7 @@
             this.textBoxPresetStyle.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(15)))), ((int)(((byte)(10)))), ((int)(((byte)(15)))));
             this.textBoxPresetStyle.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.textBoxPresetStyle.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.textBoxPresetStyle.Enabled = false;
             this.textBoxPresetStyle.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.textBoxPresetStyle.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
             this.textBoxPresetStyle.Location = new System.Drawing.Point(10, 7);
@@ -1824,6 +1826,7 @@
             this.buttonRemovePresetStyle.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(30)))), ((int)(((byte)(50)))));
             this.buttonRemovePresetStyle.Cursor = System.Windows.Forms.Cursors.Hand;
             this.buttonRemovePresetStyle.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.buttonRemovePresetStyle.Enabled = false;
             this.buttonRemovePresetStyle.FlatAppearance.BorderSize = 0;
             this.buttonRemovePresetStyle.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonRemovePresetStyle.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
@@ -1835,12 +1838,14 @@
             this.buttonRemovePresetStyle.Size = new System.Drawing.Size(32, 42);
             this.buttonRemovePresetStyle.TabIndex = 45;
             this.buttonRemovePresetStyle.UseVisualStyleBackColor = false;
+            this.buttonRemovePresetStyle.Click += new System.EventHandler(this.buttonRemovePresetStyle_Click);
             // 
             // buttonAddPresetStyle
             // 
             this.buttonAddPresetStyle.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(30)))), ((int)(((byte)(50)))));
             this.buttonAddPresetStyle.Cursor = System.Windows.Forms.Cursors.Hand;
             this.buttonAddPresetStyle.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.buttonAddPresetStyle.Enabled = false;
             this.buttonAddPresetStyle.FlatAppearance.BorderSize = 0;
             this.buttonAddPresetStyle.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonAddPresetStyle.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
@@ -1930,6 +1935,7 @@
             this.buttonRemovePreset.Size = new System.Drawing.Size(32, 42);
             this.buttonRemovePreset.TabIndex = 45;
             this.buttonRemovePreset.UseVisualStyleBackColor = false;
+            this.buttonRemovePreset.Click += new System.EventHandler(this.buttonRemovePreset_Click);
             // 
             // buttonAddPreset
             // 

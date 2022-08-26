@@ -554,6 +554,8 @@ namespace StableDiffusion
             // making python line
             string gen = "python "+ txt2imgPath + text + seed + iteration + n_iter + n_samples + guidance + channels + plms + outdir + " --skip_grid ";
 
+            SavePromptInTxtFile(lastOutputPath, gen);
+
             Clipboard.SetText(gen);
 
             // start script
@@ -658,6 +660,8 @@ namespace StableDiffusion
             outdir = " --outdir \"" + outdir + "\"";
             // making python line
             string gen = "python "+ script + " --skip_grid " + outdir + text + seed + initImage + iteration + str + n_iter + n_samples + guidance + channels + plms;
+
+            SavePromptInTxtFile(lastOutputPath, gen);
 
             Clipboard.SetText(gen);
 
@@ -1467,10 +1471,24 @@ namespace StableDiffusion
 
         private void listBoxPreset_SelectedIndexChanged(object sender, EventArgs e)
         {
-            listBoxPresetStyles.Items.Clear();
-            List<string> subStyles = LoadSubStyles(listBoxPreset.SelectedItem.ToString());
-            foreach (var str in subStyles)
-                listBoxPresetStyles.Items.Add(str);
+            if (listBoxPreset.SelectedItems.Count > 0)
+            {
+                textBoxPresetStyle.Enabled = true;
+                buttonAddPresetStyle.Enabled = true;
+                buttonRemovePresetStyle.Enabled = true;
+
+                listBoxPresetStyles.Items.Clear();
+                List<string> subStyles = LoadSubStyles(listBoxPreset.SelectedItem.ToString());
+                foreach (var str in subStyles)
+                    listBoxPresetStyles.Items.Add(str);
+            }
+            else
+            {
+                textBoxPresetStyle.Enabled = false;
+                buttonAddPresetStyle.Enabled = false;
+                buttonRemovePresetStyle.Enabled = false;
+            }
+
         }
 
 
@@ -1761,6 +1779,44 @@ namespace StableDiffusion
         private void buttonSaveSelectedStyles_Click(object sender, EventArgs e)
         {
             SaveSelectedStyles(listBoxSelectedStyles);
+        }
+
+        private void buttonRemovePreset_Click(object sender, EventArgs e)
+        {
+            if (listBoxPreset.SelectedItems.Count > 0)
+            {
+                DialogResult dialogResult = MessageBox.Show("Do you really want to delete "+ listBoxPreset.SelectedItems[0] + " preset ?", listBoxPreset.SelectedItems[0]+" will be removed !", MessageBoxButtons.YesNo);
+                if (dialogResult == DialogResult.Yes)
+                {
+                    string preset = listBoxPreset.SelectedItems[0].ToString();
+                    listBoxPreset.Items.Remove(preset);
+                    IniFile SettingFile = new IniFile("Settings.ini");
+                    preset = preset.Replace(" ", "_");
+                    SettingFile.DeleteKey(preset, "Styles");
+                    listBoxPresetStyles.Items.Clear();
+                    SavePreset(listBoxPreset);
+                }
+                else if (dialogResult == DialogResult.No)
+                {
+                    //do something else
+                }
+            }
+           
+            foreach (string item in listBoxPreset.SelectedItems)
+            {
+                //listBoxPreset.Items.Remove(item);
+            }
+            //RemoveDuplicate(listBoxPreset);
+        }
+
+        private void buttonRemovePresetStyle_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void buttonRemoveGenericStyle_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }
