@@ -29,12 +29,12 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            this.textBox1 = new System.Windows.Forms.TextBox();
-            this.listBoxStyle = new System.Windows.Forms.ListBox();
-            this.listBoxSubStyle = new System.Windows.Forms.ListBox();
-            this.listBoxStyleGeneric = new System.Windows.Forms.ListBox();
+            this.textBoxPrompt = new System.Windows.Forms.TextBox();
+            this.listBoxPreset = new System.Windows.Forms.ListBox();
+            this.listBoxPresetStyles = new System.Windows.Forms.ListBox();
+            this.listBoxGenericStyles = new System.Windows.Forms.ListBox();
             this.buttonStart = new System.Windows.Forms.Button();
-            this.flowLayoutPanel2 = new System.Windows.Forms.FlowLayoutPanel();
+            this.flowLayoutPanelPaintTools = new System.Windows.Forms.FlowLayoutPanel();
             this.panelCpick = new System.Windows.Forms.Panel();
             this.panelGradiant = new System.Windows.Forms.Panel();
             this.panelC2 = new System.Windows.Forms.Panel();
@@ -50,16 +50,18 @@
             this.panelC12 = new System.Windows.Forms.Panel();
             this.panelC13 = new System.Windows.Forms.Panel();
             this.panelTabImages = new System.Windows.Forms.Panel();
+            this.buttonPastImage = new System.Windows.Forms.Button();
             this.panel9 = new System.Windows.Forms.Panel();
             this.listBoxInitImages = new System.Windows.Forms.ListBox();
+            this.buttonPencilRedo = new System.Windows.Forms.Button();
             this.panel12 = new System.Windows.Forms.Panel();
             this.listViewInitImages = new System.Windows.Forms.ListView();
             this.ImagesList = new System.Windows.Forms.ColumnHeader();
             this.buttonPencil = new System.Windows.Forms.Button();
             this.buttonInpaint = new System.Windows.Forms.Button();
-            this.buttonImage = new System.Windows.Forms.Button();
-            this.buttonClear = new System.Windows.Forms.Button();
+            this.buttonOpenImage = new System.Windows.Forms.Button();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.buttonClearImage = new System.Windows.Forms.Button();
             this.buttonStrength = new System.Windows.Forms.Button();
             this.trackBarStrength = new System.Windows.Forms.TrackBar();
             this.buttonN_iter = new System.Windows.Forms.Button();
@@ -72,57 +74,100 @@
             this.buttonOutFolder = new System.Windows.Forms.Button();
             this.buttonClearOutputFolder = new System.Windows.Forms.Button();
             this.buttonSave = new System.Windows.Forms.Button();
-            this.flowLayoutPanel3 = new System.Windows.Forms.FlowLayoutPanel();
+            this.flowLayoutPanelQuality = new System.Windows.Forms.FlowLayoutPanel();
             this.panel3 = new System.Windows.Forms.Panel();
             this.labelIteration = new System.Windows.Forms.Label();
-            this.flowLayoutPanel4 = new System.Windows.Forms.FlowLayoutPanel();
+            this.flowLayoutPanelRepeat = new System.Windows.Forms.FlowLayoutPanel();
             this.panel4 = new System.Windows.Forms.Panel();
             this.labelN_iter = new System.Windows.Forms.Label();
-            this.flowLayoutPanel5 = new System.Windows.Forms.FlowLayoutPanel();
+            this.flowLayoutPanelSamples = new System.Windows.Forms.FlowLayoutPanel();
             this.panel5 = new System.Windows.Forms.Panel();
             this.labelN_samples = new System.Windows.Forms.Label();
             this.flowLayoutPanel6 = new System.Windows.Forms.FlowLayoutPanel();
             this.panel6 = new System.Windows.Forms.Panel();
             this.labelStrength = new System.Windows.Forms.Label();
-            this.flowLayoutPanel7 = new System.Windows.Forms.FlowLayoutPanel();
+            this.flowLayoutPanelSeed = new System.Windows.Forms.FlowLayoutPanel();
             this.panel1 = new System.Windows.Forms.Panel();
             this.textBoxSeed = new System.Windows.Forms.TextBox();
             this.flowLayoutPanel8 = new System.Windows.Forms.FlowLayoutPanel();
+            this.flowLayoutPanelGuidance = new System.Windows.Forms.FlowLayoutPanel();
+            this.buttonGuidance = new System.Windows.Forms.Button();
+            this.trackBarGuidance = new System.Windows.Forms.TrackBar();
+            this.panel13 = new System.Windows.Forms.Panel();
+            this.labelGuidance = new System.Windows.Forms.Label();
             this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
             this.buttonChannels = new System.Windows.Forms.Button();
-            this.trackBar1 = new System.Windows.Forms.TrackBar();
+            this.trackBarChannels = new System.Windows.Forms.TrackBar();
             this.panel15 = new System.Windows.Forms.Panel();
-            this.label1 = new System.Windows.Forms.Label();
-            this.flowLayoutPanel9 = new System.Windows.Forms.FlowLayoutPanel();
-            this.button3 = new System.Windows.Forms.Button();
+            this.labelChannels = new System.Windows.Forms.Label();
+            this.buttonOpenSettings = new System.Windows.Forms.Button();
             this.button4 = new System.Windows.Forms.Button();
-            this.button5 = new System.Windows.Forms.Button();
-            this.flowLayoutPanel10 = new System.Windows.Forms.FlowLayoutPanel();
-            this.flowLayoutPanel12 = new System.Windows.Forms.FlowLayoutPanel();
-            this.buttonTabPrompt = new System.Windows.Forms.Button();
+            this.tableLayoutPanel6 = new System.Windows.Forms.TableLayoutPanel();
             this.buttonTabImage = new System.Windows.Forms.Button();
             this.buttonTabSequence = new System.Windows.Forms.Button();
+            this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
+            this.buttonClearStyle = new System.Windows.Forms.Button();
+            this.buttonTabPrompt = new System.Windows.Forms.Button();
+            this.panelSelectedPrompt = new System.Windows.Forms.Panel();
+            this.panelSelectedImage = new System.Windows.Forms.Panel();
+            this.panelSelectedSequence = new System.Windows.Forms.Panel();
             this.panel8 = new System.Windows.Forms.Panel();
             this.timerSec = new System.Windows.Forms.Timer(this.components);
             this.panel7 = new System.Windows.Forms.Panel();
             this.flowLayoutPanel11 = new System.Windows.Forms.FlowLayoutPanel();
             this.button1 = new System.Windows.Forms.Button();
-            this.button2 = new System.Windows.Forms.Button();
             this.panel10 = new System.Windows.Forms.Panel();
             this.panel11 = new System.Windows.Forms.Panel();
             this.imageList1 = new System.Windows.Forms.ImageList(this.components);
             this.panel14 = new System.Windows.Forms.Panel();
+            this.flowLayoutPanel14 = new System.Windows.Forms.FlowLayoutPanel();
+            this.button12 = new System.Windows.Forms.Button();
+            this.buttonDonate = new System.Windows.Forms.Button();
             this.panelTabPrompt = new System.Windows.Forms.Panel();
-            this.flowLayoutPanel13 = new System.Windows.Forms.FlowLayoutPanel();
-            this.button6 = new System.Windows.Forms.Button();
-            this.button7 = new System.Windows.Forms.Button();
-            this.button8 = new System.Windows.Forms.Button();
-            this.button9 = new System.Windows.Forms.Button();
-            this.button10 = new System.Windows.Forms.Button();
+            this.buttonAddSelectedStylesToPreset = new System.Windows.Forms.Button();
+            this.buttonAddSelectedStylesToGeneric = new System.Windows.Forms.Button();
+            this.buttonAddSelectedPreset = new System.Windows.Forms.Button();
+            this.buttonAddSelectedToStyles = new System.Windows.Forms.Button();
+            this.buttonAddGenericToPreset = new System.Windows.Forms.Button();
+            this.tableLayoutPanel4 = new System.Windows.Forms.TableLayoutPanel();
+            this.panel19 = new System.Windows.Forms.Panel();
+            this.textBoxGenericStyle = new System.Windows.Forms.TextBox();
+            this.tableLayoutPanel13 = new System.Windows.Forms.TableLayoutPanel();
+            this.buttonRemoveGenericStyle = new System.Windows.Forms.Button();
+            this.buttonAddGenericStyle = new System.Windows.Forms.Button();
+            this.buttonAddAllSelectedPreset = new System.Windows.Forms.Button();
+            this.tableLayoutPanel9 = new System.Windows.Forms.TableLayoutPanel();
+            this.panel18 = new System.Windows.Forms.Panel();
+            this.textBoxPresetStyle = new System.Windows.Forms.TextBox();
+            this.tableLayoutPanel12 = new System.Windows.Forms.TableLayoutPanel();
+            this.buttonRemovePresetStyle = new System.Windows.Forms.Button();
+            this.buttonAddPresetStyle = new System.Windows.Forms.Button();
+            this.tableLayoutPanel5 = new System.Windows.Forms.TableLayoutPanel();
+            this.panel17 = new System.Windows.Forms.Panel();
+            this.textBoxPreset = new System.Windows.Forms.TextBox();
+            this.tableLayoutPanel8 = new System.Windows.Forms.TableLayoutPanel();
+            this.buttonRemovePreset = new System.Windows.Forms.Button();
+            this.buttonAddPreset = new System.Windows.Forms.Button();
+            this.tableLayoutPanel11 = new System.Windows.Forms.TableLayoutPanel();
+            this.buttonSaveSelectedStyles = new System.Windows.Forms.Button();
+            this.buttonSaveGenericStyles = new System.Windows.Forms.Button();
+            this.buttonSavePresets = new System.Windows.Forms.Button();
+            this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+            this.buttonRemoveStyles = new System.Windows.Forms.Button();
+            this.buttonRemoveSelectedStyles = new System.Windows.Forms.Button();
+            this.button20 = new System.Windows.Forms.Button();
+            this.buttonShuffleSelectedStyles = new System.Windows.Forms.Button();
             this.panel2 = new System.Windows.Forms.Panel();
             this.listBoxSelectedStyles = new System.Windows.Forms.ListBox();
             this.panelTabSequence = new System.Windows.Forms.Panel();
-            this.flowLayoutPanel2.SuspendLayout();
+            this.buttonWorkInProgress1 = new System.Windows.Forms.Button();
+            this.panel16 = new System.Windows.Forms.Panel();
+            this.flowLayoutPanel2 = new System.Windows.Forms.FlowLayoutPanel();
+            this.panelSelectedMorph = new System.Windows.Forms.Panel();
+            this.buttonTabMorph = new System.Windows.Forms.Button();
+            this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
+            this.tableLayoutPanel7 = new System.Windows.Forms.TableLayoutPanel();
+            this.flowLayoutPanelPaintTools.SuspendLayout();
             this.panelTabImages.SuspendLayout();
             this.panel9.SuspendLayout();
             this.panel12.SuspendLayout();
@@ -131,123 +176,139 @@
             ((System.ComponentModel.ISupportInitialize)(this.trackBarN_iter)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.trackBarN_samples)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.trackBarIteration)).BeginInit();
-            this.flowLayoutPanel3.SuspendLayout();
+            this.flowLayoutPanelQuality.SuspendLayout();
             this.panel3.SuspendLayout();
-            this.flowLayoutPanel4.SuspendLayout();
+            this.flowLayoutPanelRepeat.SuspendLayout();
             this.panel4.SuspendLayout();
-            this.flowLayoutPanel5.SuspendLayout();
+            this.flowLayoutPanelSamples.SuspendLayout();
             this.panel5.SuspendLayout();
             this.flowLayoutPanel6.SuspendLayout();
             this.panel6.SuspendLayout();
-            this.flowLayoutPanel7.SuspendLayout();
+            this.flowLayoutPanelSeed.SuspendLayout();
             this.panel1.SuspendLayout();
             this.flowLayoutPanel8.SuspendLayout();
+            this.flowLayoutPanelGuidance.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.trackBarGuidance)).BeginInit();
+            this.panel13.SuspendLayout();
             this.flowLayoutPanel1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.trackBar1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.trackBarChannels)).BeginInit();
             this.panel15.SuspendLayout();
-            this.flowLayoutPanel9.SuspendLayout();
-            this.flowLayoutPanel10.SuspendLayout();
-            this.flowLayoutPanel12.SuspendLayout();
+            this.tableLayoutPanel6.SuspendLayout();
+            this.tableLayoutPanel2.SuspendLayout();
             this.panel8.SuspendLayout();
             this.panel7.SuspendLayout();
             this.flowLayoutPanel11.SuspendLayout();
             this.panel10.SuspendLayout();
             this.panel11.SuspendLayout();
+            this.panel14.SuspendLayout();
+            this.flowLayoutPanel14.SuspendLayout();
             this.panelTabPrompt.SuspendLayout();
-            this.flowLayoutPanel13.SuspendLayout();
+            this.tableLayoutPanel4.SuspendLayout();
+            this.panel19.SuspendLayout();
+            this.tableLayoutPanel13.SuspendLayout();
+            this.tableLayoutPanel9.SuspendLayout();
+            this.panel18.SuspendLayout();
+            this.tableLayoutPanel12.SuspendLayout();
+            this.tableLayoutPanel5.SuspendLayout();
+            this.panel17.SuspendLayout();
+            this.tableLayoutPanel8.SuspendLayout();
+            this.tableLayoutPanel11.SuspendLayout();
+            this.tableLayoutPanel1.SuspendLayout();
             this.panel2.SuspendLayout();
+            this.panelTabSequence.SuspendLayout();
+            this.panel16.SuspendLayout();
+            this.flowLayoutPanel2.SuspendLayout();
+            this.tableLayoutPanel3.SuspendLayout();
             this.SuspendLayout();
             // 
-            // textBox1
+            // textBoxPrompt
             // 
-            this.textBox1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(15)))), ((int)(((byte)(10)))), ((int)(((byte)(15)))));
-            this.textBox1.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.textBox1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.textBox1.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.textBox1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
-            this.textBox1.Location = new System.Drawing.Point(10, 10);
-            this.textBox1.Margin = new System.Windows.Forms.Padding(5);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(821, 22);
-            this.textBox1.TabIndex = 1;
-            this.textBox1.Text = "identity photo of a woman";
+            this.textBoxPrompt.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(15)))), ((int)(((byte)(10)))), ((int)(((byte)(15)))));
+            this.textBoxPrompt.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.textBoxPrompt.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.textBoxPrompt.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.textBoxPrompt.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
+            this.textBoxPrompt.Location = new System.Drawing.Point(10, 10);
+            this.textBoxPrompt.Margin = new System.Windows.Forms.Padding(5);
+            this.textBoxPrompt.Name = "textBoxPrompt";
+            this.textBoxPrompt.Size = new System.Drawing.Size(948, 22);
+            this.textBoxPrompt.TabIndex = 1;
+            this.textBoxPrompt.Text = "identity photo of a woman";
             // 
-            // listBoxStyle
+            // listBoxPreset
             // 
-            this.listBoxStyle.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(15)))), ((int)(((byte)(10)))), ((int)(((byte)(15)))));
-            this.listBoxStyle.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.listBoxStyle.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.listBoxStyle.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.listBoxStyle.ForeColor = System.Drawing.Color.Silver;
-            this.listBoxStyle.FormattingEnabled = true;
-            this.listBoxStyle.ItemHeight = 17;
-            this.listBoxStyle.Items.AddRange(new object[] {
+            this.listBoxPreset.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(15)))), ((int)(((byte)(10)))), ((int)(((byte)(15)))));
+            this.listBoxPreset.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.listBoxPreset.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.listBoxPreset.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.listBoxPreset.ForeColor = System.Drawing.Color.Silver;
+            this.listBoxPreset.FormattingEnabled = true;
+            this.listBoxPreset.ItemHeight = 20;
+            this.listBoxPreset.Items.AddRange(new object[] {
             "Portrait",
             "Oil painting",
             "Pen drawing",
             "Landscape art"});
-            this.listBoxStyle.Location = new System.Drawing.Point(10, 10);
-            this.listBoxStyle.Name = "listBoxStyle";
-            this.listBoxStyle.Size = new System.Drawing.Size(155, 146);
-            this.listBoxStyle.TabIndex = 2;
-            this.listBoxStyle.SelectedIndexChanged += new System.EventHandler(this.listBoxStyle_SelectedIndexChanged);
+            this.listBoxPreset.Location = new System.Drawing.Point(10, 10);
+            this.listBoxPreset.Name = "listBoxPreset";
+            this.listBoxPreset.Size = new System.Drawing.Size(198, 135);
+            this.listBoxPreset.TabIndex = 2;
+            this.listBoxPreset.SelectedIndexChanged += new System.EventHandler(this.listBoxPreset_SelectedIndexChanged);
             // 
-            // listBoxSubStyle
+            // listBoxPresetStyles
             // 
-            this.listBoxSubStyle.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(15)))), ((int)(((byte)(10)))), ((int)(((byte)(15)))));
-            this.listBoxSubStyle.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.listBoxSubStyle.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.listBoxSubStyle.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.listBoxSubStyle.ForeColor = System.Drawing.Color.Silver;
-            this.listBoxSubStyle.FormattingEnabled = true;
-            this.listBoxSubStyle.ItemHeight = 17;
-            this.listBoxSubStyle.Location = new System.Drawing.Point(10, 10);
-            this.listBoxSubStyle.Name = "listBoxSubStyle";
-            this.listBoxSubStyle.SelectionMode = System.Windows.Forms.SelectionMode.MultiSimple;
-            this.listBoxSubStyle.Size = new System.Drawing.Size(155, 273);
-            this.listBoxSubStyle.TabIndex = 3;
+            this.listBoxPresetStyles.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(15)))), ((int)(((byte)(10)))), ((int)(((byte)(15)))));
+            this.listBoxPresetStyles.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.listBoxPresetStyles.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.listBoxPresetStyles.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.listBoxPresetStyles.ForeColor = System.Drawing.Color.Silver;
+            this.listBoxPresetStyles.FormattingEnabled = true;
+            this.listBoxPresetStyles.ItemHeight = 17;
+            this.listBoxPresetStyles.Location = new System.Drawing.Point(10, 10);
+            this.listBoxPresetStyles.Name = "listBoxPresetStyles";
+            this.listBoxPresetStyles.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
+            this.listBoxPresetStyles.Size = new System.Drawing.Size(198, 227);
+            this.listBoxPresetStyles.TabIndex = 3;
             // 
-            // listBoxStyleGeneric
+            // listBoxGenericStyles
             // 
-            this.listBoxStyleGeneric.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(15)))), ((int)(((byte)(10)))), ((int)(((byte)(15)))));
-            this.listBoxStyleGeneric.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.listBoxStyleGeneric.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.listBoxStyleGeneric.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.listBoxStyleGeneric.ForeColor = System.Drawing.Color.Silver;
-            this.listBoxStyleGeneric.FormattingEnabled = true;
-            this.listBoxStyleGeneric.ItemHeight = 17;
-            this.listBoxStyleGeneric.Items.AddRange(new object[] {
-            "realistic",
+            this.listBoxGenericStyles.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(15)))), ((int)(((byte)(10)))), ((int)(((byte)(15)))));
+            this.listBoxGenericStyles.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.listBoxGenericStyles.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.listBoxGenericStyles.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.listBoxGenericStyles.ForeColor = System.Drawing.Color.Silver;
+            this.listBoxGenericStyles.FormattingEnabled = true;
+            this.listBoxGenericStyles.ItemHeight = 17;
+            this.listBoxGenericStyles.Items.AddRange(new object[] {
+            "ultrarealistic",
+            "highly detailed",
             "photorealistic",
-            "detailed",
-            "3d",
-            "4k",
+            "digital painting",
             "artstation",
-            "pixiv",
+            "smooth",
+            "sharp focus",
+            "illustration",
+            "3d",
             "unreal engine",
             "octane render",
             "vray render",
             "houdini",
-            "clear focus",
-            "vfx",
             "global illumination",
             "ray tracing",
-            "global illumination",
+            "4k",
             "anime",
-            "render",
             "colorful",
-            "atmosphere",
+            "atmospheric",
+            "beautifull",
             "cinematic",
             "hdr",
             "artworks",
-            "digital painting",
-            "Sci-Fi",
-            "Synthwave"});
-            this.listBoxStyleGeneric.Location = new System.Drawing.Point(10, 10);
-            this.listBoxStyleGeneric.Name = "listBoxStyleGeneric";
-            this.listBoxStyleGeneric.SelectionMode = System.Windows.Forms.SelectionMode.MultiSimple;
-            this.listBoxStyleGeneric.Size = new System.Drawing.Size(155, 449);
-            this.listBoxStyleGeneric.TabIndex = 4;
+            "synthwave"});
+            this.listBoxGenericStyles.Location = new System.Drawing.Point(10, 10);
+            this.listBoxGenericStyles.Name = "listBoxGenericStyles";
+            this.listBoxGenericStyles.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
+            this.listBoxGenericStyles.Size = new System.Drawing.Size(198, 437);
+            this.listBoxGenericStyles.TabIndex = 4;
             // 
             // buttonStart
             // 
@@ -258,37 +319,39 @@
             this.buttonStart.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.buttonStart.ForeColor = System.Drawing.Color.Silver;
             this.buttonStart.Image = global::StableDiffusion.Properties.Resources.play_button;
-            this.buttonStart.Location = new System.Drawing.Point(3, 3);
+            this.buttonStart.Location = new System.Drawing.Point(46, 3);
             this.buttonStart.Margin = new System.Windows.Forms.Padding(0);
             this.buttonStart.Name = "buttonStart";
-            this.buttonStart.Size = new System.Drawing.Size(113, 163);
+            this.buttonStart.Padding = new System.Windows.Forms.Padding(0, 0, 0, 10);
+            this.buttonStart.Size = new System.Drawing.Size(121, 178);
             this.buttonStart.TabIndex = 10;
             this.buttonStart.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
             this.buttonStart.UseVisualStyleBackColor = false;
             this.buttonStart.Click += new System.EventHandler(this.buttonStart_Click);
             // 
-            // flowLayoutPanel2
+            // flowLayoutPanelPaintTools
             // 
-            this.flowLayoutPanel2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(15)))), ((int)(((byte)(10)))), ((int)(((byte)(15)))));
-            this.flowLayoutPanel2.Controls.Add(this.panelCpick);
-            this.flowLayoutPanel2.Controls.Add(this.panelGradiant);
-            this.flowLayoutPanel2.Controls.Add(this.panelC2);
-            this.flowLayoutPanel2.Controls.Add(this.panelC3);
-            this.flowLayoutPanel2.Controls.Add(this.panelC4);
-            this.flowLayoutPanel2.Controls.Add(this.panelC6);
-            this.flowLayoutPanel2.Controls.Add(this.panelC5);
-            this.flowLayoutPanel2.Controls.Add(this.panelC7);
-            this.flowLayoutPanel2.Controls.Add(this.panelC8);
-            this.flowLayoutPanel2.Controls.Add(this.panelC9);
-            this.flowLayoutPanel2.Controls.Add(this.panelC10);
-            this.flowLayoutPanel2.Controls.Add(this.panelC11);
-            this.flowLayoutPanel2.Controls.Add(this.panelC12);
-            this.flowLayoutPanel2.Controls.Add(this.panelC13);
-            this.flowLayoutPanel2.Location = new System.Drawing.Point(83, 520);
-            this.flowLayoutPanel2.Margin = new System.Windows.Forms.Padding(5);
-            this.flowLayoutPanel2.Name = "flowLayoutPanel2";
-            this.flowLayoutPanel2.Size = new System.Drawing.Size(434, 75);
-            this.flowLayoutPanel2.TabIndex = 20;
+            this.flowLayoutPanelPaintTools.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(15)))), ((int)(((byte)(10)))), ((int)(((byte)(15)))));
+            this.flowLayoutPanelPaintTools.Controls.Add(this.panelCpick);
+            this.flowLayoutPanelPaintTools.Controls.Add(this.panelGradiant);
+            this.flowLayoutPanelPaintTools.Controls.Add(this.panelC2);
+            this.flowLayoutPanelPaintTools.Controls.Add(this.panelC3);
+            this.flowLayoutPanelPaintTools.Controls.Add(this.panelC4);
+            this.flowLayoutPanelPaintTools.Controls.Add(this.panelC6);
+            this.flowLayoutPanelPaintTools.Controls.Add(this.panelC5);
+            this.flowLayoutPanelPaintTools.Controls.Add(this.panelC7);
+            this.flowLayoutPanelPaintTools.Controls.Add(this.panelC8);
+            this.flowLayoutPanelPaintTools.Controls.Add(this.panelC9);
+            this.flowLayoutPanelPaintTools.Controls.Add(this.panelC10);
+            this.flowLayoutPanelPaintTools.Controls.Add(this.panelC11);
+            this.flowLayoutPanelPaintTools.Controls.Add(this.panelC12);
+            this.flowLayoutPanelPaintTools.Controls.Add(this.panelC13);
+            this.flowLayoutPanelPaintTools.Enabled = false;
+            this.flowLayoutPanelPaintTools.Location = new System.Drawing.Point(244, 518);
+            this.flowLayoutPanelPaintTools.Margin = new System.Windows.Forms.Padding(5);
+            this.flowLayoutPanelPaintTools.Name = "flowLayoutPanelPaintTools";
+            this.flowLayoutPanelPaintTools.Size = new System.Drawing.Size(433, 75);
+            this.flowLayoutPanelPaintTools.TabIndex = 20;
             // 
             // panelCpick
             // 
@@ -434,28 +497,46 @@
             // panelTabImages
             // 
             this.panelTabImages.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(25)))), ((int)(((byte)(15)))), ((int)(((byte)(35)))));
+            this.panelTabImages.Controls.Add(this.buttonPastImage);
             this.panelTabImages.Controls.Add(this.panel9);
+            this.panelTabImages.Controls.Add(this.buttonPencilRedo);
             this.panelTabImages.Controls.Add(this.panel12);
             this.panelTabImages.Controls.Add(this.buttonPencil);
             this.panelTabImages.Controls.Add(this.buttonInpaint);
-            this.panelTabImages.Controls.Add(this.buttonImage);
-            this.panelTabImages.Controls.Add(this.buttonClear);
+            this.panelTabImages.Controls.Add(this.buttonOpenImage);
             this.panelTabImages.Controls.Add(this.pictureBox1);
-            this.panelTabImages.Controls.Add(this.flowLayoutPanel2);
+            this.panelTabImages.Controls.Add(this.flowLayoutPanelPaintTools);
             this.panelTabImages.Location = new System.Drawing.Point(1033, 59);
             this.panelTabImages.Name = "panelTabImages";
             this.panelTabImages.Size = new System.Drawing.Size(680, 600);
             this.panelTabImages.TabIndex = 21;
             // 
+            // buttonPastImage
+            // 
+            this.buttonPastImage.AllowDrop = true;
+            this.buttonPastImage.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(35)))), ((int)(((byte)(55)))));
+            this.buttonPastImage.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.buttonPastImage.FlatAppearance.BorderSize = 0;
+            this.buttonPastImage.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.buttonPastImage.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.buttonPastImage.ForeColor = System.Drawing.Color.Silver;
+            this.buttonPastImage.Image = global::StableDiffusion.Properties.Resources.paste;
+            this.buttonPastImage.Location = new System.Drawing.Point(520, 5);
+            this.buttonPastImage.Name = "buttonPastImage";
+            this.buttonPastImage.Size = new System.Drawing.Size(43, 40);
+            this.buttonPastImage.TabIndex = 64;
+            this.buttonPastImage.UseVisualStyleBackColor = false;
+            this.buttonPastImage.Click += new System.EventHandler(this.buttonPastImage_Click);
+            // 
             // panel9
             // 
             this.panel9.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(15)))), ((int)(((byte)(10)))), ((int)(((byte)(15)))));
             this.panel9.Controls.Add(this.listBoxInitImages);
-            this.panel9.Location = new System.Drawing.Point(520, 108);
+            this.panel9.Location = new System.Drawing.Point(520, 51);
             this.panel9.Margin = new System.Windows.Forms.Padding(0, 3, 0, 3);
             this.panel9.Name = "panel9";
             this.panel9.Padding = new System.Windows.Forms.Padding(10);
-            this.panel9.Size = new System.Drawing.Size(155, 175);
+            this.panel9.Size = new System.Drawing.Size(155, 232);
             this.panel9.TabIndex = 53;
             // 
             // listBoxInitImages
@@ -469,9 +550,28 @@
             this.listBoxInitImages.ItemHeight = 20;
             this.listBoxInitImages.Location = new System.Drawing.Point(10, 10);
             this.listBoxInitImages.Name = "listBoxInitImages";
-            this.listBoxInitImages.Size = new System.Drawing.Size(135, 155);
+            this.listBoxInitImages.Size = new System.Drawing.Size(135, 212);
             this.listBoxInitImages.TabIndex = 42;
             this.listBoxInitImages.SelectedIndexChanged += new System.EventHandler(this.listBoxInitImages_SelectedIndexChanged);
+            // 
+            // buttonPencilRedo
+            // 
+            this.buttonPencilRedo.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(30)))), ((int)(((byte)(50)))));
+            this.buttonPencilRedo.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.buttonPencilRedo.FlatAppearance.BorderSize = 0;
+            this.buttonPencilRedo.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.buttonPencilRedo.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.buttonPencilRedo.ForeColor = System.Drawing.Color.Silver;
+            this.buttonPencilRedo.Image = global::StableDiffusion.Properties.Resources.go_back_arrow;
+            this.buttonPencilRedo.Location = new System.Drawing.Point(83, 520);
+            this.buttonPencilRedo.Margin = new System.Windows.Forms.Padding(3, 0, 3, 3);
+            this.buttonPencilRedo.Name = "buttonPencilRedo";
+            this.buttonPencilRedo.Size = new System.Drawing.Size(75, 75);
+            this.buttonPencilRedo.TabIndex = 55;
+            this.buttonPencilRedo.Text = "Undo";
+            this.buttonPencilRedo.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.buttonPencilRedo.UseVisualStyleBackColor = false;
+            this.buttonPencilRedo.Click += new System.EventHandler(this.buttonPencilRedo_Click);
             // 
             // panel12
             // 
@@ -481,7 +581,7 @@
             this.panel12.Margin = new System.Windows.Forms.Padding(0, 3, 0, 3);
             this.panel12.Name = "panel12";
             this.panel12.Padding = new System.Windows.Forms.Padding(10);
-            this.panel12.Size = new System.Drawing.Size(155, 304);
+            this.panel12.Size = new System.Drawing.Size(155, 226);
             this.panel12.TabIndex = 54;
             // 
             // listViewInitImages
@@ -497,7 +597,7 @@
             this.listViewInitImages.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.None;
             this.listViewInitImages.Location = new System.Drawing.Point(10, 10);
             this.listViewInitImages.Name = "listViewInitImages";
-            this.listViewInitImages.Size = new System.Drawing.Size(135, 284);
+            this.listViewInitImages.Size = new System.Drawing.Size(135, 206);
             this.listViewInitImages.TabIndex = 55;
             this.listViewInitImages.UseCompatibleStateImageBehavior = false;
             this.listViewInitImages.SelectedIndexChanged += new System.EventHandler(this.listViewInitImages_SelectedIndexChanged);
@@ -521,6 +621,8 @@
             this.buttonPencil.Name = "buttonPencil";
             this.buttonPencil.Size = new System.Drawing.Size(75, 75);
             this.buttonPencil.TabIndex = 42;
+            this.buttonPencil.Text = "Paint";
+            this.buttonPencil.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
             this.buttonPencil.UseVisualStyleBackColor = false;
             this.buttonPencil.Click += new System.EventHandler(this.buttonPencil_Click);
             // 
@@ -532,57 +634,43 @@
             this.buttonInpaint.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonInpaint.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.buttonInpaint.ForeColor = System.Drawing.Color.Silver;
-            this.buttonInpaint.Location = new System.Drawing.Point(520, 53);
+            this.buttonInpaint.Image = global::StableDiffusion.Properties.Resources.eraser;
+            this.buttonInpaint.Location = new System.Drawing.Point(161, 520);
             this.buttonInpaint.Margin = new System.Windows.Forms.Padding(3, 3, 0, 3);
             this.buttonInpaint.Name = "buttonInpaint";
-            this.buttonInpaint.Size = new System.Drawing.Size(155, 50);
+            this.buttonInpaint.Size = new System.Drawing.Size(78, 75);
             this.buttonInpaint.TabIndex = 47;
             this.buttonInpaint.Text = "Inpaint";
+            this.buttonInpaint.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
             this.buttonInpaint.UseVisualStyleBackColor = false;
             this.buttonInpaint.Click += new System.EventHandler(this.buttonInpaint_Click);
             // 
-            // buttonImage
+            // buttonOpenImage
             // 
-            this.buttonImage.AllowDrop = true;
-            this.buttonImage.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(35)))), ((int)(((byte)(55)))));
-            this.buttonImage.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.buttonImage.FlatAppearance.BorderSize = 0;
-            this.buttonImage.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.buttonImage.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.buttonImage.ForeColor = System.Drawing.Color.Silver;
-            this.buttonImage.Image = global::StableDiffusion.Properties.Resources.image;
-            this.buttonImage.Location = new System.Drawing.Point(585, 5);
-            this.buttonImage.Name = "buttonImage";
-            this.buttonImage.Size = new System.Drawing.Size(90, 44);
-            this.buttonImage.TabIndex = 30;
-            this.buttonImage.UseVisualStyleBackColor = false;
-            this.buttonImage.Click += new System.EventHandler(this.buttonImage_Click);
-            this.buttonImage.DragDrop += new System.Windows.Forms.DragEventHandler(this.buttonImage_DragDrop);
-            this.buttonImage.DragEnter += new System.Windows.Forms.DragEventHandler(this.buttonImage_DragEnter);
-            // 
-            // buttonClear
-            // 
-            this.buttonClear.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(35)))), ((int)(((byte)(55)))));
-            this.buttonClear.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.buttonClear.FlatAppearance.BorderSize = 0;
-            this.buttonClear.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.buttonClear.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.buttonClear.ForeColor = System.Drawing.Color.Silver;
-            this.buttonClear.Image = global::StableDiffusion.Properties.Resources.delete_cross;
-            this.buttonClear.Location = new System.Drawing.Point(520, 5);
-            this.buttonClear.Name = "buttonClear";
-            this.buttonClear.Size = new System.Drawing.Size(61, 44);
-            this.buttonClear.TabIndex = 28;
-            this.buttonClear.UseVisualStyleBackColor = false;
-            this.buttonClear.Click += new System.EventHandler(this.buttonClear_Click);
+            this.buttonOpenImage.AllowDrop = true;
+            this.buttonOpenImage.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(35)))), ((int)(((byte)(55)))));
+            this.buttonOpenImage.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.buttonOpenImage.FlatAppearance.BorderSize = 0;
+            this.buttonOpenImage.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.buttonOpenImage.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.buttonOpenImage.ForeColor = System.Drawing.Color.Silver;
+            this.buttonOpenImage.Image = global::StableDiffusion.Properties.Resources.add_photo;
+            this.buttonOpenImage.Location = new System.Drawing.Point(569, 5);
+            this.buttonOpenImage.Name = "buttonOpenImage";
+            this.buttonOpenImage.Size = new System.Drawing.Size(106, 40);
+            this.buttonOpenImage.TabIndex = 30;
+            this.buttonOpenImage.UseVisualStyleBackColor = false;
+            this.buttonOpenImage.Click += new System.EventHandler(this.buttonOpenImage_Click);
+            this.buttonOpenImage.DragDrop += new System.Windows.Forms.DragEventHandler(this.buttonImage_DragDrop);
+            this.buttonOpenImage.DragEnter += new System.Windows.Forms.DragEventHandler(this.buttonImage_DragEnter);
             // 
             // pictureBox1
             // 
             this.pictureBox1.BackColor = System.Drawing.Color.Black;
-            this.pictureBox1.Cursor = System.Windows.Forms.Cursors.Cross;
             this.pictureBox1.Location = new System.Drawing.Point(5, 5);
             this.pictureBox1.Name = "pictureBox1";
             this.pictureBox1.Size = new System.Drawing.Size(512, 512);
+            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
             this.pictureBox1.TabIndex = 26;
             this.pictureBox1.TabStop = false;
             this.pictureBox1.Paint += new System.Windows.Forms.PaintEventHandler(this.pictureBox1_Paint);
@@ -590,12 +678,29 @@
             this.pictureBox1.MouseMove += new System.Windows.Forms.MouseEventHandler(this.pictureBox1_MouseMove);
             this.pictureBox1.MouseUp += new System.Windows.Forms.MouseEventHandler(this.pictureBox1_MouseUp);
             // 
+            // buttonClearImage
+            // 
+            this.buttonClearImage.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(35)))), ((int)(((byte)(55)))));
+            this.buttonClearImage.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.buttonClearImage.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.buttonClearImage.FlatAppearance.BorderSize = 0;
+            this.buttonClearImage.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.buttonClearImage.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.buttonClearImage.ForeColor = System.Drawing.Color.Silver;
+            this.buttonClearImage.Image = global::StableDiffusion.Properties.Resources.delete_cross;
+            this.buttonClearImage.Location = new System.Drawing.Point(101, 0);
+            this.buttonClearImage.Margin = new System.Windows.Forms.Padding(0);
+            this.buttonClearImage.Name = "buttonClearImage";
+            this.buttonClearImage.Size = new System.Drawing.Size(34, 40);
+            this.buttonClearImage.TabIndex = 28;
+            this.buttonClearImage.UseVisualStyleBackColor = false;
+            this.buttonClearImage.Click += new System.EventHandler(this.buttonClearImage_Click);
+            // 
             // buttonStrength
             // 
             this.buttonStrength.AllowDrop = true;
             this.buttonStrength.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(30)))), ((int)(((byte)(50)))));
             this.buttonStrength.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.buttonStrength.Enabled = false;
             this.buttonStrength.FlatAppearance.BorderSize = 0;
             this.buttonStrength.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonStrength.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
@@ -615,7 +720,6 @@
             // trackBarStrength
             // 
             this.trackBarStrength.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(15)))), ((int)(((byte)(10)))), ((int)(((byte)(15)))));
-            this.trackBarStrength.Enabled = false;
             this.trackBarStrength.LargeChange = 1;
             this.trackBarStrength.Location = new System.Drawing.Point(116, 0);
             this.trackBarStrength.Margin = new System.Windows.Forms.Padding(3, 0, 3, 0);
@@ -624,7 +728,6 @@
             this.trackBarStrength.Name = "trackBarStrength";
             this.trackBarStrength.Size = new System.Drawing.Size(150, 45);
             this.trackBarStrength.TabIndex = 31;
-            this.trackBarStrength.TickStyle = System.Windows.Forms.TickStyle.Both;
             this.trackBarStrength.Value = 16;
             this.trackBarStrength.ValueChanged += new System.EventHandler(this.trackBar_ValueChanged);
             // 
@@ -655,11 +758,9 @@
             this.trackBarN_iter.LargeChange = 1;
             this.trackBarN_iter.Location = new System.Drawing.Point(116, 0);
             this.trackBarN_iter.Margin = new System.Windows.Forms.Padding(3, 0, 3, 0);
-            this.trackBarN_iter.Minimum = 1;
             this.trackBarN_iter.Name = "trackBarN_iter";
             this.trackBarN_iter.Size = new System.Drawing.Size(150, 45);
             this.trackBarN_iter.TabIndex = 33;
-            this.trackBarN_iter.TickStyle = System.Windows.Forms.TickStyle.Both;
             this.trackBarN_iter.Value = 1;
             this.trackBarN_iter.ValueChanged += new System.EventHandler(this.trackBar_ValueChanged);
             // 
@@ -695,7 +796,6 @@
             this.trackBarN_samples.Name = "trackBarN_samples";
             this.trackBarN_samples.Size = new System.Drawing.Size(150, 45);
             this.trackBarN_samples.TabIndex = 35;
-            this.trackBarN_samples.TickStyle = System.Windows.Forms.TickStyle.Both;
             this.trackBarN_samples.Value = 6;
             this.trackBarN_samples.ValueChanged += new System.EventHandler(this.trackBar_ValueChanged);
             // 
@@ -752,7 +852,6 @@
             this.trackBarIteration.Name = "trackBarIteration";
             this.trackBarIteration.Size = new System.Drawing.Size(150, 45);
             this.trackBarIteration.TabIndex = 39;
-            this.trackBarIteration.TickStyle = System.Windows.Forms.TickStyle.Both;
             this.trackBarIteration.Value = 2;
             this.trackBarIteration.ValueChanged += new System.EventHandler(this.trackBar_ValueChanged);
             // 
@@ -760,15 +859,15 @@
             // 
             this.buttonOutFolder.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(30)))), ((int)(((byte)(50)))));
             this.buttonOutFolder.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.buttonOutFolder.Dock = System.Windows.Forms.DockStyle.Fill;
             this.buttonOutFolder.FlatAppearance.BorderSize = 0;
             this.buttonOutFolder.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonOutFolder.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.buttonOutFolder.ForeColor = System.Drawing.Color.Silver;
             this.buttonOutFolder.Image = global::StableDiffusion.Properties.Resources.search;
-            this.buttonOutFolder.Location = new System.Drawing.Point(3, 0);
-            this.buttonOutFolder.Margin = new System.Windows.Forms.Padding(3, 0, 0, 3);
+            this.buttonOutFolder.Location = new System.Drawing.Point(3, 3);
             this.buttonOutFolder.Name = "buttonOutFolder";
-            this.buttonOutFolder.Size = new System.Drawing.Size(30, 30);
+            this.buttonOutFolder.Size = new System.Drawing.Size(39, 40);
             this.buttonOutFolder.TabIndex = 40;
             this.buttonOutFolder.UseVisualStyleBackColor = false;
             this.buttonOutFolder.Click += new System.EventHandler(this.buttonOutFolder_Click);
@@ -777,15 +876,15 @@
             // 
             this.buttonClearOutputFolder.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(30)))), ((int)(((byte)(50)))));
             this.buttonClearOutputFolder.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.buttonClearOutputFolder.Dock = System.Windows.Forms.DockStyle.Fill;
             this.buttonClearOutputFolder.FlatAppearance.BorderSize = 0;
             this.buttonClearOutputFolder.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonClearOutputFolder.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.buttonClearOutputFolder.ForeColor = System.Drawing.Color.Silver;
             this.buttonClearOutputFolder.Image = global::StableDiffusion.Properties.Resources.delete_cross1;
-            this.buttonClearOutputFolder.Location = new System.Drawing.Point(3, 33);
-            this.buttonClearOutputFolder.Margin = new System.Windows.Forms.Padding(3, 0, 3, 3);
+            this.buttonClearOutputFolder.Location = new System.Drawing.Point(3, 49);
             this.buttonClearOutputFolder.Name = "buttonClearOutputFolder";
-            this.buttonClearOutputFolder.Size = new System.Drawing.Size(30, 30);
+            this.buttonClearOutputFolder.Size = new System.Drawing.Size(39, 40);
             this.buttonClearOutputFolder.TabIndex = 41;
             this.buttonClearOutputFolder.UseVisualStyleBackColor = false;
             this.buttonClearOutputFolder.Click += new System.EventHandler(this.buttonClearOutputFolder_Click);
@@ -798,7 +897,7 @@
             this.buttonSave.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonSave.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.buttonSave.ForeColor = System.Drawing.Color.Silver;
-            this.buttonSave.Image = global::StableDiffusion.Properties.Resources.save;
+            this.buttonSave.Image = global::StableDiffusion.Properties.Resources.save1;
             this.buttonSave.Location = new System.Drawing.Point(272, 0);
             this.buttonSave.Margin = new System.Windows.Forms.Padding(3, 0, 3, 3);
             this.buttonSave.Name = "buttonSave";
@@ -807,16 +906,16 @@
             this.buttonSave.UseVisualStyleBackColor = false;
             this.buttonSave.MouseUp += new System.Windows.Forms.MouseEventHandler(this.buttonSave_MouseUp);
             // 
-            // flowLayoutPanel3
+            // flowLayoutPanelQuality
             // 
-            this.flowLayoutPanel3.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(15)))), ((int)(((byte)(10)))), ((int)(((byte)(15)))));
-            this.flowLayoutPanel3.Controls.Add(this.buttonIteration);
-            this.flowLayoutPanel3.Controls.Add(this.trackBarIteration);
-            this.flowLayoutPanel3.Controls.Add(this.panel3);
-            this.flowLayoutPanel3.Location = new System.Drawing.Point(3, 52);
-            this.flowLayoutPanel3.Name = "flowLayoutPanel3";
-            this.flowLayoutPanel3.Size = new System.Drawing.Size(325, 43);
-            this.flowLayoutPanel3.TabIndex = 43;
+            this.flowLayoutPanelQuality.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(15)))), ((int)(((byte)(10)))), ((int)(((byte)(15)))));
+            this.flowLayoutPanelQuality.Controls.Add(this.buttonIteration);
+            this.flowLayoutPanelQuality.Controls.Add(this.trackBarIteration);
+            this.flowLayoutPanelQuality.Controls.Add(this.panel3);
+            this.flowLayoutPanelQuality.Location = new System.Drawing.Point(3, 52);
+            this.flowLayoutPanelQuality.Name = "flowLayoutPanelQuality";
+            this.flowLayoutPanelQuality.Size = new System.Drawing.Size(325, 43);
+            this.flowLayoutPanelQuality.TabIndex = 43;
             // 
             // panel3
             // 
@@ -842,16 +941,16 @@
             this.labelIteration.Text = "0";
             this.labelIteration.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // flowLayoutPanel4
+            // flowLayoutPanelRepeat
             // 
-            this.flowLayoutPanel4.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(15)))), ((int)(((byte)(10)))), ((int)(((byte)(15)))));
-            this.flowLayoutPanel4.Controls.Add(this.buttonN_iter);
-            this.flowLayoutPanel4.Controls.Add(this.trackBarN_iter);
-            this.flowLayoutPanel4.Controls.Add(this.panel4);
-            this.flowLayoutPanel4.Location = new System.Drawing.Point(3, 101);
-            this.flowLayoutPanel4.Name = "flowLayoutPanel4";
-            this.flowLayoutPanel4.Size = new System.Drawing.Size(325, 43);
-            this.flowLayoutPanel4.TabIndex = 44;
+            this.flowLayoutPanelRepeat.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(15)))), ((int)(((byte)(10)))), ((int)(((byte)(15)))));
+            this.flowLayoutPanelRepeat.Controls.Add(this.buttonN_iter);
+            this.flowLayoutPanelRepeat.Controls.Add(this.trackBarN_iter);
+            this.flowLayoutPanelRepeat.Controls.Add(this.panel4);
+            this.flowLayoutPanelRepeat.Location = new System.Drawing.Point(3, 101);
+            this.flowLayoutPanelRepeat.Name = "flowLayoutPanelRepeat";
+            this.flowLayoutPanelRepeat.Size = new System.Drawing.Size(325, 43);
+            this.flowLayoutPanelRepeat.TabIndex = 44;
             // 
             // panel4
             // 
@@ -877,16 +976,16 @@
             this.labelN_iter.Text = "0";
             this.labelN_iter.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // flowLayoutPanel5
+            // flowLayoutPanelSamples
             // 
-            this.flowLayoutPanel5.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(15)))), ((int)(((byte)(10)))), ((int)(((byte)(15)))));
-            this.flowLayoutPanel5.Controls.Add(this.buttonN_samples);
-            this.flowLayoutPanel5.Controls.Add(this.trackBarN_samples);
-            this.flowLayoutPanel5.Controls.Add(this.panel5);
-            this.flowLayoutPanel5.Location = new System.Drawing.Point(3, 150);
-            this.flowLayoutPanel5.Name = "flowLayoutPanel5";
-            this.flowLayoutPanel5.Size = new System.Drawing.Size(325, 43);
-            this.flowLayoutPanel5.TabIndex = 45;
+            this.flowLayoutPanelSamples.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(15)))), ((int)(((byte)(10)))), ((int)(((byte)(15)))));
+            this.flowLayoutPanelSamples.Controls.Add(this.buttonN_samples);
+            this.flowLayoutPanelSamples.Controls.Add(this.trackBarN_samples);
+            this.flowLayoutPanelSamples.Controls.Add(this.panel5);
+            this.flowLayoutPanelSamples.Location = new System.Drawing.Point(3, 150);
+            this.flowLayoutPanelSamples.Name = "flowLayoutPanelSamples";
+            this.flowLayoutPanelSamples.Size = new System.Drawing.Size(325, 43);
+            this.flowLayoutPanelSamples.TabIndex = 45;
             // 
             // panel5
             // 
@@ -918,7 +1017,7 @@
             this.flowLayoutPanel6.Controls.Add(this.buttonStrength);
             this.flowLayoutPanel6.Controls.Add(this.trackBarStrength);
             this.flowLayoutPanel6.Controls.Add(this.panel6);
-            this.flowLayoutPanel6.Location = new System.Drawing.Point(3, 248);
+            this.flowLayoutPanel6.Location = new System.Drawing.Point(3, 297);
             this.flowLayoutPanel6.Name = "flowLayoutPanel6";
             this.flowLayoutPanel6.Size = new System.Drawing.Size(325, 43);
             this.flowLayoutPanel6.TabIndex = 45;
@@ -947,16 +1046,16 @@
             this.labelStrength.Text = "0";
             this.labelStrength.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // flowLayoutPanel7
+            // flowLayoutPanelSeed
             // 
-            this.flowLayoutPanel7.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(15)))), ((int)(((byte)(10)))), ((int)(((byte)(15)))));
-            this.flowLayoutPanel7.Controls.Add(this.buttonSeed);
-            this.flowLayoutPanel7.Controls.Add(this.panel1);
-            this.flowLayoutPanel7.Controls.Add(this.buttonSave);
-            this.flowLayoutPanel7.Location = new System.Drawing.Point(3, 3);
-            this.flowLayoutPanel7.Name = "flowLayoutPanel7";
-            this.flowLayoutPanel7.Size = new System.Drawing.Size(325, 43);
-            this.flowLayoutPanel7.TabIndex = 45;
+            this.flowLayoutPanelSeed.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(15)))), ((int)(((byte)(10)))), ((int)(((byte)(15)))));
+            this.flowLayoutPanelSeed.Controls.Add(this.buttonSeed);
+            this.flowLayoutPanelSeed.Controls.Add(this.panel1);
+            this.flowLayoutPanelSeed.Controls.Add(this.buttonSave);
+            this.flowLayoutPanelSeed.Location = new System.Drawing.Point(3, 3);
+            this.flowLayoutPanelSeed.Name = "flowLayoutPanelSeed";
+            this.flowLayoutPanelSeed.Size = new System.Drawing.Size(325, 43);
+            this.flowLayoutPanelSeed.TabIndex = 45;
             // 
             // panel1
             // 
@@ -988,25 +1087,97 @@
             // flowLayoutPanel8
             // 
             this.flowLayoutPanel8.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(25)))), ((int)(((byte)(15)))), ((int)(((byte)(35)))));
-            this.flowLayoutPanel8.Controls.Add(this.flowLayoutPanel7);
-            this.flowLayoutPanel8.Controls.Add(this.flowLayoutPanel3);
-            this.flowLayoutPanel8.Controls.Add(this.flowLayoutPanel4);
-            this.flowLayoutPanel8.Controls.Add(this.flowLayoutPanel5);
+            this.flowLayoutPanel8.Controls.Add(this.flowLayoutPanelSeed);
+            this.flowLayoutPanel8.Controls.Add(this.flowLayoutPanelQuality);
+            this.flowLayoutPanel8.Controls.Add(this.flowLayoutPanelRepeat);
+            this.flowLayoutPanel8.Controls.Add(this.flowLayoutPanelSamples);
+            this.flowLayoutPanel8.Controls.Add(this.flowLayoutPanelGuidance);
             this.flowLayoutPanel8.Controls.Add(this.flowLayoutPanel1);
             this.flowLayoutPanel8.Controls.Add(this.flowLayoutPanel6);
-            this.flowLayoutPanel8.Location = new System.Drawing.Point(7, 235);
+            this.flowLayoutPanel8.Location = new System.Drawing.Point(7, 317);
             this.flowLayoutPanel8.Margin = new System.Windows.Forms.Padding(0);
             this.flowLayoutPanel8.Name = "flowLayoutPanel8";
-            this.flowLayoutPanel8.Size = new System.Drawing.Size(325, 425);
+            this.flowLayoutPanel8.Size = new System.Drawing.Size(325, 343);
             this.flowLayoutPanel8.TabIndex = 46;
+            // 
+            // flowLayoutPanelGuidance
+            // 
+            this.flowLayoutPanelGuidance.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(15)))), ((int)(((byte)(10)))), ((int)(((byte)(15)))));
+            this.flowLayoutPanelGuidance.Controls.Add(this.buttonGuidance);
+            this.flowLayoutPanelGuidance.Controls.Add(this.trackBarGuidance);
+            this.flowLayoutPanelGuidance.Controls.Add(this.panel13);
+            this.flowLayoutPanelGuidance.Location = new System.Drawing.Point(3, 199);
+            this.flowLayoutPanelGuidance.Name = "flowLayoutPanelGuidance";
+            this.flowLayoutPanelGuidance.Size = new System.Drawing.Size(325, 43);
+            this.flowLayoutPanelGuidance.TabIndex = 52;
+            // 
+            // buttonGuidance
+            // 
+            this.buttonGuidance.AllowDrop = true;
+            this.buttonGuidance.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(30)))), ((int)(((byte)(50)))));
+            this.buttonGuidance.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.buttonGuidance.FlatAppearance.BorderSize = 0;
+            this.buttonGuidance.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.buttonGuidance.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.buttonGuidance.ForeColor = System.Drawing.Color.Silver;
+            this.buttonGuidance.Image = global::StableDiffusion.Properties.Resources.scale;
+            this.buttonGuidance.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.buttonGuidance.Location = new System.Drawing.Point(0, 0);
+            this.buttonGuidance.Margin = new System.Windows.Forms.Padding(0);
+            this.buttonGuidance.Name = "buttonGuidance";
+            this.buttonGuidance.Size = new System.Drawing.Size(113, 43);
+            this.buttonGuidance.TabIndex = 34;
+            this.buttonGuidance.Text = "Guidance";
+            this.buttonGuidance.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.buttonGuidance.UseVisualStyleBackColor = false;
+            this.buttonGuidance.Click += new System.EventHandler(this.buttonGuidance_Click);
+            // 
+            // trackBarGuidance
+            // 
+            this.trackBarGuidance.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(15)))), ((int)(((byte)(10)))), ((int)(((byte)(15)))));
+            this.trackBarGuidance.LargeChange = 1;
+            this.trackBarGuidance.Location = new System.Drawing.Point(116, 0);
+            this.trackBarGuidance.Margin = new System.Windows.Forms.Padding(3, 0, 3, 0);
+            this.trackBarGuidance.Maximum = 200;
+            this.trackBarGuidance.Name = "trackBarGuidance";
+            this.trackBarGuidance.Size = new System.Drawing.Size(150, 45);
+            this.trackBarGuidance.SmallChange = 2;
+            this.trackBarGuidance.TabIndex = 31;
+            this.trackBarGuidance.TickStyle = System.Windows.Forms.TickStyle.None;
+            this.trackBarGuidance.Value = 15;
+            this.trackBarGuidance.ValueChanged += new System.EventHandler(this.trackBar_ValueChanged);
+            // 
+            // panel13
+            // 
+            this.panel13.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(30)))), ((int)(((byte)(50)))));
+            this.panel13.Controls.Add(this.labelGuidance);
+            this.panel13.Location = new System.Drawing.Point(272, 0);
+            this.panel13.Margin = new System.Windows.Forms.Padding(3, 0, 0, 3);
+            this.panel13.Name = "panel13";
+            this.panel13.Padding = new System.Windows.Forms.Padding(5);
+            this.panel13.Size = new System.Drawing.Size(47, 43);
+            this.panel13.TabIndex = 50;
+            // 
+            // labelGuidance
+            // 
+            this.labelGuidance.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(30)))), ((int)(((byte)(50)))));
+            this.labelGuidance.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.labelGuidance.Font = new System.Drawing.Font("Segoe UI", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.labelGuidance.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
+            this.labelGuidance.Location = new System.Drawing.Point(5, 5);
+            this.labelGuidance.Name = "labelGuidance";
+            this.labelGuidance.Size = new System.Drawing.Size(37, 33);
+            this.labelGuidance.TabIndex = 0;
+            this.labelGuidance.Text = "0";
+            this.labelGuidance.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // flowLayoutPanel1
             // 
             this.flowLayoutPanel1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(15)))), ((int)(((byte)(10)))), ((int)(((byte)(15)))));
             this.flowLayoutPanel1.Controls.Add(this.buttonChannels);
-            this.flowLayoutPanel1.Controls.Add(this.trackBar1);
+            this.flowLayoutPanel1.Controls.Add(this.trackBarChannels);
             this.flowLayoutPanel1.Controls.Add(this.panel15);
-            this.flowLayoutPanel1.Location = new System.Drawing.Point(3, 199);
+            this.flowLayoutPanel1.Location = new System.Drawing.Point(3, 248);
             this.flowLayoutPanel1.Name = "flowLayoutPanel1";
             this.flowLayoutPanel1.Size = new System.Drawing.Size(325, 43);
             this.flowLayoutPanel1.TabIndex = 51;
@@ -1030,25 +1201,25 @@
             this.buttonChannels.Text = "Channels";
             this.buttonChannels.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.buttonChannels.UseVisualStyleBackColor = false;
+            this.buttonChannels.Click += new System.EventHandler(this.buttonChannels_Click);
             // 
-            // trackBar1
+            // trackBarChannels
             // 
-            this.trackBar1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(15)))), ((int)(((byte)(10)))), ((int)(((byte)(15)))));
-            this.trackBar1.LargeChange = 1;
-            this.trackBar1.Location = new System.Drawing.Point(116, 0);
-            this.trackBar1.Margin = new System.Windows.Forms.Padding(3, 0, 3, 0);
-            this.trackBar1.Maximum = 6;
-            this.trackBar1.Minimum = 1;
-            this.trackBar1.Name = "trackBar1";
-            this.trackBar1.Size = new System.Drawing.Size(150, 45);
-            this.trackBar1.TabIndex = 35;
-            this.trackBar1.TickStyle = System.Windows.Forms.TickStyle.Both;
-            this.trackBar1.Value = 6;
+            this.trackBarChannels.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(15)))), ((int)(((byte)(10)))), ((int)(((byte)(15)))));
+            this.trackBarChannels.LargeChange = 1;
+            this.trackBarChannels.Location = new System.Drawing.Point(116, 0);
+            this.trackBarChannels.Margin = new System.Windows.Forms.Padding(3, 0, 3, 0);
+            this.trackBarChannels.Minimum = 1;
+            this.trackBarChannels.Name = "trackBarChannels";
+            this.trackBarChannels.Size = new System.Drawing.Size(150, 45);
+            this.trackBarChannels.TabIndex = 35;
+            this.trackBarChannels.Value = 1;
+            this.trackBarChannels.ValueChanged += new System.EventHandler(this.trackBar_ValueChanged);
             // 
             // panel15
             // 
             this.panel15.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(30)))), ((int)(((byte)(50)))));
-            this.panel15.Controls.Add(this.label1);
+            this.panel15.Controls.Add(this.labelChannels);
             this.panel15.Location = new System.Drawing.Point(272, 0);
             this.panel15.Margin = new System.Windows.Forms.Padding(3, 0, 0, 3);
             this.panel15.Name = "panel15";
@@ -1056,138 +1227,84 @@
             this.panel15.Size = new System.Drawing.Size(47, 43);
             this.panel15.TabIndex = 50;
             // 
-            // label1
+            // labelChannels
             // 
-            this.label1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(30)))), ((int)(((byte)(50)))));
-            this.label1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label1.Font = new System.Drawing.Font("Segoe UI", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.label1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
-            this.label1.Location = new System.Drawing.Point(5, 5);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(37, 33);
-            this.label1.TabIndex = 0;
-            this.label1.Text = "0";
-            this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.labelChannels.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(30)))), ((int)(((byte)(50)))));
+            this.labelChannels.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.labelChannels.Font = new System.Drawing.Font("Segoe UI", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.labelChannels.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
+            this.labelChannels.Location = new System.Drawing.Point(5, 5);
+            this.labelChannels.Name = "labelChannels";
+            this.labelChannels.Size = new System.Drawing.Size(37, 33);
+            this.labelChannels.TabIndex = 0;
+            this.labelChannels.Text = "0";
+            this.labelChannels.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // flowLayoutPanel9
+            // buttonOpenSettings
             // 
-            this.flowLayoutPanel9.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(25)))), ((int)(((byte)(15)))), ((int)(((byte)(35)))));
-            this.flowLayoutPanel9.Controls.Add(this.buttonOutFolder);
-            this.flowLayoutPanel9.Controls.Add(this.buttonClearOutputFolder);
-            this.flowLayoutPanel9.Controls.Add(this.button3);
-            this.flowLayoutPanel9.Controls.Add(this.button4);
-            this.flowLayoutPanel9.Controls.Add(this.button5);
-            this.flowLayoutPanel9.Location = new System.Drawing.Point(116, 3);
-            this.flowLayoutPanel9.Margin = new System.Windows.Forms.Padding(0);
-            this.flowLayoutPanel9.Name = "flowLayoutPanel9";
-            this.flowLayoutPanel9.Size = new System.Drawing.Size(33, 163);
-            this.flowLayoutPanel9.TabIndex = 46;
-            // 
-            // button3
-            // 
-            this.button3.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(30)))), ((int)(((byte)(50)))));
-            this.button3.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.button3.FlatAppearance.BorderSize = 0;
-            this.button3.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button3.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.button3.ForeColor = System.Drawing.Color.Silver;
-            this.button3.Image = global::StableDiffusion.Properties.Resources.delete_cross1;
-            this.button3.Location = new System.Drawing.Point(3, 66);
-            this.button3.Margin = new System.Windows.Forms.Padding(3, 0, 3, 3);
-            this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(30, 30);
-            this.button3.TabIndex = 42;
-            this.button3.UseVisualStyleBackColor = false;
+            this.buttonOpenSettings.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(30)))), ((int)(((byte)(50)))));
+            this.buttonOpenSettings.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.buttonOpenSettings.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.buttonOpenSettings.FlatAppearance.BorderSize = 0;
+            this.buttonOpenSettings.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.buttonOpenSettings.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.buttonOpenSettings.ForeColor = System.Drawing.Color.Silver;
+            this.buttonOpenSettings.Image = global::StableDiffusion.Properties.Resources.option_dequipement;
+            this.buttonOpenSettings.Location = new System.Drawing.Point(3, 141);
+            this.buttonOpenSettings.Name = "buttonOpenSettings";
+            this.buttonOpenSettings.Size = new System.Drawing.Size(39, 42);
+            this.buttonOpenSettings.TabIndex = 42;
+            this.buttonOpenSettings.UseVisualStyleBackColor = false;
+            this.buttonOpenSettings.Click += new System.EventHandler(this.buttonOpenSettings_Click);
             // 
             // button4
             // 
             this.button4.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(30)))), ((int)(((byte)(50)))));
             this.button4.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.button4.Dock = System.Windows.Forms.DockStyle.Fill;
             this.button4.FlatAppearance.BorderSize = 0;
             this.button4.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.button4.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.button4.ForeColor = System.Drawing.Color.Silver;
             this.button4.Image = global::StableDiffusion.Properties.Resources.delete_cross1;
-            this.button4.Location = new System.Drawing.Point(3, 99);
-            this.button4.Margin = new System.Windows.Forms.Padding(3, 0, 3, 3);
+            this.button4.Location = new System.Drawing.Point(3, 95);
             this.button4.Name = "button4";
-            this.button4.Size = new System.Drawing.Size(30, 30);
+            this.button4.Size = new System.Drawing.Size(39, 40);
             this.button4.TabIndex = 43;
             this.button4.UseVisualStyleBackColor = false;
+            this.button4.Visible = false;
             // 
-            // button5
+            // tableLayoutPanel6
             // 
-            this.button5.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(30)))), ((int)(((byte)(50)))));
-            this.button5.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.button5.FlatAppearance.BorderSize = 0;
-            this.button5.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button5.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.button5.ForeColor = System.Drawing.Color.Silver;
-            this.button5.Image = global::StableDiffusion.Properties.Resources.delete_cross1;
-            this.button5.Location = new System.Drawing.Point(3, 132);
-            this.button5.Margin = new System.Windows.Forms.Padding(3, 0, 3, 3);
-            this.button5.Name = "button5";
-            this.button5.Size = new System.Drawing.Size(30, 30);
-            this.button5.TabIndex = 44;
-            this.button5.UseVisualStyleBackColor = false;
-            // 
-            // flowLayoutPanel10
-            // 
-            this.flowLayoutPanel10.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(25)))), ((int)(((byte)(15)))), ((int)(((byte)(35)))));
-            this.flowLayoutPanel10.Controls.Add(this.buttonStart);
-            this.flowLayoutPanel10.Controls.Add(this.flowLayoutPanel9);
-            this.flowLayoutPanel10.Controls.Add(this.flowLayoutPanel12);
-            this.flowLayoutPanel10.Location = new System.Drawing.Point(7, 60);
-            this.flowLayoutPanel10.Margin = new System.Windows.Forms.Padding(0);
-            this.flowLayoutPanel10.Name = "flowLayoutPanel10";
-            this.flowLayoutPanel10.Padding = new System.Windows.Forms.Padding(3);
-            this.flowLayoutPanel10.Size = new System.Drawing.Size(325, 169);
-            this.flowLayoutPanel10.TabIndex = 48;
-            // 
-            // flowLayoutPanel12
-            // 
-            this.flowLayoutPanel12.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(25)))), ((int)(((byte)(15)))), ((int)(((byte)(35)))));
-            this.flowLayoutPanel12.Controls.Add(this.buttonTabPrompt);
-            this.flowLayoutPanel12.Controls.Add(this.buttonTabImage);
-            this.flowLayoutPanel12.Controls.Add(this.buttonTabSequence);
-            this.flowLayoutPanel12.Location = new System.Drawing.Point(149, 3);
-            this.flowLayoutPanel12.Margin = new System.Windows.Forms.Padding(0);
-            this.flowLayoutPanel12.Name = "flowLayoutPanel12";
-            this.flowLayoutPanel12.Padding = new System.Windows.Forms.Padding(3, 0, 0, 0);
-            this.flowLayoutPanel12.Size = new System.Drawing.Size(173, 166);
-            this.flowLayoutPanel12.TabIndex = 56;
-            // 
-            // buttonTabPrompt
-            // 
-            this.buttonTabPrompt.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(60)))), ((int)(((byte)(30)))));
-            this.buttonTabPrompt.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.buttonTabPrompt.FlatAppearance.BorderSize = 0;
-            this.buttonTabPrompt.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.buttonTabPrompt.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.buttonTabPrompt.ForeColor = System.Drawing.Color.Silver;
-            this.buttonTabPrompt.Location = new System.Drawing.Point(3, 0);
-            this.buttonTabPrompt.Margin = new System.Windows.Forms.Padding(0, 0, 0, 3);
-            this.buttonTabPrompt.Name = "buttonTabPrompt";
-            this.buttonTabPrompt.Size = new System.Drawing.Size(170, 50);
-            this.buttonTabPrompt.TabIndex = 56;
-            this.buttonTabPrompt.Text = "Prompt";
-            this.buttonTabPrompt.UseVisualStyleBackColor = false;
-            this.buttonTabPrompt.Click += new System.EventHandler(this.buttonTabPrompt_Click);
+            this.tableLayoutPanel6.ColumnCount = 2;
+            this.tableLayoutPanel6.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 75F));
+            this.tableLayoutPanel6.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
+            this.tableLayoutPanel6.Controls.Add(this.buttonTabImage, 0, 0);
+            this.tableLayoutPanel6.Controls.Add(this.buttonClearImage, 1, 0);
+            this.tableLayoutPanel6.Location = new System.Drawing.Point(23, 49);
+            this.tableLayoutPanel6.Margin = new System.Windows.Forms.Padding(0, 3, 0, 0);
+            this.tableLayoutPanel6.Name = "tableLayoutPanel6";
+            this.tableLayoutPanel6.RowCount = 1;
+            this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel6.Size = new System.Drawing.Size(135, 40);
+            this.tableLayoutPanel6.TabIndex = 63;
             // 
             // buttonTabImage
             // 
             this.buttonTabImage.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(35)))), ((int)(((byte)(55)))));
             this.buttonTabImage.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.buttonTabImage.Dock = System.Windows.Forms.DockStyle.Fill;
             this.buttonTabImage.FlatAppearance.BorderSize = 0;
             this.buttonTabImage.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.buttonTabImage.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.buttonTabImage.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.buttonTabImage.ForeColor = System.Drawing.Color.Silver;
-            this.buttonTabImage.Location = new System.Drawing.Point(3, 56);
-            this.buttonTabImage.Margin = new System.Windows.Forms.Padding(0, 3, 0, 3);
+            this.buttonTabImage.Location = new System.Drawing.Point(3, 0);
+            this.buttonTabImage.Margin = new System.Windows.Forms.Padding(3, 0, 3, 0);
             this.buttonTabImage.Name = "buttonTabImage";
-            this.buttonTabImage.Size = new System.Drawing.Size(170, 50);
+            this.buttonTabImage.Size = new System.Drawing.Size(95, 40);
             this.buttonTabImage.TabIndex = 58;
             this.buttonTabImage.Text = "Image";
+            this.buttonTabImage.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.buttonTabImage.UseVisualStyleBackColor = false;
             this.buttonTabImage.Click += new System.EventHandler(this.buttonTabImage_Click);
             // 
@@ -1197,26 +1314,103 @@
             this.buttonTabSequence.Cursor = System.Windows.Forms.Cursors.Hand;
             this.buttonTabSequence.FlatAppearance.BorderSize = 0;
             this.buttonTabSequence.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.buttonTabSequence.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.buttonTabSequence.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.buttonTabSequence.ForeColor = System.Drawing.Color.Silver;
-            this.buttonTabSequence.Location = new System.Drawing.Point(3, 112);
-            this.buttonTabSequence.Margin = new System.Windows.Forms.Padding(0, 3, 0, 3);
+            this.buttonTabSequence.Location = new System.Drawing.Point(26, 95);
             this.buttonTabSequence.Name = "buttonTabSequence";
-            this.buttonTabSequence.Size = new System.Drawing.Size(170, 50);
+            this.buttonTabSequence.Size = new System.Drawing.Size(132, 40);
             this.buttonTabSequence.TabIndex = 59;
             this.buttonTabSequence.Text = "Sequence";
+            this.buttonTabSequence.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.buttonTabSequence.UseVisualStyleBackColor = false;
             this.buttonTabSequence.Click += new System.EventHandler(this.buttonTabSequence_Click);
+            // 
+            // tableLayoutPanel2
+            // 
+            this.tableLayoutPanel2.ColumnCount = 2;
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 75F));
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
+            this.tableLayoutPanel2.Controls.Add(this.buttonClearStyle, 1, 0);
+            this.tableLayoutPanel2.Controls.Add(this.buttonTabPrompt, 0, 0);
+            this.tableLayoutPanel2.Location = new System.Drawing.Point(23, 3);
+            this.tableLayoutPanel2.Margin = new System.Windows.Forms.Padding(0, 3, 0, 0);
+            this.tableLayoutPanel2.Name = "tableLayoutPanel2";
+            this.tableLayoutPanel2.RowCount = 1;
+            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel2.Size = new System.Drawing.Size(135, 40);
+            this.tableLayoutPanel2.TabIndex = 59;
+            // 
+            // buttonClearStyle
+            // 
+            this.buttonClearStyle.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(35)))), ((int)(((byte)(55)))));
+            this.buttonClearStyle.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.buttonClearStyle.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.buttonClearStyle.FlatAppearance.BorderSize = 0;
+            this.buttonClearStyle.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.buttonClearStyle.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.buttonClearStyle.ForeColor = System.Drawing.Color.Silver;
+            this.buttonClearStyle.Image = global::StableDiffusion.Properties.Resources.delete_cross;
+            this.buttonClearStyle.Location = new System.Drawing.Point(101, 0);
+            this.buttonClearStyle.Margin = new System.Windows.Forms.Padding(0);
+            this.buttonClearStyle.Name = "buttonClearStyle";
+            this.buttonClearStyle.Size = new System.Drawing.Size(34, 40);
+            this.buttonClearStyle.TabIndex = 62;
+            this.buttonClearStyle.UseVisualStyleBackColor = false;
+            // 
+            // buttonTabPrompt
+            // 
+            this.buttonTabPrompt.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(60)))), ((int)(((byte)(30)))));
+            this.buttonTabPrompt.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.buttonTabPrompt.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.buttonTabPrompt.FlatAppearance.BorderSize = 0;
+            this.buttonTabPrompt.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.buttonTabPrompt.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.buttonTabPrompt.ForeColor = System.Drawing.Color.Silver;
+            this.buttonTabPrompt.Location = new System.Drawing.Point(3, 0);
+            this.buttonTabPrompt.Margin = new System.Windows.Forms.Padding(3, 0, 3, 0);
+            this.buttonTabPrompt.Name = "buttonTabPrompt";
+            this.buttonTabPrompt.Size = new System.Drawing.Size(95, 40);
+            this.buttonTabPrompt.TabIndex = 56;
+            this.buttonTabPrompt.Text = "Prompt";
+            this.buttonTabPrompt.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.buttonTabPrompt.UseVisualStyleBackColor = false;
+            this.buttonTabPrompt.Click += new System.EventHandler(this.buttonTabPrompt_Click);
+            // 
+            // panelSelectedPrompt
+            // 
+            this.panelSelectedPrompt.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(60)))), ((int)(((byte)(30)))));
+            this.panelSelectedPrompt.Location = new System.Drawing.Point(3, 3);
+            this.panelSelectedPrompt.Margin = new System.Windows.Forms.Padding(3, 3, 0, 3);
+            this.panelSelectedPrompt.Name = "panelSelectedPrompt";
+            this.panelSelectedPrompt.Size = new System.Drawing.Size(20, 40);
+            this.panelSelectedPrompt.TabIndex = 59;
+            // 
+            // panelSelectedImage
+            // 
+            this.panelSelectedImage.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(15)))), ((int)(((byte)(10)))), ((int)(((byte)(15)))));
+            this.panelSelectedImage.Location = new System.Drawing.Point(3, 49);
+            this.panelSelectedImage.Margin = new System.Windows.Forms.Padding(3, 3, 0, 3);
+            this.panelSelectedImage.Name = "panelSelectedImage";
+            this.panelSelectedImage.Size = new System.Drawing.Size(20, 40);
+            this.panelSelectedImage.TabIndex = 60;
+            // 
+            // panelSelectedSequence
+            // 
+            this.panelSelectedSequence.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(15)))), ((int)(((byte)(10)))), ((int)(((byte)(15)))));
+            this.panelSelectedSequence.Location = new System.Drawing.Point(3, 95);
+            this.panelSelectedSequence.Margin = new System.Windows.Forms.Padding(3, 3, 0, 3);
+            this.panelSelectedSequence.Name = "panelSelectedSequence";
+            this.panelSelectedSequence.Size = new System.Drawing.Size(20, 40);
+            this.panelSelectedSequence.TabIndex = 61;
             // 
             // panel8
             // 
             this.panel8.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(15)))), ((int)(((byte)(10)))), ((int)(((byte)(15)))));
-            this.panel8.Controls.Add(this.listBoxStyle);
-            this.panel8.Location = new System.Drawing.Point(3, 3);
-            this.panel8.Margin = new System.Windows.Forms.Padding(0, 0, 0, 5);
+            this.panel8.Controls.Add(this.listBoxPreset);
+            this.panel8.Location = new System.Drawing.Point(6, 52);
             this.panel8.Name = "panel8";
             this.panel8.Padding = new System.Windows.Forms.Padding(10);
-            this.panel8.Size = new System.Drawing.Size(175, 166);
+            this.panel8.Size = new System.Drawing.Size(218, 155);
             this.panel8.TabIndex = 52;
             // 
             // timerSec
@@ -1227,11 +1421,12 @@
             // panel7
             // 
             this.panel7.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(15)))), ((int)(((byte)(10)))), ((int)(((byte)(15)))));
-            this.panel7.Controls.Add(this.textBox1);
-            this.panel7.Location = new System.Drawing.Point(122, 3);
+            this.panel7.Controls.Add(this.textBoxPrompt);
+            this.panel7.Location = new System.Drawing.Point(45, 3);
+            this.panel7.Margin = new System.Windows.Forms.Padding(0, 3, 0, 3);
             this.panel7.Name = "panel7";
             this.panel7.Padding = new System.Windows.Forms.Padding(10, 10, 5, 5);
-            this.panel7.Size = new System.Drawing.Size(836, 45);
+            this.panel7.Size = new System.Drawing.Size(963, 45);
             this.panel7.TabIndex = 50;
             // 
             // flowLayoutPanel11
@@ -1239,11 +1434,10 @@
             this.flowLayoutPanel11.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(25)))), ((int)(((byte)(15)))), ((int)(((byte)(35)))));
             this.flowLayoutPanel11.Controls.Add(this.button1);
             this.flowLayoutPanel11.Controls.Add(this.panel7);
-            this.flowLayoutPanel11.Controls.Add(this.button2);
             this.flowLayoutPanel11.Location = new System.Drawing.Point(7, 4);
             this.flowLayoutPanel11.Margin = new System.Windows.Forms.Padding(0);
             this.flowLayoutPanel11.Name = "flowLayoutPanel11";
-            this.flowLayoutPanel11.Size = new System.Drawing.Size(1011, 51);
+            this.flowLayoutPanel11.Size = new System.Drawing.Size(1013, 51);
             this.flowLayoutPanel11.TabIndex = 51;
             // 
             // button1
@@ -1256,51 +1450,32 @@
             this.button1.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.button1.ForeColor = System.Drawing.Color.Silver;
             this.button1.Image = global::StableDiffusion.Properties.Resources.text;
-            this.button1.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.button1.Location = new System.Drawing.Point(3, 3);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(113, 45);
+            this.button1.Size = new System.Drawing.Size(39, 45);
             this.button1.TabIndex = 37;
-            this.button1.Text = "Prompt";
-            this.button1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.button1.UseVisualStyleBackColor = false;
-            // 
-            // button2
-            // 
-            this.button2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(30)))), ((int)(((byte)(50)))));
-            this.button2.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.button2.FlatAppearance.BorderSize = 0;
-            this.button2.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button2.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.button2.ForeColor = System.Drawing.Color.Silver;
-            this.button2.Image = global::StableDiffusion.Properties.Resources.save;
-            this.button2.Location = new System.Drawing.Point(961, 3);
-            this.button2.Margin = new System.Windows.Forms.Padding(0, 3, 0, 3);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(47, 45);
-            this.button2.TabIndex = 42;
-            this.button2.UseVisualStyleBackColor = false;
             // 
             // panel10
             // 
             this.panel10.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(15)))), ((int)(((byte)(10)))), ((int)(((byte)(15)))));
-            this.panel10.Controls.Add(this.listBoxSubStyle);
-            this.panel10.Location = new System.Drawing.Point(3, 175);
+            this.panel10.Controls.Add(this.listBoxPresetStyles);
+            this.panel10.Location = new System.Drawing.Point(6, 260);
             this.panel10.Margin = new System.Windows.Forms.Padding(0, 3, 0, 3);
             this.panel10.Name = "panel10";
             this.panel10.Padding = new System.Windows.Forms.Padding(10);
-            this.panel10.Size = new System.Drawing.Size(175, 293);
+            this.panel10.Size = new System.Drawing.Size(218, 247);
             this.panel10.TabIndex = 53;
             // 
             // panel11
             // 
             this.panel11.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(15)))), ((int)(((byte)(10)))), ((int)(((byte)(15)))));
-            this.panel11.Controls.Add(this.listBoxStyleGeneric);
-            this.panel11.Location = new System.Drawing.Point(186, 1);
+            this.panel11.Controls.Add(this.listBoxGenericStyles);
+            this.panel11.Location = new System.Drawing.Point(230, 50);
             this.panel11.Margin = new System.Windows.Forms.Padding(0, 3, 0, 3);
             this.panel11.Name = "panel11";
             this.panel11.Padding = new System.Windows.Forms.Padding(10);
-            this.panel11.Size = new System.Drawing.Size(175, 469);
+            this.panel11.Size = new System.Drawing.Size(218, 457);
             this.panel11.TabIndex = 54;
             // 
             // imageList1
@@ -1312,19 +1487,79 @@
             // panel14
             // 
             this.panel14.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(25)))), ((int)(((byte)(15)))), ((int)(((byte)(35)))));
+            this.panel14.Controls.Add(this.flowLayoutPanel14);
             this.panel14.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panel14.Location = new System.Drawing.Point(0, 772);
+            this.panel14.Location = new System.Drawing.Point(0, 796);
+            this.panel14.Margin = new System.Windows.Forms.Padding(0);
             this.panel14.Name = "panel14";
-            this.panel14.Size = new System.Drawing.Size(2568, 30);
+            this.panel14.Size = new System.Drawing.Size(2429, 40);
             this.panel14.TabIndex = 56;
+            // 
+            // flowLayoutPanel14
+            // 
+            this.flowLayoutPanel14.Controls.Add(this.button12);
+            this.flowLayoutPanel14.Controls.Add(this.buttonDonate);
+            this.flowLayoutPanel14.Dock = System.Windows.Forms.DockStyle.Right;
+            this.flowLayoutPanel14.Location = new System.Drawing.Point(2103, 0);
+            this.flowLayoutPanel14.Margin = new System.Windows.Forms.Padding(3, 3, 0, 3);
+            this.flowLayoutPanel14.Name = "flowLayoutPanel14";
+            this.flowLayoutPanel14.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
+            this.flowLayoutPanel14.Size = new System.Drawing.Size(326, 40);
+            this.flowLayoutPanel14.TabIndex = 59;
+            // 
+            // button12
+            // 
+            this.button12.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(35)))), ((int)(((byte)(55)))));
+            this.button12.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.button12.FlatAppearance.BorderSize = 0;
+            this.button12.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.button12.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.button12.ForeColor = System.Drawing.Color.Silver;
+            this.button12.Location = new System.Drawing.Point(191, 3);
+            this.button12.Margin = new System.Windows.Forms.Padding(0, 3, 0, 3);
+            this.button12.Name = "button12";
+            this.button12.Size = new System.Drawing.Size(135, 40);
+            this.button12.TabIndex = 60;
+            this.button12.Text = "Version : 0.5";
+            this.button12.UseVisualStyleBackColor = false;
+            // 
+            // buttonDonate
+            // 
+            this.buttonDonate.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(35)))), ((int)(((byte)(55)))));
+            this.buttonDonate.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.buttonDonate.FlatAppearance.BorderSize = 0;
+            this.buttonDonate.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.buttonDonate.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.buttonDonate.ForeColor = System.Drawing.Color.Silver;
+            this.buttonDonate.Image = global::StableDiffusion.Properties.Resources.hearts;
+            this.buttonDonate.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.buttonDonate.Location = new System.Drawing.Point(53, 3);
+            this.buttonDonate.Margin = new System.Windows.Forms.Padding(3, 3, 0, 3);
+            this.buttonDonate.Name = "buttonDonate";
+            this.buttonDonate.Padding = new System.Windows.Forms.Padding(5, 0, 0, 0);
+            this.buttonDonate.Size = new System.Drawing.Size(135, 40);
+            this.buttonDonate.TabIndex = 61;
+            this.buttonDonate.Text = "Donate";
+            this.buttonDonate.UseVisualStyleBackColor = false;
+            this.buttonDonate.Click += new System.EventHandler(this.buttonDonate_Click);
             // 
             // panelTabPrompt
             // 
             this.panelTabPrompt.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(25)))), ((int)(((byte)(15)))), ((int)(((byte)(35)))));
-            this.panelTabPrompt.Controls.Add(this.flowLayoutPanel13);
+            this.panelTabPrompt.Controls.Add(this.buttonAddSelectedStylesToPreset);
+            this.panelTabPrompt.Controls.Add(this.buttonAddSelectedStylesToGeneric);
+            this.panelTabPrompt.Controls.Add(this.buttonAddSelectedPreset);
+            this.panelTabPrompt.Controls.Add(this.buttonAddSelectedToStyles);
+            this.panelTabPrompt.Controls.Add(this.buttonAddGenericToPreset);
+            this.panelTabPrompt.Controls.Add(this.tableLayoutPanel4);
+            this.panelTabPrompt.Controls.Add(this.buttonAddAllSelectedPreset);
+            this.panelTabPrompt.Controls.Add(this.tableLayoutPanel9);
+            this.panelTabPrompt.Controls.Add(this.tableLayoutPanel5);
+            this.panelTabPrompt.Controls.Add(this.tableLayoutPanel11);
+            this.panelTabPrompt.Controls.Add(this.panel8);
+            this.panelTabPrompt.Controls.Add(this.tableLayoutPanel1);
             this.panelTabPrompt.Controls.Add(this.panel10);
             this.panelTabPrompt.Controls.Add(this.panel2);
-            this.panelTabPrompt.Controls.Add(this.panel8);
             this.panelTabPrompt.Controls.Add(this.panel11);
             this.panelTabPrompt.Location = new System.Drawing.Point(340, 60);
             this.panelTabPrompt.Margin = new System.Windows.Forms.Padding(0);
@@ -1333,109 +1568,566 @@
             this.panelTabPrompt.Size = new System.Drawing.Size(680, 600);
             this.panelTabPrompt.TabIndex = 57;
             // 
-            // flowLayoutPanel13
+            // buttonAddSelectedStylesToPreset
             // 
-            this.flowLayoutPanel13.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(25)))), ((int)(((byte)(15)))), ((int)(((byte)(35)))));
-            this.flowLayoutPanel13.Controls.Add(this.button6);
-            this.flowLayoutPanel13.Controls.Add(this.button7);
-            this.flowLayoutPanel13.Controls.Add(this.button8);
-            this.flowLayoutPanel13.Controls.Add(this.button9);
-            this.flowLayoutPanel13.Controls.Add(this.button10);
-            this.flowLayoutPanel13.Location = new System.Drawing.Point(417, 566);
-            this.flowLayoutPanel13.Margin = new System.Windows.Forms.Padding(0);
-            this.flowLayoutPanel13.Name = "flowLayoutPanel13";
-            this.flowLayoutPanel13.Size = new System.Drawing.Size(263, 31);
-            this.flowLayoutPanel13.TabIndex = 55;
+            this.buttonAddSelectedStylesToPreset.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(30)))), ((int)(((byte)(50)))));
+            this.buttonAddSelectedStylesToPreset.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.buttonAddSelectedStylesToPreset.FlatAppearance.BorderSize = 0;
+            this.buttonAddSelectedStylesToPreset.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.buttonAddSelectedStylesToPreset.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.buttonAddSelectedStylesToPreset.ForeColor = System.Drawing.Color.Silver;
+            this.buttonAddSelectedStylesToPreset.Image = global::StableDiffusion.Properties.Resources.fast_backward;
+            this.buttonAddSelectedStylesToPreset.Location = new System.Drawing.Point(567, 555);
+            this.buttonAddSelectedStylesToPreset.Name = "buttonAddSelectedStylesToPreset";
+            this.buttonAddSelectedStylesToPreset.Size = new System.Drawing.Size(108, 40);
+            this.buttonAddSelectedStylesToPreset.TabIndex = 70;
+            this.buttonAddSelectedStylesToPreset.UseVisualStyleBackColor = false;
+            this.buttonAddSelectedStylesToPreset.Click += new System.EventHandler(this.buttonAddSelectedStylesToPreset_Click);
             // 
-            // button6
+            // buttonAddSelectedStylesToGeneric
             // 
-            this.button6.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(30)))), ((int)(((byte)(50)))));
-            this.button6.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.button6.FlatAppearance.BorderSize = 0;
-            this.button6.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button6.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.button6.ForeColor = System.Drawing.Color.Silver;
-            this.button6.Image = global::StableDiffusion.Properties.Resources.shuffle;
-            this.button6.Location = new System.Drawing.Point(0, 0);
-            this.button6.Margin = new System.Windows.Forms.Padding(0, 0, 3, 0);
-            this.button6.Name = "button6";
-            this.button6.Size = new System.Drawing.Size(30, 30);
-            this.button6.TabIndex = 40;
-            this.button6.UseVisualStyleBackColor = false;
+            this.buttonAddSelectedStylesToGeneric.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(30)))), ((int)(((byte)(50)))));
+            this.buttonAddSelectedStylesToGeneric.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.buttonAddSelectedStylesToGeneric.FlatAppearance.BorderSize = 0;
+            this.buttonAddSelectedStylesToGeneric.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.buttonAddSelectedStylesToGeneric.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.buttonAddSelectedStylesToGeneric.ForeColor = System.Drawing.Color.Silver;
+            this.buttonAddSelectedStylesToGeneric.Image = global::StableDiffusion.Properties.Resources.previous;
+            this.buttonAddSelectedStylesToGeneric.Location = new System.Drawing.Point(454, 555);
+            this.buttonAddSelectedStylesToGeneric.Name = "buttonAddSelectedStylesToGeneric";
+            this.buttonAddSelectedStylesToGeneric.Size = new System.Drawing.Size(107, 40);
+            this.buttonAddSelectedStylesToGeneric.TabIndex = 69;
+            this.buttonAddSelectedStylesToGeneric.UseVisualStyleBackColor = false;
+            this.buttonAddSelectedStylesToGeneric.Click += new System.EventHandler(this.buttonAddSelectedStylesToGeneric_Click);
             // 
-            // button7
+            // buttonAddSelectedPreset
             // 
-            this.button7.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(30)))), ((int)(((byte)(50)))));
-            this.button7.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.button7.FlatAppearance.BorderSize = 0;
-            this.button7.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button7.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.button7.ForeColor = System.Drawing.Color.Silver;
-            this.button7.Image = global::StableDiffusion.Properties.Resources.delete_cross1;
-            this.button7.Location = new System.Drawing.Point(33, 0);
-            this.button7.Margin = new System.Windows.Forms.Padding(0, 0, 3, 3);
-            this.button7.Name = "button7";
-            this.button7.Size = new System.Drawing.Size(30, 30);
-            this.button7.TabIndex = 41;
-            this.button7.UseVisualStyleBackColor = false;
+            this.buttonAddSelectedPreset.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(30)))), ((int)(((byte)(50)))));
+            this.buttonAddSelectedPreset.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.buttonAddSelectedPreset.FlatAppearance.BorderSize = 0;
+            this.buttonAddSelectedPreset.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.buttonAddSelectedPreset.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.buttonAddSelectedPreset.ForeColor = System.Drawing.Color.Silver;
+            this.buttonAddSelectedPreset.Image = global::StableDiffusion.Properties.Resources.next;
+            this.buttonAddSelectedPreset.Location = new System.Drawing.Point(118, 554);
+            this.buttonAddSelectedPreset.Name = "buttonAddSelectedPreset";
+            this.buttonAddSelectedPreset.Size = new System.Drawing.Size(106, 40);
+            this.buttonAddSelectedPreset.TabIndex = 68;
+            this.buttonAddSelectedPreset.UseVisualStyleBackColor = false;
+            this.buttonAddSelectedPreset.Click += new System.EventHandler(this.buttonAddSelectedPreset_Click);
             // 
-            // button8
+            // buttonAddSelectedToStyles
             // 
-            this.button8.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(30)))), ((int)(((byte)(50)))));
-            this.button8.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.button8.FlatAppearance.BorderSize = 0;
-            this.button8.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button8.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.button8.ForeColor = System.Drawing.Color.Silver;
-            this.button8.Image = global::StableDiffusion.Properties.Resources.delete_cross1;
-            this.button8.Location = new System.Drawing.Point(66, 0);
-            this.button8.Margin = new System.Windows.Forms.Padding(0, 0, 3, 3);
-            this.button8.Name = "button8";
-            this.button8.Size = new System.Drawing.Size(30, 30);
-            this.button8.TabIndex = 42;
-            this.button8.UseVisualStyleBackColor = false;
+            this.buttonAddSelectedToStyles.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(30)))), ((int)(((byte)(50)))));
+            this.buttonAddSelectedToStyles.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.buttonAddSelectedToStyles.FlatAppearance.BorderSize = 0;
+            this.buttonAddSelectedToStyles.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.buttonAddSelectedToStyles.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.buttonAddSelectedToStyles.ForeColor = System.Drawing.Color.Silver;
+            this.buttonAddSelectedToStyles.Image = global::StableDiffusion.Properties.Resources.next;
+            this.buttonAddSelectedToStyles.Location = new System.Drawing.Point(342, 554);
+            this.buttonAddSelectedToStyles.Name = "buttonAddSelectedToStyles";
+            this.buttonAddSelectedToStyles.Size = new System.Drawing.Size(106, 40);
+            this.buttonAddSelectedToStyles.TabIndex = 67;
+            this.buttonAddSelectedToStyles.UseVisualStyleBackColor = false;
+            this.buttonAddSelectedToStyles.Click += new System.EventHandler(this.buttonAddSelectedToStyles_Click);
             // 
-            // button9
+            // buttonAddGenericToPreset
             // 
-            this.button9.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(30)))), ((int)(((byte)(50)))));
-            this.button9.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.button9.FlatAppearance.BorderSize = 0;
-            this.button9.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button9.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.button9.ForeColor = System.Drawing.Color.Silver;
-            this.button9.Image = global::StableDiffusion.Properties.Resources.delete_cross1;
-            this.button9.Location = new System.Drawing.Point(99, 0);
-            this.button9.Margin = new System.Windows.Forms.Padding(0, 0, 3, 3);
-            this.button9.Name = "button9";
-            this.button9.Size = new System.Drawing.Size(30, 30);
-            this.button9.TabIndex = 43;
-            this.button9.UseVisualStyleBackColor = false;
+            this.buttonAddGenericToPreset.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(30)))), ((int)(((byte)(50)))));
+            this.buttonAddGenericToPreset.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.buttonAddGenericToPreset.FlatAppearance.BorderSize = 0;
+            this.buttonAddGenericToPreset.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.buttonAddGenericToPreset.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.buttonAddGenericToPreset.ForeColor = System.Drawing.Color.Silver;
+            this.buttonAddGenericToPreset.Image = global::StableDiffusion.Properties.Resources.previous;
+            this.buttonAddGenericToPreset.Location = new System.Drawing.Point(230, 554);
+            this.buttonAddGenericToPreset.Name = "buttonAddGenericToPreset";
+            this.buttonAddGenericToPreset.Size = new System.Drawing.Size(106, 40);
+            this.buttonAddGenericToPreset.TabIndex = 66;
+            this.buttonAddGenericToPreset.UseVisualStyleBackColor = false;
+            this.buttonAddGenericToPreset.Click += new System.EventHandler(this.buttonAddSelectedToPreset_Click);
             // 
-            // button10
+            // tableLayoutPanel4
             // 
-            this.button10.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(30)))), ((int)(((byte)(50)))));
-            this.button10.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.button10.FlatAppearance.BorderSize = 0;
-            this.button10.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button10.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.button10.ForeColor = System.Drawing.Color.Silver;
-            this.button10.Image = global::StableDiffusion.Properties.Resources.delete_cross1;
-            this.button10.Location = new System.Drawing.Point(132, 0);
-            this.button10.Margin = new System.Windows.Forms.Padding(0, 0, 3, 3);
-            this.button10.Name = "button10";
-            this.button10.Size = new System.Drawing.Size(30, 30);
-            this.button10.TabIndex = 44;
-            this.button10.UseVisualStyleBackColor = false;
+            this.tableLayoutPanel4.ColumnCount = 2;
+            this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 66.51376F));
+            this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.48624F));
+            this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableLayoutPanel4.Controls.Add(this.panel19, 0, 0);
+            this.tableLayoutPanel4.Controls.Add(this.tableLayoutPanel13, 1, 0);
+            this.tableLayoutPanel4.Location = new System.Drawing.Point(230, 505);
+            this.tableLayoutPanel4.Name = "tableLayoutPanel4";
+            this.tableLayoutPanel4.RowCount = 1;
+            this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel4.Size = new System.Drawing.Size(218, 48);
+            this.tableLayoutPanel4.TabIndex = 65;
+            // 
+            // panel19
+            // 
+            this.panel19.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(15)))), ((int)(((byte)(10)))), ((int)(((byte)(15)))));
+            this.panel19.Controls.Add(this.textBoxGenericStyle);
+            this.panel19.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panel19.Location = new System.Drawing.Point(0, 3);
+            this.panel19.Margin = new System.Windows.Forms.Padding(0, 3, 0, 3);
+            this.panel19.Name = "panel19";
+            this.panel19.Padding = new System.Windows.Forms.Padding(10, 7, 5, 5);
+            this.panel19.Size = new System.Drawing.Size(145, 42);
+            this.panel19.TabIndex = 62;
+            // 
+            // textBoxGenericStyle
+            // 
+            this.textBoxGenericStyle.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(15)))), ((int)(((byte)(10)))), ((int)(((byte)(15)))));
+            this.textBoxGenericStyle.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.textBoxGenericStyle.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.textBoxGenericStyle.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.textBoxGenericStyle.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
+            this.textBoxGenericStyle.Location = new System.Drawing.Point(10, 7);
+            this.textBoxGenericStyle.Margin = new System.Windows.Forms.Padding(5);
+            this.textBoxGenericStyle.Name = "textBoxGenericStyle";
+            this.textBoxGenericStyle.Size = new System.Drawing.Size(130, 22);
+            this.textBoxGenericStyle.TabIndex = 1;
+            this.textBoxGenericStyle.Text = "new style";
+            // 
+            // tableLayoutPanel13
+            // 
+            this.tableLayoutPanel13.ColumnCount = 2;
+            this.tableLayoutPanel13.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel13.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel13.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableLayoutPanel13.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableLayoutPanel13.Controls.Add(this.buttonRemoveGenericStyle, 1, 0);
+            this.tableLayoutPanel13.Controls.Add(this.buttonAddGenericStyle, 0, 0);
+            this.tableLayoutPanel13.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanel13.Location = new System.Drawing.Point(148, 3);
+            this.tableLayoutPanel13.Margin = new System.Windows.Forms.Padding(3, 3, 0, 3);
+            this.tableLayoutPanel13.Name = "tableLayoutPanel13";
+            this.tableLayoutPanel13.RowCount = 1;
+            this.tableLayoutPanel13.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel13.Size = new System.Drawing.Size(70, 42);
+            this.tableLayoutPanel13.TabIndex = 65;
+            // 
+            // buttonRemoveGenericStyle
+            // 
+            this.buttonRemoveGenericStyle.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(30)))), ((int)(((byte)(50)))));
+            this.buttonRemoveGenericStyle.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.buttonRemoveGenericStyle.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.buttonRemoveGenericStyle.FlatAppearance.BorderSize = 0;
+            this.buttonRemoveGenericStyle.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.buttonRemoveGenericStyle.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.buttonRemoveGenericStyle.ForeColor = System.Drawing.Color.Silver;
+            this.buttonRemoveGenericStyle.Image = global::StableDiffusion.Properties.Resources.removeC;
+            this.buttonRemoveGenericStyle.Location = new System.Drawing.Point(38, 0);
+            this.buttonRemoveGenericStyle.Margin = new System.Windows.Forms.Padding(3, 0, 0, 0);
+            this.buttonRemoveGenericStyle.Name = "buttonRemoveGenericStyle";
+            this.buttonRemoveGenericStyle.Size = new System.Drawing.Size(32, 42);
+            this.buttonRemoveGenericStyle.TabIndex = 45;
+            this.buttonRemoveGenericStyle.UseVisualStyleBackColor = false;
+            // 
+            // buttonAddGenericStyle
+            // 
+            this.buttonAddGenericStyle.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(30)))), ((int)(((byte)(50)))));
+            this.buttonAddGenericStyle.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.buttonAddGenericStyle.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.buttonAddGenericStyle.FlatAppearance.BorderSize = 0;
+            this.buttonAddGenericStyle.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.buttonAddGenericStyle.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.buttonAddGenericStyle.ForeColor = System.Drawing.Color.Silver;
+            this.buttonAddGenericStyle.Image = global::StableDiffusion.Properties.Resources.addC;
+            this.buttonAddGenericStyle.Location = new System.Drawing.Point(0, 0);
+            this.buttonAddGenericStyle.Margin = new System.Windows.Forms.Padding(0, 0, 3, 0);
+            this.buttonAddGenericStyle.Name = "buttonAddGenericStyle";
+            this.buttonAddGenericStyle.Size = new System.Drawing.Size(32, 42);
+            this.buttonAddGenericStyle.TabIndex = 40;
+            this.buttonAddGenericStyle.UseVisualStyleBackColor = false;
+            this.buttonAddGenericStyle.Click += new System.EventHandler(this.buttonAddStyle_Click);
+            // 
+            // buttonAddAllSelectedPreset
+            // 
+            this.buttonAddAllSelectedPreset.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(60)))), ((int)(((byte)(30)))));
+            this.buttonAddAllSelectedPreset.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.buttonAddAllSelectedPreset.FlatAppearance.BorderSize = 0;
+            this.buttonAddAllSelectedPreset.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.buttonAddAllSelectedPreset.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.buttonAddAllSelectedPreset.ForeColor = System.Drawing.Color.Silver;
+            this.buttonAddAllSelectedPreset.Image = global::StableDiffusion.Properties.Resources.fast_forward;
+            this.buttonAddAllSelectedPreset.Location = new System.Drawing.Point(6, 554);
+            this.buttonAddAllSelectedPreset.Name = "buttonAddAllSelectedPreset";
+            this.buttonAddAllSelectedPreset.Size = new System.Drawing.Size(106, 40);
+            this.buttonAddAllSelectedPreset.TabIndex = 45;
+            this.buttonAddAllSelectedPreset.UseVisualStyleBackColor = false;
+            this.buttonAddAllSelectedPreset.Click += new System.EventHandler(this.buttonAddAllSelectedPreset_Click);
+            // 
+            // tableLayoutPanel9
+            // 
+            this.tableLayoutPanel9.ColumnCount = 2;
+            this.tableLayoutPanel9.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 66.51376F));
+            this.tableLayoutPanel9.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.48624F));
+            this.tableLayoutPanel9.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableLayoutPanel9.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableLayoutPanel9.Controls.Add(this.panel18, 0, 0);
+            this.tableLayoutPanel9.Controls.Add(this.tableLayoutPanel12, 1, 0);
+            this.tableLayoutPanel9.Location = new System.Drawing.Point(6, 505);
+            this.tableLayoutPanel9.Name = "tableLayoutPanel9";
+            this.tableLayoutPanel9.RowCount = 1;
+            this.tableLayoutPanel9.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel9.Size = new System.Drawing.Size(218, 48);
+            this.tableLayoutPanel9.TabIndex = 64;
+            // 
+            // panel18
+            // 
+            this.panel18.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(15)))), ((int)(((byte)(10)))), ((int)(((byte)(15)))));
+            this.panel18.Controls.Add(this.textBoxPresetStyle);
+            this.panel18.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panel18.Location = new System.Drawing.Point(0, 3);
+            this.panel18.Margin = new System.Windows.Forms.Padding(0, 3, 0, 3);
+            this.panel18.Name = "panel18";
+            this.panel18.Padding = new System.Windows.Forms.Padding(10, 7, 5, 5);
+            this.panel18.Size = new System.Drawing.Size(145, 42);
+            this.panel18.TabIndex = 62;
+            // 
+            // textBoxPresetStyle
+            // 
+            this.textBoxPresetStyle.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(15)))), ((int)(((byte)(10)))), ((int)(((byte)(15)))));
+            this.textBoxPresetStyle.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.textBoxPresetStyle.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.textBoxPresetStyle.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.textBoxPresetStyle.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
+            this.textBoxPresetStyle.Location = new System.Drawing.Point(10, 7);
+            this.textBoxPresetStyle.Margin = new System.Windows.Forms.Padding(5);
+            this.textBoxPresetStyle.Name = "textBoxPresetStyle";
+            this.textBoxPresetStyle.Size = new System.Drawing.Size(130, 22);
+            this.textBoxPresetStyle.TabIndex = 1;
+            this.textBoxPresetStyle.Text = "new style";
+            // 
+            // tableLayoutPanel12
+            // 
+            this.tableLayoutPanel12.ColumnCount = 2;
+            this.tableLayoutPanel12.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel12.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel12.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableLayoutPanel12.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableLayoutPanel12.Controls.Add(this.buttonRemovePresetStyle, 1, 0);
+            this.tableLayoutPanel12.Controls.Add(this.buttonAddPresetStyle, 0, 0);
+            this.tableLayoutPanel12.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanel12.Location = new System.Drawing.Point(148, 3);
+            this.tableLayoutPanel12.Margin = new System.Windows.Forms.Padding(3, 3, 0, 3);
+            this.tableLayoutPanel12.Name = "tableLayoutPanel12";
+            this.tableLayoutPanel12.RowCount = 1;
+            this.tableLayoutPanel12.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel12.Size = new System.Drawing.Size(70, 42);
+            this.tableLayoutPanel12.TabIndex = 65;
+            // 
+            // buttonRemovePresetStyle
+            // 
+            this.buttonRemovePresetStyle.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(30)))), ((int)(((byte)(50)))));
+            this.buttonRemovePresetStyle.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.buttonRemovePresetStyle.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.buttonRemovePresetStyle.FlatAppearance.BorderSize = 0;
+            this.buttonRemovePresetStyle.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.buttonRemovePresetStyle.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.buttonRemovePresetStyle.ForeColor = System.Drawing.Color.Silver;
+            this.buttonRemovePresetStyle.Image = global::StableDiffusion.Properties.Resources.removeC;
+            this.buttonRemovePresetStyle.Location = new System.Drawing.Point(38, 0);
+            this.buttonRemovePresetStyle.Margin = new System.Windows.Forms.Padding(3, 0, 0, 0);
+            this.buttonRemovePresetStyle.Name = "buttonRemovePresetStyle";
+            this.buttonRemovePresetStyle.Size = new System.Drawing.Size(32, 42);
+            this.buttonRemovePresetStyle.TabIndex = 45;
+            this.buttonRemovePresetStyle.UseVisualStyleBackColor = false;
+            // 
+            // buttonAddPresetStyle
+            // 
+            this.buttonAddPresetStyle.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(30)))), ((int)(((byte)(50)))));
+            this.buttonAddPresetStyle.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.buttonAddPresetStyle.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.buttonAddPresetStyle.FlatAppearance.BorderSize = 0;
+            this.buttonAddPresetStyle.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.buttonAddPresetStyle.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.buttonAddPresetStyle.ForeColor = System.Drawing.Color.Silver;
+            this.buttonAddPresetStyle.Image = global::StableDiffusion.Properties.Resources.addC;
+            this.buttonAddPresetStyle.Location = new System.Drawing.Point(0, 0);
+            this.buttonAddPresetStyle.Margin = new System.Windows.Forms.Padding(0, 0, 3, 0);
+            this.buttonAddPresetStyle.Name = "buttonAddPresetStyle";
+            this.buttonAddPresetStyle.Size = new System.Drawing.Size(32, 42);
+            this.buttonAddPresetStyle.TabIndex = 40;
+            this.buttonAddPresetStyle.UseVisualStyleBackColor = false;
+            this.buttonAddPresetStyle.Click += new System.EventHandler(this.buttonAddStyle_Click);
+            // 
+            // tableLayoutPanel5
+            // 
+            this.tableLayoutPanel5.ColumnCount = 2;
+            this.tableLayoutPanel5.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 66.51376F));
+            this.tableLayoutPanel5.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.48624F));
+            this.tableLayoutPanel5.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableLayoutPanel5.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableLayoutPanel5.Controls.Add(this.panel17, 0, 0);
+            this.tableLayoutPanel5.Controls.Add(this.tableLayoutPanel8, 1, 0);
+            this.tableLayoutPanel5.Location = new System.Drawing.Point(6, 207);
+            this.tableLayoutPanel5.Name = "tableLayoutPanel5";
+            this.tableLayoutPanel5.RowCount = 1;
+            this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel5.Size = new System.Drawing.Size(218, 48);
+            this.tableLayoutPanel5.TabIndex = 63;
+            // 
+            // panel17
+            // 
+            this.panel17.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(15)))), ((int)(((byte)(10)))), ((int)(((byte)(15)))));
+            this.panel17.Controls.Add(this.textBoxPreset);
+            this.panel17.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panel17.Location = new System.Drawing.Point(0, 3);
+            this.panel17.Margin = new System.Windows.Forms.Padding(0, 3, 0, 3);
+            this.panel17.Name = "panel17";
+            this.panel17.Padding = new System.Windows.Forms.Padding(10, 7, 5, 5);
+            this.panel17.Size = new System.Drawing.Size(145, 42);
+            this.panel17.TabIndex = 62;
+            // 
+            // textBoxPreset
+            // 
+            this.textBoxPreset.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(15)))), ((int)(((byte)(10)))), ((int)(((byte)(15)))));
+            this.textBoxPreset.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.textBoxPreset.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.textBoxPreset.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.textBoxPreset.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
+            this.textBoxPreset.Location = new System.Drawing.Point(10, 7);
+            this.textBoxPreset.Margin = new System.Windows.Forms.Padding(5);
+            this.textBoxPreset.Name = "textBoxPreset";
+            this.textBoxPreset.Size = new System.Drawing.Size(130, 22);
+            this.textBoxPreset.TabIndex = 1;
+            this.textBoxPreset.Text = "new preset";
+            // 
+            // tableLayoutPanel8
+            // 
+            this.tableLayoutPanel8.ColumnCount = 2;
+            this.tableLayoutPanel8.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel8.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel8.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableLayoutPanel8.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableLayoutPanel8.Controls.Add(this.buttonRemovePreset, 1, 0);
+            this.tableLayoutPanel8.Controls.Add(this.buttonAddPreset, 0, 0);
+            this.tableLayoutPanel8.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanel8.Location = new System.Drawing.Point(148, 3);
+            this.tableLayoutPanel8.Margin = new System.Windows.Forms.Padding(3, 3, 0, 3);
+            this.tableLayoutPanel8.Name = "tableLayoutPanel8";
+            this.tableLayoutPanel8.RowCount = 1;
+            this.tableLayoutPanel8.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel8.Size = new System.Drawing.Size(70, 42);
+            this.tableLayoutPanel8.TabIndex = 65;
+            // 
+            // buttonRemovePreset
+            // 
+            this.buttonRemovePreset.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(30)))), ((int)(((byte)(50)))));
+            this.buttonRemovePreset.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.buttonRemovePreset.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.buttonRemovePreset.FlatAppearance.BorderSize = 0;
+            this.buttonRemovePreset.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.buttonRemovePreset.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.buttonRemovePreset.ForeColor = System.Drawing.Color.Silver;
+            this.buttonRemovePreset.Image = global::StableDiffusion.Properties.Resources.removeC;
+            this.buttonRemovePreset.Location = new System.Drawing.Point(38, 0);
+            this.buttonRemovePreset.Margin = new System.Windows.Forms.Padding(3, 0, 0, 0);
+            this.buttonRemovePreset.Name = "buttonRemovePreset";
+            this.buttonRemovePreset.Size = new System.Drawing.Size(32, 42);
+            this.buttonRemovePreset.TabIndex = 45;
+            this.buttonRemovePreset.UseVisualStyleBackColor = false;
+            // 
+            // buttonAddPreset
+            // 
+            this.buttonAddPreset.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(30)))), ((int)(((byte)(50)))));
+            this.buttonAddPreset.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.buttonAddPreset.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.buttonAddPreset.FlatAppearance.BorderSize = 0;
+            this.buttonAddPreset.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.buttonAddPreset.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.buttonAddPreset.ForeColor = System.Drawing.Color.Silver;
+            this.buttonAddPreset.Image = global::StableDiffusion.Properties.Resources.addC;
+            this.buttonAddPreset.Location = new System.Drawing.Point(0, 0);
+            this.buttonAddPreset.Margin = new System.Windows.Forms.Padding(0, 0, 3, 0);
+            this.buttonAddPreset.Name = "buttonAddPreset";
+            this.buttonAddPreset.Size = new System.Drawing.Size(32, 42);
+            this.buttonAddPreset.TabIndex = 40;
+            this.buttonAddPreset.UseVisualStyleBackColor = false;
+            this.buttonAddPreset.Click += new System.EventHandler(this.buttonAddStyle_Click);
+            // 
+            // tableLayoutPanel11
+            // 
+            this.tableLayoutPanel11.ColumnCount = 3;
+            this.tableLayoutPanel11.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
+            this.tableLayoutPanel11.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
+            this.tableLayoutPanel11.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
+            this.tableLayoutPanel11.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableLayoutPanel11.Controls.Add(this.buttonSaveSelectedStyles, 2, 0);
+            this.tableLayoutPanel11.Controls.Add(this.buttonSaveGenericStyles, 1, 0);
+            this.tableLayoutPanel11.Controls.Add(this.buttonSavePresets, 0, 0);
+            this.tableLayoutPanel11.Dock = System.Windows.Forms.DockStyle.Top;
+            this.tableLayoutPanel11.Location = new System.Drawing.Point(3, 3);
+            this.tableLayoutPanel11.Name = "tableLayoutPanel11";
+            this.tableLayoutPanel11.RowCount = 1;
+            this.tableLayoutPanel11.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel11.Size = new System.Drawing.Size(674, 46);
+            this.tableLayoutPanel11.TabIndex = 62;
+            // 
+            // buttonSaveSelectedStyles
+            // 
+            this.buttonSaveSelectedStyles.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(60)))), ((int)(((byte)(30)))));
+            this.buttonSaveSelectedStyles.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.buttonSaveSelectedStyles.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.buttonSaveSelectedStyles.FlatAppearance.BorderSize = 0;
+            this.buttonSaveSelectedStyles.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.buttonSaveSelectedStyles.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.buttonSaveSelectedStyles.ForeColor = System.Drawing.Color.Silver;
+            this.buttonSaveSelectedStyles.Image = global::StableDiffusion.Properties.Resources.save1;
+            this.buttonSaveSelectedStyles.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.buttonSaveSelectedStyles.Location = new System.Drawing.Point(451, 3);
+            this.buttonSaveSelectedStyles.Name = "buttonSaveSelectedStyles";
+            this.buttonSaveSelectedStyles.Size = new System.Drawing.Size(220, 40);
+            this.buttonSaveSelectedStyles.TabIndex = 62;
+            this.buttonSaveSelectedStyles.Text = "Selected Styles";
+            this.buttonSaveSelectedStyles.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.buttonSaveSelectedStyles.UseVisualStyleBackColor = false;
+            this.buttonSaveSelectedStyles.Click += new System.EventHandler(this.buttonSaveSelectedStyles_Click);
+            // 
+            // buttonSaveGenericStyles
+            // 
+            this.buttonSaveGenericStyles.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(60)))), ((int)(((byte)(30)))));
+            this.buttonSaveGenericStyles.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.buttonSaveGenericStyles.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.buttonSaveGenericStyles.FlatAppearance.BorderSize = 0;
+            this.buttonSaveGenericStyles.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.buttonSaveGenericStyles.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.buttonSaveGenericStyles.ForeColor = System.Drawing.Color.Silver;
+            this.buttonSaveGenericStyles.Image = global::StableDiffusion.Properties.Resources.save1;
+            this.buttonSaveGenericStyles.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.buttonSaveGenericStyles.Location = new System.Drawing.Point(227, 3);
+            this.buttonSaveGenericStyles.Name = "buttonSaveGenericStyles";
+            this.buttonSaveGenericStyles.Size = new System.Drawing.Size(218, 40);
+            this.buttonSaveGenericStyles.TabIndex = 61;
+            this.buttonSaveGenericStyles.Text = "Generic Styles";
+            this.buttonSaveGenericStyles.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.buttonSaveGenericStyles.UseVisualStyleBackColor = false;
+            this.buttonSaveGenericStyles.Click += new System.EventHandler(this.buttonSaveGenericStyles_Click);
+            // 
+            // buttonSavePresets
+            // 
+            this.buttonSavePresets.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(60)))), ((int)(((byte)(30)))));
+            this.buttonSavePresets.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.buttonSavePresets.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.buttonSavePresets.FlatAppearance.BorderSize = 0;
+            this.buttonSavePresets.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.buttonSavePresets.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.buttonSavePresets.ForeColor = System.Drawing.Color.Silver;
+            this.buttonSavePresets.Image = global::StableDiffusion.Properties.Resources.save1;
+            this.buttonSavePresets.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.buttonSavePresets.Location = new System.Drawing.Point(3, 3);
+            this.buttonSavePresets.Name = "buttonSavePresets";
+            this.buttonSavePresets.Size = new System.Drawing.Size(218, 40);
+            this.buttonSavePresets.TabIndex = 60;
+            this.buttonSavePresets.Text = "Presets";
+            this.buttonSavePresets.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.buttonSavePresets.UseVisualStyleBackColor = false;
+            this.buttonSavePresets.Click += new System.EventHandler(this.buttonSavePresets_Click);
+            // 
+            // tableLayoutPanel1
+            // 
+            this.tableLayoutPanel1.ColumnCount = 4;
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableLayoutPanel1.Controls.Add(this.buttonRemoveStyles, 3, 0);
+            this.tableLayoutPanel1.Controls.Add(this.buttonRemoveSelectedStyles, 2, 0);
+            this.tableLayoutPanel1.Controls.Add(this.button20, 1, 0);
+            this.tableLayoutPanel1.Controls.Add(this.buttonShuffleSelectedStyles, 0, 0);
+            this.tableLayoutPanel1.Location = new System.Drawing.Point(454, 508);
+            this.tableLayoutPanel1.Name = "tableLayoutPanel1";
+            this.tableLayoutPanel1.RowCount = 1;
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(221, 45);
+            this.tableLayoutPanel1.TabIndex = 59;
+            // 
+            // buttonRemoveStyles
+            // 
+            this.buttonRemoveStyles.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(20)))), ((int)(((byte)(30)))));
+            this.buttonRemoveStyles.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.buttonRemoveStyles.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.buttonRemoveStyles.FlatAppearance.BorderSize = 0;
+            this.buttonRemoveStyles.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.buttonRemoveStyles.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.buttonRemoveStyles.ForeColor = System.Drawing.Color.Silver;
+            this.buttonRemoveStyles.Image = global::StableDiffusion.Properties.Resources.cancel;
+            this.buttonRemoveStyles.Location = new System.Drawing.Point(168, 0);
+            this.buttonRemoveStyles.Margin = new System.Windows.Forms.Padding(3, 0, 0, 3);
+            this.buttonRemoveStyles.Name = "buttonRemoveStyles";
+            this.buttonRemoveStyles.Size = new System.Drawing.Size(53, 42);
+            this.buttonRemoveStyles.TabIndex = 45;
+            this.buttonRemoveStyles.UseVisualStyleBackColor = false;
+            this.buttonRemoveStyles.Click += new System.EventHandler(this.buttonRemoveStyles_Click);
+            // 
+            // buttonRemoveSelectedStyles
+            // 
+            this.buttonRemoveSelectedStyles.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(30)))), ((int)(((byte)(50)))));
+            this.buttonRemoveSelectedStyles.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.buttonRemoveSelectedStyles.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.buttonRemoveSelectedStyles.FlatAppearance.BorderSize = 0;
+            this.buttonRemoveSelectedStyles.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.buttonRemoveSelectedStyles.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.buttonRemoveSelectedStyles.ForeColor = System.Drawing.Color.Silver;
+            this.buttonRemoveSelectedStyles.Image = global::StableDiffusion.Properties.Resources.removeC;
+            this.buttonRemoveSelectedStyles.Location = new System.Drawing.Point(113, 0);
+            this.buttonRemoveSelectedStyles.Margin = new System.Windows.Forms.Padding(3, 0, 3, 3);
+            this.buttonRemoveSelectedStyles.Name = "buttonRemoveSelectedStyles";
+            this.buttonRemoveSelectedStyles.Size = new System.Drawing.Size(49, 42);
+            this.buttonRemoveSelectedStyles.TabIndex = 44;
+            this.buttonRemoveSelectedStyles.UseVisualStyleBackColor = false;
+            this.buttonRemoveSelectedStyles.Click += new System.EventHandler(this.buttonRemoveStyleSelectedStyles_Click);
+            // 
+            // button20
+            // 
+            this.button20.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(30)))), ((int)(((byte)(50)))));
+            this.button20.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.button20.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.button20.FlatAppearance.BorderSize = 0;
+            this.button20.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.button20.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.button20.ForeColor = System.Drawing.Color.Silver;
+            this.button20.Image = global::StableDiffusion.Properties.Resources.delete_cross1;
+            this.button20.Location = new System.Drawing.Point(58, 0);
+            this.button20.Margin = new System.Windows.Forms.Padding(3, 0, 3, 3);
+            this.button20.Name = "button20";
+            this.button20.Size = new System.Drawing.Size(49, 42);
+            this.button20.TabIndex = 41;
+            this.button20.UseVisualStyleBackColor = false;
+            this.button20.Visible = false;
+            // 
+            // buttonShuffleSelectedStyles
+            // 
+            this.buttonShuffleSelectedStyles.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(30)))), ((int)(((byte)(50)))));
+            this.buttonShuffleSelectedStyles.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.buttonShuffleSelectedStyles.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.buttonShuffleSelectedStyles.FlatAppearance.BorderSize = 0;
+            this.buttonShuffleSelectedStyles.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.buttonShuffleSelectedStyles.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.buttonShuffleSelectedStyles.ForeColor = System.Drawing.Color.Silver;
+            this.buttonShuffleSelectedStyles.Image = global::StableDiffusion.Properties.Resources.shuffle;
+            this.buttonShuffleSelectedStyles.Location = new System.Drawing.Point(0, 0);
+            this.buttonShuffleSelectedStyles.Margin = new System.Windows.Forms.Padding(0, 0, 3, 3);
+            this.buttonShuffleSelectedStyles.Name = "buttonShuffleSelectedStyles";
+            this.buttonShuffleSelectedStyles.Size = new System.Drawing.Size(52, 42);
+            this.buttonShuffleSelectedStyles.TabIndex = 40;
+            this.buttonShuffleSelectedStyles.UseVisualStyleBackColor = false;
+            this.buttonShuffleSelectedStyles.Click += new System.EventHandler(this.buttonShuffleSelectedStyles_Click);
             // 
             // panel2
             // 
             this.panel2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(15)))), ((int)(((byte)(10)))), ((int)(((byte)(15)))));
             this.panel2.Controls.Add(this.listBoxSelectedStyles);
-            this.panel2.Location = new System.Drawing.Point(417, 3);
+            this.panel2.Location = new System.Drawing.Point(454, 50);
             this.panel2.Margin = new System.Windows.Forms.Padding(0, 0, 0, 5);
             this.panel2.Name = "panel2";
             this.panel2.Padding = new System.Windows.Forms.Padding(10);
-            this.panel2.Size = new System.Drawing.Size(260, 562);
+            this.panel2.Size = new System.Drawing.Size(221, 457);
             this.panel2.TabIndex = 53;
             // 
             // listBoxSelectedStyles
@@ -1447,19 +2139,16 @@
             this.listBoxSelectedStyles.ForeColor = System.Drawing.Color.Silver;
             this.listBoxSelectedStyles.FormattingEnabled = true;
             this.listBoxSelectedStyles.ItemHeight = 17;
-            this.listBoxSelectedStyles.Items.AddRange(new object[] {
-            "Portrait",
-            "Oil painting",
-            "Pen drawing",
-            "Landscape art"});
             this.listBoxSelectedStyles.Location = new System.Drawing.Point(10, 10);
             this.listBoxSelectedStyles.Name = "listBoxSelectedStyles";
-            this.listBoxSelectedStyles.Size = new System.Drawing.Size(240, 542);
+            this.listBoxSelectedStyles.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
+            this.listBoxSelectedStyles.Size = new System.Drawing.Size(201, 437);
             this.listBoxSelectedStyles.TabIndex = 2;
             // 
             // panelTabSequence
             // 
             this.panelTabSequence.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(25)))), ((int)(((byte)(15)))), ((int)(((byte)(35)))));
+            this.panelTabSequence.Controls.Add(this.buttonWorkInProgress1);
             this.panelTabSequence.Location = new System.Drawing.Point(1730, 60);
             this.panelTabSequence.Margin = new System.Windows.Forms.Padding(0);
             this.panelTabSequence.Name = "panelTabSequence";
@@ -1467,24 +2156,129 @@
             this.panelTabSequence.Size = new System.Drawing.Size(680, 600);
             this.panelTabSequence.TabIndex = 58;
             // 
+            // buttonWorkInProgress1
+            // 
+            this.buttonWorkInProgress1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(35)))), ((int)(((byte)(55)))));
+            this.buttonWorkInProgress1.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.buttonWorkInProgress1.FlatAppearance.BorderSize = 0;
+            this.buttonWorkInProgress1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.buttonWorkInProgress1.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.buttonWorkInProgress1.ForeColor = System.Drawing.Color.Silver;
+            this.buttonWorkInProgress1.Image = global::StableDiffusion.Properties.Resources.work_in_progress;
+            this.buttonWorkInProgress1.Location = new System.Drawing.Point(180, 167);
+            this.buttonWorkInProgress1.Margin = new System.Windows.Forms.Padding(3, 3, 0, 3);
+            this.buttonWorkInProgress1.Name = "buttonWorkInProgress1";
+            this.buttonWorkInProgress1.Size = new System.Drawing.Size(314, 226);
+            this.buttonWorkInProgress1.TabIndex = 48;
+            this.buttonWorkInProgress1.Text = "Comming soon...";
+            this.buttonWorkInProgress1.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.buttonWorkInProgress1.UseVisualStyleBackColor = false;
+            // 
+            // panel16
+            // 
+            this.panel16.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(25)))), ((int)(((byte)(15)))), ((int)(((byte)(35)))));
+            this.panel16.Controls.Add(this.buttonStart);
+            this.panel16.Controls.Add(this.flowLayoutPanel2);
+            this.panel16.Controls.Add(this.tableLayoutPanel3);
+            this.panel16.Location = new System.Drawing.Point(7, 61);
+            this.panel16.Name = "panel16";
+            this.panel16.Size = new System.Drawing.Size(328, 186);
+            this.panel16.TabIndex = 60;
+            // 
+            // flowLayoutPanel2
+            // 
+            this.flowLayoutPanel2.Controls.Add(this.panelSelectedPrompt);
+            this.flowLayoutPanel2.Controls.Add(this.tableLayoutPanel2);
+            this.flowLayoutPanel2.Controls.Add(this.panelSelectedImage);
+            this.flowLayoutPanel2.Controls.Add(this.tableLayoutPanel6);
+            this.flowLayoutPanel2.Controls.Add(this.panelSelectedSequence);
+            this.flowLayoutPanel2.Controls.Add(this.buttonTabSequence);
+            this.flowLayoutPanel2.Controls.Add(this.panelSelectedMorph);
+            this.flowLayoutPanel2.Controls.Add(this.buttonTabMorph);
+            this.flowLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Right;
+            this.flowLayoutPanel2.Location = new System.Drawing.Point(167, 0);
+            this.flowLayoutPanel2.Name = "flowLayoutPanel2";
+            this.flowLayoutPanel2.Size = new System.Drawing.Size(161, 186);
+            this.flowLayoutPanel2.TabIndex = 64;
+            // 
+            // panelSelectedMorph
+            // 
+            this.panelSelectedMorph.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(15)))), ((int)(((byte)(10)))), ((int)(((byte)(15)))));
+            this.panelSelectedMorph.Location = new System.Drawing.Point(3, 141);
+            this.panelSelectedMorph.Margin = new System.Windows.Forms.Padding(3, 3, 0, 3);
+            this.panelSelectedMorph.Name = "panelSelectedMorph";
+            this.panelSelectedMorph.Size = new System.Drawing.Size(20, 40);
+            this.panelSelectedMorph.TabIndex = 66;
+            // 
+            // buttonTabMorph
+            // 
+            this.buttonTabMorph.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(35)))), ((int)(((byte)(55)))));
+            this.buttonTabMorph.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.buttonTabMorph.FlatAppearance.BorderSize = 0;
+            this.buttonTabMorph.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.buttonTabMorph.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.buttonTabMorph.ForeColor = System.Drawing.Color.Silver;
+            this.buttonTabMorph.Location = new System.Drawing.Point(26, 141);
+            this.buttonTabMorph.Name = "buttonTabMorph";
+            this.buttonTabMorph.Size = new System.Drawing.Size(132, 40);
+            this.buttonTabMorph.TabIndex = 59;
+            this.buttonTabMorph.Text = "Morph";
+            this.buttonTabMorph.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.buttonTabMorph.UseVisualStyleBackColor = false;
+            this.buttonTabMorph.Click += new System.EventHandler(this.buttonTabMorph_Click);
+            // 
+            // tableLayoutPanel3
+            // 
+            this.tableLayoutPanel3.ColumnCount = 1;
+            this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel3.Controls.Add(this.button4, 0, 2);
+            this.tableLayoutPanel3.Controls.Add(this.buttonOpenSettings, 0, 3);
+            this.tableLayoutPanel3.Controls.Add(this.buttonClearOutputFolder, 0, 1);
+            this.tableLayoutPanel3.Controls.Add(this.buttonOutFolder, 0, 0);
+            this.tableLayoutPanel3.Dock = System.Windows.Forms.DockStyle.Left;
+            this.tableLayoutPanel3.Location = new System.Drawing.Point(0, 0);
+            this.tableLayoutPanel3.Name = "tableLayoutPanel3";
+            this.tableLayoutPanel3.RowCount = 4;
+            this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
+            this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
+            this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
+            this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
+            this.tableLayoutPanel3.Size = new System.Drawing.Size(45, 186);
+            this.tableLayoutPanel3.TabIndex = 61;
+            // 
+            // tableLayoutPanel7
+            // 
+            this.tableLayoutPanel7.ColumnCount = 4;
+            this.tableLayoutPanel7.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
+            this.tableLayoutPanel7.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
+            this.tableLayoutPanel7.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
+            this.tableLayoutPanel7.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableLayoutPanel7.Location = new System.Drawing.Point(0, 0);
+            this.tableLayoutPanel7.Name = "tableLayoutPanel7";
+            this.tableLayoutPanel7.RowCount = 1;
+            this.tableLayoutPanel7.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableLayoutPanel7.Size = new System.Drawing.Size(200, 100);
+            this.tableLayoutPanel7.TabIndex = 0;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(20)))), ((int)(((byte)(40)))));
-            this.ClientSize = new System.Drawing.Size(2568, 802);
+            this.ClientSize = new System.Drawing.Size(2429, 836);
+            this.Controls.Add(this.panel16);
             this.Controls.Add(this.panelTabSequence);
             this.Controls.Add(this.panelTabPrompt);
             this.Controls.Add(this.panel14);
             this.Controls.Add(this.flowLayoutPanel11);
-            this.Controls.Add(this.flowLayoutPanel10);
             this.Controls.Add(this.flowLayoutPanel8);
             this.Controls.Add(this.panelTabImages);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.MaximizeBox = false;
             this.Name = "Form1";
+            this.ShowIcon = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Form1";
-            this.flowLayoutPanel2.ResumeLayout(false);
+            this.flowLayoutPanelPaintTools.ResumeLayout(false);
             this.panelTabImages.ResumeLayout(false);
             this.panel9.ResumeLayout(false);
             this.panel12.ResumeLayout(false);
@@ -1493,49 +2287,71 @@
             ((System.ComponentModel.ISupportInitialize)(this.trackBarN_iter)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.trackBarN_samples)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.trackBarIteration)).EndInit();
-            this.flowLayoutPanel3.ResumeLayout(false);
-            this.flowLayoutPanel3.PerformLayout();
+            this.flowLayoutPanelQuality.ResumeLayout(false);
+            this.flowLayoutPanelQuality.PerformLayout();
             this.panel3.ResumeLayout(false);
-            this.flowLayoutPanel4.ResumeLayout(false);
-            this.flowLayoutPanel4.PerformLayout();
+            this.flowLayoutPanelRepeat.ResumeLayout(false);
+            this.flowLayoutPanelRepeat.PerformLayout();
             this.panel4.ResumeLayout(false);
-            this.flowLayoutPanel5.ResumeLayout(false);
-            this.flowLayoutPanel5.PerformLayout();
+            this.flowLayoutPanelSamples.ResumeLayout(false);
+            this.flowLayoutPanelSamples.PerformLayout();
             this.panel5.ResumeLayout(false);
             this.flowLayoutPanel6.ResumeLayout(false);
             this.flowLayoutPanel6.PerformLayout();
             this.panel6.ResumeLayout(false);
-            this.flowLayoutPanel7.ResumeLayout(false);
+            this.flowLayoutPanelSeed.ResumeLayout(false);
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
             this.flowLayoutPanel8.ResumeLayout(false);
+            this.flowLayoutPanelGuidance.ResumeLayout(false);
+            this.flowLayoutPanelGuidance.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.trackBarGuidance)).EndInit();
+            this.panel13.ResumeLayout(false);
             this.flowLayoutPanel1.ResumeLayout(false);
             this.flowLayoutPanel1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.trackBar1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.trackBarChannels)).EndInit();
             this.panel15.ResumeLayout(false);
-            this.flowLayoutPanel9.ResumeLayout(false);
-            this.flowLayoutPanel10.ResumeLayout(false);
-            this.flowLayoutPanel12.ResumeLayout(false);
+            this.tableLayoutPanel6.ResumeLayout(false);
+            this.tableLayoutPanel2.ResumeLayout(false);
             this.panel8.ResumeLayout(false);
             this.panel7.ResumeLayout(false);
             this.panel7.PerformLayout();
             this.flowLayoutPanel11.ResumeLayout(false);
             this.panel10.ResumeLayout(false);
             this.panel11.ResumeLayout(false);
+            this.panel14.ResumeLayout(false);
+            this.flowLayoutPanel14.ResumeLayout(false);
             this.panelTabPrompt.ResumeLayout(false);
-            this.flowLayoutPanel13.ResumeLayout(false);
+            this.tableLayoutPanel4.ResumeLayout(false);
+            this.panel19.ResumeLayout(false);
+            this.panel19.PerformLayout();
+            this.tableLayoutPanel13.ResumeLayout(false);
+            this.tableLayoutPanel9.ResumeLayout(false);
+            this.panel18.ResumeLayout(false);
+            this.panel18.PerformLayout();
+            this.tableLayoutPanel12.ResumeLayout(false);
+            this.tableLayoutPanel5.ResumeLayout(false);
+            this.panel17.ResumeLayout(false);
+            this.panel17.PerformLayout();
+            this.tableLayoutPanel8.ResumeLayout(false);
+            this.tableLayoutPanel11.ResumeLayout(false);
+            this.tableLayoutPanel1.ResumeLayout(false);
             this.panel2.ResumeLayout(false);
+            this.panelTabSequence.ResumeLayout(false);
+            this.panel16.ResumeLayout(false);
+            this.flowLayoutPanel2.ResumeLayout(false);
+            this.tableLayoutPanel3.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
 
         #endregion
-        private TextBox textBox1;
-        private ListBox listBoxStyle;
-        private ListBox listBoxSubStyle;
-        private ListBox listBoxStyleGeneric;
+        private TextBox textBoxPrompt;
+        private ListBox listBoxPreset;
+        private ListBox listBoxPresetStyles;
+        private ListBox listBoxGenericStyles;
         private Button buttonStart;
-        private FlowLayoutPanel flowLayoutPanel2;
+        private FlowLayoutPanel flowLayoutPanelPaintTools;
         private Panel panelC2;
         private Panel panelC3;
         private Panel panelC4;
@@ -1548,8 +2364,8 @@
         private Panel panelGradiant;
         private Panel panelCpick;
         private PictureBox pictureBox1;
-        private Button buttonClear;
-        private Button buttonImage;
+        private Button buttonClearImage;
+        private Button buttonOpenImage;
         private TrackBar trackBarStrength;
         private Button buttonN_iter;
         private Button buttonStrength;
@@ -1563,16 +2379,14 @@
         private Button buttonClearOutputFolder;
         private ListBox listBoxInitImages;
         private Button buttonSave;
-        private FlowLayoutPanel flowLayoutPanel3;
-        private FlowLayoutPanel flowLayoutPanel4;
-        private FlowLayoutPanel flowLayoutPanel5;
+        private FlowLayoutPanel flowLayoutPanelQuality;
+        private FlowLayoutPanel flowLayoutPanelRepeat;
+        private FlowLayoutPanel flowLayoutPanelSamples;
         private FlowLayoutPanel flowLayoutPanel6;
-        private FlowLayoutPanel flowLayoutPanel7;
+        private FlowLayoutPanel flowLayoutPanelSeed;
         private FlowLayoutPanel flowLayoutPanel8;
-        private FlowLayoutPanel flowLayoutPanel9;
         private Panel panel1;
         private TextBox textBoxSeed;
-        private FlowLayoutPanel flowLayoutPanel10;
         private Panel panel3;
         private Label labelIteration;
         private Panel panel4;
@@ -1585,7 +2399,6 @@
         private Panel panel7;
         private FlowLayoutPanel flowLayoutPanel11;
         private Button button1;
-        private Button button2;
         private Panel panel8;
         private Panel panel9;
         private Panel panel10;
@@ -1595,7 +2408,6 @@
         private Panel panel12;
         private ColumnHeader ImagesList;
         private ImageList imageList1;
-        private FlowLayoutPanel flowLayoutPanel12;
         private Button buttonTabPrompt;
         private Button buttonTabImage;
         private Panel panelC10;
@@ -1606,22 +2418,71 @@
         private Panel panel14;
         private FlowLayoutPanel flowLayoutPanel1;
         private Button buttonChannels;
-        private TrackBar trackBar1;
+        private TrackBar trackBarChannels;
         private Panel panel15;
-        private Label label1;
+        private Label labelChannels;
         private Panel panelTabPrompt;
         private Button buttonTabSequence;
-        private Button button3;
+        private Button buttonOpenSettings;
         private Button button4;
-        private Button button5;
         private Panel panel2;
         private ListBox listBoxSelectedStyles;
-        private FlowLayoutPanel flowLayoutPanel13;
-        private Button button6;
-        private Button button7;
-        private Button button8;
-        private Button button9;
-        private Button button10;
+        private Button buttonShuffleSelectedStyles;
+        private Button button20;
         private Panel panelTabSequence;
+        private Button buttonPencilRedo;
+        private Button button12;
+        private FlowLayoutPanel flowLayoutPanel14;
+        private Button buttonDonate;
+        private Panel panelSelectedPrompt;
+        private Panel panelSelectedImage;
+        private Panel panelSelectedSequence;
+        private Button buttonClearStyle;
+        private FlowLayoutPanel flowLayoutPanelGuidance;
+        private Button buttonGuidance;
+        private TrackBar trackBarGuidance;
+        private Panel panel13;
+        private Label labelGuidance;
+        private TableLayoutPanel tableLayoutPanel1;
+        private Button buttonRemoveStyles;
+        private Button buttonRemoveSelectedStyles;
+        private TableLayoutPanel tableLayoutPanel2;
+        private Panel panel16;
+        private TableLayoutPanel tableLayoutPanel3;
+        private TableLayoutPanel tableLayoutPanel5;
+        private TableLayoutPanel tableLayoutPanel7;
+        private TableLayoutPanel tableLayoutPanel6;
+        private FlowLayoutPanel flowLayoutPanel2;
+        private Panel panelSelectedMorph;
+        private Button buttonTabMorph;
+        private Button buttonPastImage;
+        private Button buttonSavePresets;
+        private Button buttonAddAllSelectedPreset;
+        private Panel panel17;
+        private TextBox textBoxPreset;
+        private TableLayoutPanel tableLayoutPanel8;
+        private Button buttonRemovePreset;
+        private Button buttonAddPreset;
+        private TableLayoutPanel tableLayoutPanel11;
+        private Button buttonSaveSelectedStyles;
+        private Button buttonSaveGenericStyles;
+        private TableLayoutPanel tableLayoutPanel9;
+        private Panel panel18;
+        private TextBox textBoxPresetStyle;
+        private TableLayoutPanel tableLayoutPanel12;
+        private Button buttonRemovePresetStyle;
+        private Button buttonAddPresetStyle;
+        private TableLayoutPanel tableLayoutPanel4;
+        private Panel panel19;
+        private TextBox textBoxGenericStyle;
+        private TableLayoutPanel tableLayoutPanel13;
+        private Button buttonRemoveGenericStyle;
+        private Button buttonAddGenericStyle;
+        private Button buttonAddGenericToPreset;
+        private Button buttonAddSelectedToStyles;
+        private Button buttonAddSelectedPreset;
+        private Button buttonAddSelectedStylesToPreset;
+        private Button buttonAddSelectedStylesToGeneric;
+        private Button buttonWorkInProgress1;
     }
 }

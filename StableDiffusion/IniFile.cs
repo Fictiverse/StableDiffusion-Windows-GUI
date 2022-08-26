@@ -26,9 +26,12 @@ namespace StableDiffusion
 
         public string Read(string Key, string Section = null)
         {
-            var RetVal = new StringBuilder(512);
-            GetPrivateProfileString(Section ?? EXE, Key, "", RetVal, 512, Path);
-            return RetVal.ToString();
+
+                var RetVal = new StringBuilder(1024);
+                GetPrivateProfileString(Section ?? EXE, Key, "", RetVal, 1024, Path);
+                return RetVal.ToString();
+
+
         }
 
         public void Write(string Key, string Value, string Section = null)
