@@ -59,6 +59,7 @@ namespace StableDiffusion
             //img2imgPath = LoadImg2imgPath();
             //inpaintPath= LoadInpaintPath();
 
+            lastOutputPath =  System.IO.Path.GetDirectoryName(Application.ExecutablePath) + "\\Result";
 
             textBoxPrompt.Text = LoadPrompt();
 
@@ -422,6 +423,7 @@ namespace StableDiffusion
         bool isLaunched = false;
         int sec = 0;
 
+        string lastOutputPath = "";
         // start
         private void buttonStart_Click(object sender, EventArgs e)
         {
@@ -534,21 +536,20 @@ namespace StableDiffusion
 
             string outdir = System.IO.Path.GetDirectoryName(Application.ExecutablePath) + "\\Result";
             System.IO.Directory.CreateDirectory(outdir);
-
             if (listBoxPreset.SelectedItems.Count > 0)
             {
-                System.IO.Directory.CreateDirectory(outdir + "\\" + listBoxPreset.SelectedItem);
-
-                outdir.Replace("\\", "/");
-                outdir = " --outdir " + outdir + "/Result/" + listBoxPreset.SelectedItem;
+                outdir = outdir + "\\" + listBoxPreset.SelectedItem;
+                System.IO.Directory.CreateDirectory(outdir);
             }
             else
             {
-                System.IO.Directory.CreateDirectory(outdir + "\\NoPreset");
-                outdir.Replace("\\", "/");
-                outdir = " --outdir " + outdir + "/Result/" + listBoxPreset.SelectedItem;
+                outdir = outdir + "\\NoPreset";
+                System.IO.Directory.CreateDirectory(outdir);
             }
-
+            outdir = CreateResultDirectory(outdir);
+            lastOutputPath = outdir;
+            outdir.Replace("\\", "/");
+            outdir = " --outdir \"" + outdir + "\"";
 
             // making python line
             string gen = "python "+ txt2imgPath + text + seed + iteration + n_iter + n_samples + guidance + channels + plms + outdir + " --skip_grid ";
@@ -641,21 +642,20 @@ namespace StableDiffusion
 
             string outdir = System.IO.Path.GetDirectoryName(Application.ExecutablePath) + "\\Result";
             System.IO.Directory.CreateDirectory(outdir);
-
             if (listBoxPreset.SelectedItems.Count > 0)
             {
-                System.IO.Directory.CreateDirectory(outdir + "\\" + listBoxPreset.SelectedItem);
-
-                outdir.Replace("\\", "/");
-                outdir = " --outdir " + outdir + "/Result/" + listBoxPreset.SelectedItem;
+                outdir = outdir + "\\" + listBoxPreset.SelectedItem;
+                System.IO.Directory.CreateDirectory(outdir);
             }
             else
             {
-                System.IO.Directory.CreateDirectory(outdir + "\\NoPreset");
-                outdir.Replace("\\", "/");
-                outdir = " --outdir " + outdir + "/Result/" + listBoxPreset.SelectedItem;
+                outdir = outdir + "\\NoPreset";
+                System.IO.Directory.CreateDirectory(outdir);
             }
-
+            outdir = CreateResultDirectory(outdir);
+            lastOutputPath = outdir;
+            outdir.Replace("\\", "/");
+            outdir = " --outdir \"" + outdir + "\"";
             // making python line
             string gen = "python "+ script + " --skip_grid " + outdir + text + seed + initImage + iteration + str + n_iter + n_samples + guidance + channels + plms;
 
@@ -805,6 +805,8 @@ namespace StableDiffusion
         // open outputs folder
         private void buttonOutFolder_Click(object sender, EventArgs e)
         {
+            System.Diagnostics.Process.Start(Environment.GetEnvironmentVariable("WINDIR") + @"\explorer.exe", lastOutputPath);
+            /*
             if (isTabSequenceSelected)
             {
                 System.Diagnostics.Process.Start("explorer.exe", envpath + "\\outputs\\imgs2imgs\\samples");
@@ -817,6 +819,7 @@ namespace StableDiffusion
             {
                 System.Diagnostics.Process.Start("explorer.exe", envpath + "\\outputs\\img2img-samples\\samples");
             }
+            */
         }
 
         // clear outputs folder
