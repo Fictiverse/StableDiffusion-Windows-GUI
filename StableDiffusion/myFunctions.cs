@@ -38,6 +38,19 @@ namespace StableDiffusion
             }
         }
 
+        public static string CreateResultDirectory(string path)
+        {
+            //int directoryCount = System.IO.Directory.GetDirectories(path).Length;
+            //string prefix = directoryCount.ToString("D3");
+            string locationToCreateFolder = path+"\\";
+            string date = DateTime.Now.ToString("MM.dd.yyyy");
+            string time = DateTime.Now.ToString("HH.mm tt");
+            string format = "{0}_{1}";
+            string folderName = string.Format(format, date, time);
+            Directory.CreateDirectory(locationToCreateFolder + folderName);
+            return locationToCreateFolder + folderName;
+
+        }
 
 
         public static bool IsDigitsOnly(string str)
