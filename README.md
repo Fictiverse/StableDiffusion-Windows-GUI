@@ -4,9 +4,12 @@ A windows interface for stable diffusion
 **1** - Install https://github.com/CompVis/stable-diffusion with Anaconda
 > Update the last model : https://huggingface.co/CompVis/stable-diffusion-v1-4
 
+
 **2** - Make sure .NET 6.0 is installed https://dotnet.microsoft.com/en-us/download/dotnet/6.0
 
 **3** - Launch Stable Diffusion GUI and locate your Stable Diffusion environement path
+
+![image](https://user-images.githubusercontent.com/111762798/187035210-4d141216-39f9-4a2b-a3b4-5e8bd02ccfde.png)
 
 **4** - Enjoy
 
