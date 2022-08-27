@@ -8,11 +8,11 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <Copyright>Fictiverse</Copyright>
-    <ApplicationIcon>00303.ico</ApplicationIcon>
+    <ApplicationIcon>00005.ico</ApplicationIcon>
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Include="00303.ico" />
+    <Content Include="00005.ico" />
   </ItemGroup>
 
   <ItemGroup>

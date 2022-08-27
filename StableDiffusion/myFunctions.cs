@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using System.Linq;
@@ -43,8 +44,8 @@ namespace StableDiffusion
             //int directoryCount = System.IO.Directory.GetDirectories(path).Length;
             //string prefix = directoryCount.ToString("D3");
             string locationToCreateFolder = path+"\\";
-            string date = DateTime.Now.ToString("MM.dd.yyyy");
-            string time = DateTime.Now.ToString("HH.mm tt");
+            string date = DateTime.Now.ToString("dd.MM.yyyy");
+            string time = DateTime.Now.ToString("HH.mm");
             string format = "{0}_{1}";
             string folderName = string.Format(format, date, time);
             Directory.CreateDirectory(locationToCreateFolder + folderName);
@@ -52,7 +53,14 @@ namespace StableDiffusion
 
         }
 
+        public static void SavePromptInTxtFile(string path, string prompt)
+        {
+            path = path + "\\prompt.ini";
+            IniFile SettingFile = new IniFile(path);
+            SettingFile.Write("prompt", prompt, "Prompt");
 
+
+        }
         public static bool IsDigitsOnly(string str)
         {
             if (string.IsNullOrEmpty(str))
