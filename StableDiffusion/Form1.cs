@@ -35,6 +35,8 @@ namespace StableDiffusion
         string imgs2imgsPath = "scripts/imgs2imgs.py";
         string inpaintPath = "scripts/inpaint.py";
 
+
+        string separator = ", ";
         public Form1()
         {
             InitializeComponent();
@@ -513,7 +515,7 @@ namespace StableDiffusion
             string style = "";
             foreach (var item in listBoxSelectedStyles.Items)
             {
-                style = style + " | " + item;
+                style = style + separator + item;
             }
             text = text + style;
             text = " --prompt \"" + text + "\"";
@@ -560,7 +562,7 @@ namespace StableDiffusion
 
             // start script
             psi.UseShellExecute = true;
-            psi.Verb = "runas";
+            //psi.Verb = "runas";
             psi.FileName = @"C:\Windows\System32\cmd.exe";
             psi.Arguments = @" %windir%\System32\cmd.exe /K " + AnacondaPath + "\\Scripts\\activate.bat " + AnacondaPath + "&conda activate " + envName + "&" + drive + ":&cd " + envpath + "&" + gen;
             try{ newProcess = Process.Start(psi);} catch (Exception) { }
@@ -608,7 +610,7 @@ namespace StableDiffusion
             string style = "";
             foreach (var item in listBoxSelectedStyles.Items)
             {
-                style = style + " | " + item;
+                style = style + separator + item;
             }
             text = text + style;
             text = " --prompt \"" + text + "\"";
@@ -667,7 +669,7 @@ namespace StableDiffusion
 
             // start script
             psi.UseShellExecute = true;
-            psi.Verb = "runas";
+            //psi.Verb = "runas";
             psi.FileName = @"C:\Windows\System32\cmd.exe";
             psi.Arguments = @" %windir%\System32\cmd.exe /K "+AnacondaPath+ "\\Scripts\\activate.bat " + AnacondaPath + "&conda activate "+envName+"&" + drive + ":&cd " + envpath + "&" + gen;
             try{ newProcess = Process.Start(psi);}catch (Exception) { }
@@ -774,7 +776,6 @@ namespace StableDiffusion
             psi.FileName = @"C:\Windows\System32\cmd.exe";
             psi.Arguments = @" %windir%\System32\cmd.exe /K " + AnacondaPath + "\\Scripts\\activate.bat " + AnacondaPath + "&conda activate " + envName + "&" + drive + ":&cd " + envpath + "&" + gen;
             try{newProcess = Process.Start(psi);}catch (Exception) { }
-
         }
 
 
@@ -795,12 +796,7 @@ namespace StableDiffusion
                 buttonStart.Image = Resources.play_button;
                 isLaunched = false;
             }
-
-
         }
-
-
-
 
 
 
@@ -829,6 +825,7 @@ namespace StableDiffusion
         // clear outputs folder
         private void buttonClearOutputFolder_Click(object sender, EventArgs e)
         {
+            /*
             if (isTabSequenceSelected)
             {
                 clearFolder(envpath + "\\outputs\\imgs2imgs\\samples");
@@ -841,6 +838,7 @@ namespace StableDiffusion
             {
                 clearFolder(envpath + "\\outputs\\img2img-samples\\samples");
             }
+            */
         }
 
 
@@ -1648,21 +1646,12 @@ namespace StableDiffusion
 
         private void buttonRemoveStyleSelectedStyles_Click(object sender, EventArgs e)
         {
-            for (int i = 0; i < listBoxSelectedStyles.SelectedItems.Count; i++)
-            {
-                listBoxSelectedStyles.Items.Remove(listBoxSelectedStyles.SelectedItems[i]);
-            }
-
-            ListBox.SelectedObjectCollection selectedItems = new ListBox.SelectedObjectCollection(listBoxSelectedStyles);
-            selectedItems = listBoxSelectedStyles.SelectedItems;
-
+            ListBox.SelectedObjectCollection  selectedItems = listBoxSelectedStyles.SelectedItems;
             if (listBoxSelectedStyles.SelectedIndex != -1)
             {
                 for (int i = selectedItems.Count - 1; i >= 0; i--)
                     listBoxSelectedStyles.Items.Remove(selectedItems[i]);
             }
-
-            RemoveDuplicate(listBoxSelectedStyles);
         }
 
 
@@ -1796,27 +1785,34 @@ namespace StableDiffusion
                     listBoxPresetStyles.Items.Clear();
                     SavePreset(listBoxPreset);
                 }
-                else if (dialogResult == DialogResult.No)
-                {
-                    //do something else
-                }
-            }
-           
-            foreach (string item in listBoxPreset.SelectedItems)
-            {
-                //listBoxPreset.Items.Remove(item);
-            }
-            //RemoveDuplicate(listBoxPreset);
+                else if (dialogResult == DialogResult.No){}
+            }         
         }
 
         private void buttonRemovePresetStyle_Click(object sender, EventArgs e)
         {
-
+            ListBox.SelectedObjectCollection selectedItems = listBoxPresetStyles.SelectedItems;
+            if (listBoxPresetStyles.SelectedIndex != -1)
+            {
+                for (int i = selectedItems.Count - 1; i >= 0; i--)
+                    listBoxPresetStyles.Items.Remove(selectedItems[i]);
+            }
         }
 
         private void buttonRemoveGenericStyle_Click(object sender, EventArgs e)
         {
+            ListBox.SelectedObjectCollection selectedItems = listBoxGenericStyles.SelectedItems;
+            if (listBoxGenericStyles.SelectedIndex != -1)
+            {
+                for (int i = selectedItems.Count - 1; i >= 0; i--)
+                    listBoxGenericStyles.Items.Remove(selectedItems[i]);
+            }
 
         }
+
+
+
+
+
     }
 }

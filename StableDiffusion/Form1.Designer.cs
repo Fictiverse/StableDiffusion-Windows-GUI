@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.textBoxPrompt = new System.Windows.Forms.TextBox();
             this.listBoxPreset = new System.Windows.Forms.ListBox();
             this.listBoxPresetStyles = new System.Windows.Forms.ListBox();
@@ -161,10 +162,10 @@
             this.listBoxSelectedStyles = new System.Windows.Forms.ListBox();
             this.panelTabSequence = new System.Windows.Forms.Panel();
             this.buttonWorkInProgress1 = new System.Windows.Forms.Button();
-            this.panel16 = new System.Windows.Forms.Panel();
             this.flowLayoutPanel2 = new System.Windows.Forms.FlowLayoutPanel();
             this.panelSelectedMorph = new System.Windows.Forms.Panel();
             this.buttonTabMorph = new System.Windows.Forms.Button();
+            this.panel16 = new System.Windows.Forms.Panel();
             this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
             this.tableLayoutPanel7 = new System.Windows.Forms.TableLayoutPanel();
             this.flowLayoutPanelPaintTools.SuspendLayout();
@@ -216,8 +217,8 @@
             this.tableLayoutPanel1.SuspendLayout();
             this.panel2.SuspendLayout();
             this.panelTabSequence.SuspendLayout();
-            this.panel16.SuspendLayout();
             this.flowLayoutPanel2.SuspendLayout();
+            this.panel16.SuspendLayout();
             this.tableLayoutPanel3.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -887,6 +888,7 @@
             this.buttonClearOutputFolder.Size = new System.Drawing.Size(39, 40);
             this.buttonClearOutputFolder.TabIndex = 41;
             this.buttonClearOutputFolder.UseVisualStyleBackColor = false;
+            this.buttonClearOutputFolder.Visible = false;
             this.buttonClearOutputFolder.Click += new System.EventHandler(this.buttonClearOutputFolder_Click);
             // 
             // buttonSave
@@ -1252,7 +1254,7 @@
             this.buttonOpenSettings.Image = global::StableDiffusion.Properties.Resources.option_dequipement;
             this.buttonOpenSettings.Location = new System.Drawing.Point(3, 141);
             this.buttonOpenSettings.Name = "buttonOpenSettings";
-            this.buttonOpenSettings.Size = new System.Drawing.Size(39, 42);
+            this.buttonOpenSettings.Size = new System.Drawing.Size(39, 40);
             this.buttonOpenSettings.TabIndex = 42;
             this.buttonOpenSettings.UseVisualStyleBackColor = false;
             this.buttonOpenSettings.Click += new System.EventHandler(this.buttonOpenSettings_Click);
@@ -2180,19 +2182,9 @@
             this.buttonWorkInProgress1.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
             this.buttonWorkInProgress1.UseVisualStyleBackColor = false;
             // 
-            // panel16
-            // 
-            this.panel16.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(25)))), ((int)(((byte)(15)))), ((int)(((byte)(35)))));
-            this.panel16.Controls.Add(this.buttonStart);
-            this.panel16.Controls.Add(this.flowLayoutPanel2);
-            this.panel16.Controls.Add(this.tableLayoutPanel3);
-            this.panel16.Location = new System.Drawing.Point(7, 61);
-            this.panel16.Name = "panel16";
-            this.panel16.Size = new System.Drawing.Size(328, 186);
-            this.panel16.TabIndex = 60;
-            // 
             // flowLayoutPanel2
             // 
+            this.flowLayoutPanel2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(25)))), ((int)(((byte)(15)))), ((int)(((byte)(35)))));
             this.flowLayoutPanel2.Controls.Add(this.panelSelectedPrompt);
             this.flowLayoutPanel2.Controls.Add(this.tableLayoutPanel2);
             this.flowLayoutPanel2.Controls.Add(this.panelSelectedImage);
@@ -2204,7 +2196,7 @@
             this.flowLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Right;
             this.flowLayoutPanel2.Location = new System.Drawing.Point(167, 0);
             this.flowLayoutPanel2.Name = "flowLayoutPanel2";
-            this.flowLayoutPanel2.Size = new System.Drawing.Size(161, 186);
+            this.flowLayoutPanel2.Size = new System.Drawing.Size(161, 184);
             this.flowLayoutPanel2.TabIndex = 64;
             // 
             // panelSelectedMorph
@@ -2233,6 +2225,17 @@
             this.buttonTabMorph.UseVisualStyleBackColor = false;
             this.buttonTabMorph.Click += new System.EventHandler(this.buttonTabMorph_Click);
             // 
+            // panel16
+            // 
+            this.panel16.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(25)))), ((int)(((byte)(15)))), ((int)(((byte)(35)))));
+            this.panel16.Controls.Add(this.buttonStart);
+            this.panel16.Controls.Add(this.flowLayoutPanel2);
+            this.panel16.Controls.Add(this.tableLayoutPanel3);
+            this.panel16.Location = new System.Drawing.Point(7, 61);
+            this.panel16.Name = "panel16";
+            this.panel16.Size = new System.Drawing.Size(328, 184);
+            this.panel16.TabIndex = 60;
+            // 
             // tableLayoutPanel3
             // 
             this.tableLayoutPanel3.ColumnCount = 1;
@@ -2249,7 +2252,7 @@
             this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
             this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
             this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
-            this.tableLayoutPanel3.Size = new System.Drawing.Size(45, 186);
+            this.tableLayoutPanel3.Size = new System.Drawing.Size(45, 184);
             this.tableLayoutPanel3.TabIndex = 61;
             // 
             // tableLayoutPanel7
@@ -2280,10 +2283,11 @@
             this.Controls.Add(this.flowLayoutPanel8);
             this.Controls.Add(this.panelTabImages);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.Name = "Form1";
-            this.ShowIcon = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+            this.Text = "Stable Diffusion UI";
             this.flowLayoutPanelPaintTools.ResumeLayout(false);
             this.panelTabImages.ResumeLayout(false);
             this.panel9.ResumeLayout(false);
@@ -2344,8 +2348,8 @@
             this.tableLayoutPanel1.ResumeLayout(false);
             this.panel2.ResumeLayout(false);
             this.panelTabSequence.ResumeLayout(false);
-            this.panel16.ResumeLayout(false);
             this.flowLayoutPanel2.ResumeLayout(false);
+            this.panel16.ResumeLayout(false);
             this.tableLayoutPanel3.ResumeLayout(false);
             this.ResumeLayout(false);
 
