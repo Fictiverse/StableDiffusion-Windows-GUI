@@ -7,6 +7,7 @@ A windows interface for stable diffusion
 **2** - Make sure .NET 6.0 is installed https://dotnet.microsoft.com/en-us/download/dotnet/6.0
 
 **3** - Launch Stable Diffusion GUI and locate your Stable Diffusion environement path
+![image](https://user-images.githubusercontent.com/111762798/187034937-80c05e91-57d5-46e5-971a-e6aacdc4fe6a.png)
 
 **4** - Enjoy
 
