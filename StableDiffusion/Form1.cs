@@ -743,7 +743,7 @@ namespace StableDiffusion
 
             // start script
             psi.UseShellExecute = true;
-            psi.Verb = "runas";
+            //psi.Verb = "runas";
             psi.FileName = @"C:\Windows\System32\cmd.exe";
             psi.Arguments = @" %windir%\System32\cmd.exe /K " + AnacondaPath + "\\Scripts\\activate.bat " + AnacondaPath + "&conda activate " + envName + "&" + drive + ":&cd " + envpath + "&" + gen;
             try { newProcess = Process.Start(psi); } catch (Exception) { }
@@ -772,7 +772,7 @@ namespace StableDiffusion
 
             // start script
             psi.UseShellExecute = true;
-            psi.Verb = "runas";
+            //psi.Verb = "runas";
             psi.FileName = @"C:\Windows\System32\cmd.exe";
             psi.Arguments = @" %windir%\System32\cmd.exe /K " + AnacondaPath + "\\Scripts\\activate.bat " + AnacondaPath + "&conda activate " + envName + "&" + drive + ":&cd " + envpath + "&" + gen;
             try{newProcess = Process.Start(psi);}catch (Exception) { }
