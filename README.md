@@ -23,7 +23,7 @@ A windows interface for stable diffusion
 
 # Instructions:
 
-# # Prompt tab :
+## Prompt tab :
 ![image](https://user-images.githubusercontent.com/111762798/187481834-7bc549ee-69e1-4e44-bad3-3a06804f6985.png)
 
 - The first column is for your presets
