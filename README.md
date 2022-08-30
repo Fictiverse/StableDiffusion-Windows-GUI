@@ -21,3 +21,22 @@ A windows interface for stable diffusion
 ![A](https://user-images.githubusercontent.com/111762798/187033465-4179de8f-2403-40af-99ca-3e61e40b978f.JPG)
 
 
+# Instructions:
+
+# # Prompt tab :
+![image](https://user-images.githubusercontent.com/111762798/187481834-7bc549ee-69e1-4e44-bad3-3a06804f6985.png)
+
+- The first column is for your presets
+- The second column is the list of some generic styles
+- The third column is the list of selected styles who will be added after your main prompt.
+
+![image](https://user-images.githubusercontent.com/111762798/187480424-91b2db7e-cdbb-4a70-a8c6-380e62507b14.png)
+
+- First button add all styles of the selected preset on the **Selected Style column**
+- Second button add only selected styles of the selected preset on the **Selected Style column**
+
+- Third button add selected generic styles to **Peset column**
+- Fourth button add selected generic styles to **Selected Styles column**
+
+- Fifth button add selected styles of the third column to **Generic Styles column**
+- Sixth button add selected styles of the third column to **Preset Styles column**
