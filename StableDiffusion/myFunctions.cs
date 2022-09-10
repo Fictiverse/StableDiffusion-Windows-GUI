@@ -4,12 +4,13 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
+using System.IO;
 using System.Linq;
 using System.Management;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
-
+using System.Windows.Forms;
 namespace StableDiffusion
 {
     internal class myFunctions
@@ -39,12 +40,25 @@ namespace StableDiffusion
             }
         }
 
+        public static void RemoveListDuplicate(List<string> listb)
+        {
+            string[] arr = new string[listb.Count];
+            listb.CopyTo(arr, 0);
+
+            var arr2 = arr.Distinct();
+            listb.Clear();
+            foreach (string s in arr2)
+            {
+                listb.Add(s);
+            }
+        }
+
         public static string CreateResultDirectory(string path)
         {
             //int directoryCount = System.IO.Directory.GetDirectories(path).Length;
             //string prefix = directoryCount.ToString("D3");
             string locationToCreateFolder = path+"\\";
-            string date = DateTime.Now.ToString("dd.MM.yyyy");
+            string date = DateTime.Now.ToString("yyyy.MM.dd");
             string time = DateTime.Now.ToString("HH.mm");
             string format = "{0}_{1}";
             string folderName = string.Format(format, date, time);
@@ -53,14 +67,9 @@ namespace StableDiffusion
 
         }
 
-        public static void SavePromptInTxtFile(string path, string prompt)
-        {
-            path = path + "\\prompt.ini";
-            IniFile SettingFile = new IniFile(path);
-            SettingFile.Write("prompt", prompt, "Prompt");
 
 
-        }
+
         public static bool IsDigitsOnly(string str)
         {
             if (string.IsNullOrEmpty(str))
@@ -97,6 +106,25 @@ namespace StableDiffusion
                 clearFolder(di.FullName);
                 di.Delete();
             }
+        }
+
+
+        public static void CopyFilesRecursively(string sourcePath, string targetPath)
+        {
+            //Now Create all of the directories
+            foreach (string dirPath in Directory.GetDirectories(sourcePath, "*", System.IO.SearchOption.AllDirectories))
+            {
+                Directory.CreateDirectory(dirPath.Replace(sourcePath, targetPath));
+            }
+
+            //Copy all the files & Replaces any files with the same name
+            foreach (string newPath in Directory.GetFiles(sourcePath, "*.*", System.IO.SearchOption.AllDirectories))
+            {
+                System.IO.File.Copy(newPath, newPath.Replace(sourcePath, targetPath), true);
+            }
+
+            if (Directory.Exists(sourcePath)) Directory.Delete(sourcePath, true);
+
         }
 
 
@@ -165,12 +193,12 @@ namespace StableDiffusion
 
         }
 
-        public static int ClampTrackbar(int value, int min, int max, int def)
+        public static int ClampTrackbar(TrackBar t,  int value)
         {
             if (value == -1)
-                return def;
+                return t.Value;
             else
-                return Math.Clamp(value,min,max);
+                return Math.Clamp(value,t.Minimum, t.Maximum);
         }
 
         public static void ClearMemory()
@@ -180,59 +208,108 @@ namespace StableDiffusion
         }
 
 
-        public static void populateInitImages(System.Windows.Forms.ListView listv, string folderName)
+        public static void populateImageList(System.Windows.Forms.ListView listv, string path)
         {
-
-            // listViewInitImages.Columns.Clear();
-
             listv.Items.Clear();
 
-
-            string Path = System.IO.Path.GetDirectoryName(Application.ExecutablePath) + "\\InitImages\\" + folderName;
             var filters = new String[] { "jpg", "jpeg", "png", "tiff", "bmp" };
-            string[] paths = GetFilesFrom(Path, filters, false);
 
+
+            string[] paths = GetFilesFrom(path, filters, false);
 
             ImageList imgs = new ImageList();
-            imgs.ImageSize = new Size(100, 100);
+            imgs.ColorDepth = ColorDepth.Depth32Bit;
+            imgs.ImageSize = new Size(128, 128);
 
-            try
+            foreach (string p in paths)
             {
-                foreach (string path in paths)
+                try
                 {
-                    imgs.Images.Add(Image.FromFile(path));
+                    //FileStream fs = new FileStream(p, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
+                    //imgs.Images.Add((Bitmap)Image.FromStream(fs).Clone());
+                    //fs.Dispose();
+                    imgs.Images.Add(GetBitmap(p));
+                    //imgs.Images.Add((Bitmap)Image.FromFile(p).Clone());
+                }
+                catch
+                {
+                    break;
+                    //MessageBox.Show("Access Denided");
                 }
             }
-            catch { }
 
             listv.SmallImageList = imgs;
 
-
-            String[] FileNames = GetFilesFrom(Path, filters, false);
+            string[] FileNames = GetFilesFrom(path, filters, false);
 
 
             for (int i = 0; i < FileNames.Length; i++)
             {
-                //string new_string = FileNames[i].Remove(FileNames[i].LastIndexOf('.'));
-                //new_string = new_string.Split('\\').Last();
-
                 listv.Items.Add(FileNames[i], i);
-
             }
+            ClearMemory();
 
         }
 
+        public static Point ClampPoint(Point p, int brushSize)
+        {
+            if (p.X - brushSize < 0)
+            {
+                p.X = brushSize;
+            }
+            if (p.Y - brushSize < 0)
+            {
+                p.Y = brushSize;
+            }
+            if (p.X + brushSize > 511)
+            {
+                p.X = 511 - brushSize;
+            }
+            if (p.Y + brushSize > 511)
+            {
+                p.Y = 511 - brushSize;
+            }
+            return p;
 
-        public static String[] GetFilesFrom(String searchFolder, String[] filters, bool isRecursive)
+        }
+
+        public static string[] GetFilesFrom(String searchFolder, String[] filters, bool isRecursive)
         {
             List<String> filesFound = new List<String>();
             var searchOption = isRecursive ? SearchOption.AllDirectories : SearchOption.TopDirectoryOnly;
             foreach (var filter in filters)
             {
-                filesFound.AddRange(Directory.GetFiles(searchFolder, String.Format("*.{0}", filter), searchOption));
+                try
+                {
+                    filesFound.AddRange(Directory.GetFiles(searchFolder, String.Format("*.{0}", filter), searchOption));
+                }catch {}
             }
-            return filesFound.ToArray();
+            string[] r = filesFound.ToArray();
+            DateTime[] creationTimes = new DateTime[r.Length];
+            for (int i = 0; i < r.Length; i++)
+                creationTimes[i] = new FileInfo(r[i]).CreationTime;
+            Array.Sort(creationTimes, r);
+
+            return r;
         }
+
+
+        public static Bitmap GetBitmap(string path)
+        {
+            Bitmap retBitmap = null;
+            if (File.Exists(path))
+            {
+                try
+                {
+                    retBitmap = new Bitmap(path, true);
+                }
+                catch { }
+            }
+            return retBitmap;
+        }
+
+
+
 
 
 
@@ -292,6 +369,73 @@ namespace StableDiffusion
         }
 
 
+        public static System.Drawing.Image ResizeImage3(System.Drawing.Image imgToResize, Size size)
+        {
+            //Get the image current width  
+            int sourceWidth = imgToResize.Width;
+            //Get the image current height  
+            int sourceHeight = imgToResize.Height;
+            float nPercent = 0;
+            float nPercentW = 0;
+            float nPercentH = 0;
+            //Calulate  width with new desired size  
+            nPercentW = ((float)size.Width / (float)sourceWidth);
+            //Calculate height with new desired size  
+            nPercentH = ((float)size.Height / (float)sourceHeight);
+            if (nPercentH < nPercentW)
+                nPercent = nPercentH;
+            else
+                nPercent = nPercentW;
+            //New Width  
+            int destWidth = (int)(sourceWidth * nPercent);
+            //New Height  
+            int destHeight = (int)(sourceHeight * nPercent);
+            Bitmap b = new Bitmap(destWidth, destHeight);
+            Graphics g = Graphics.FromImage((System.Drawing.Image)b);
+            g.InterpolationMode = InterpolationMode.HighQualityBicubic;
+            // Draw image with new width and height  
+            g.DrawImage(imgToResize, 0, 0, destWidth, destHeight);
+            g.Dispose();
+            return (System.Drawing.Image)b;
+        }
+
+
+        public static Bitmap ResizeImage2(Image image, int width, int height)
+        {
+            var destRect = new Rectangle(0, 0, width, height);
+            var destImage = new Bitmap(width, height);
+
+            destImage.SetResolution(image.HorizontalResolution, image.VerticalResolution);
+
+            using (var graphics = Graphics.FromImage(destImage))
+            {
+                graphics.CompositingMode = CompositingMode.SourceCopy;
+                graphics.CompositingQuality = CompositingQuality.HighQuality;
+                graphics.InterpolationMode = InterpolationMode.HighQualityBicubic;
+                graphics.SmoothingMode = SmoothingMode.HighQuality;
+                graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
+
+                using (var wrapMode = new ImageAttributes())
+                {
+                    wrapMode.SetWrapMode(WrapMode.TileFlipXY);
+                    graphics.DrawImage(image, destRect, 0, 0, image.Width, image.Height, GraphicsUnit.Pixel, wrapMode);
+                }
+            }
+
+            return destImage;
+        }
+
+
+        public static Bitmap CropFaceFromImage(Bitmap source, Rectangle section)
+        {
+            int s = section.Width;
+            var bitmap = new Bitmap(s, s);
+            using (var g = Graphics.FromImage(bitmap))
+            {
+                g.DrawImage(source, 0, 0, section, GraphicsUnit.Pixel);
+                return bitmap;
+            }
+        }
 
         public static Image FixedSize(Image imgPhoto, int Width, int Height)
         {
@@ -343,13 +487,53 @@ namespace StableDiffusion
             return bmPhoto;
         }
 
-        public static void FillCircle(Graphics g, Brush brush, float centerX, float centerY, float radius)
+        public static void FillCircle(Graphics g, Brush brush, float centerX, float centerY, float radius, bool fill = true)
         {
-            g.FillEllipse(brush, centerX - radius, centerY - radius, radius + radius, radius + radius);
+            if (fill)
+            {
+                g.FillEllipse(brush, centerX - radius, centerY - radius, radius + radius, radius + radius);
+            }
+            else
+            {
+                g.FillEllipse(brush, centerX - radius, centerY - radius, radius + radius, radius + radius);
+                Rectangle r = new Rectangle((int)(centerX - radius), (int)(centerY - radius), (int)(radius + radius), (int)(radius + radius));
+                Pen pen = new Pen(brush);
+                //pen.Color = Color.FromArgb(pen.Color.ToArgb() ^ 0xffffff);
+                pen.Width = 2;
+                pen.Color = Color.FromArgb(128,128,128,128) ;
+                g.DrawEllipse(pen, r);
+            }
         }
 
+        public static void FillSmoothCircle(Graphics g, Color c, int x, int y, int radius)
+        {
+            Rectangle bounds = new Rectangle(x - radius / 2, y - radius / 2, radius, radius);
+            using (var ellipsePath = new GraphicsPath())
+            {
+                ellipsePath.AddEllipse(bounds);
+                using (var brush = new PathGradientBrush(ellipsePath))
+                {
+                    brush.CenterPoint = new PointF(x, y);
+                    brush.CenterColor = c;
+                    brush.SurroundColors = new[] { Color.FromArgb(0, c.R, c.G, c.B) };
+                    brush.FocusScales = new PointF(0, 0);
 
+                    g.FillEllipse(brush, x - radius / 2, y - radius / 2, radius, radius);
+                }
+            }
+        }
 
+        public static void DrawSquare(Graphics g, Rectangle r)
+        {
+            Pen p = new Pen(Color.FromArgb(100,0,0,0));
+            p.Width = 3;
+            Pen p2 = new Pen(Brushes.White);
+            p2.DashStyle = DashStyle.Dash;
+            p2.Width = 1;
+            g.DrawRectangle(p, r);
+            g.DrawRectangle(p2, r);
+
+        }
         public static Bitmap ChangeToColor(Bitmap bmp)
         {
             Bitmap bmp2 = new Bitmap(bmp.Width, bmp.Height);
@@ -422,6 +606,54 @@ namespace StableDiffusion
 
             return Color.FromArgb(255, (int)r, (int)g, (int)b);
         }
+
+
+        public static void FloodFill(Bitmap bitmap, int x, int y, Color color)
+        {
+
+            x = Math.Clamp(x, 0, bitmap.Width - 1);
+            y = Math.Clamp(y, 0, bitmap.Height - 1);
+            BitmapData data = bitmap.LockBits(
+                new Rectangle(0, 0, bitmap.Width, bitmap.Height),
+                ImageLockMode.ReadWrite, PixelFormat.Format32bppArgb);
+            int[] bits = new int[data.Stride / 4 * data.Height];
+            Marshal.Copy(data.Scan0, bits, 0, bits.Length);
+
+            LinkedList<Point> check = new LinkedList<Point>();
+            int floodTo = color.ToArgb();
+            int floodFrom = bits[x + y * data.Stride / 4];
+            bits[x + y * data.Stride / 4] = floodTo;
+
+            if (floodFrom != floodTo)
+            {
+                check.AddLast(new Point(x, y));
+                while (check.Count > 0)
+                {
+                    Point cur = check.First.Value;
+                    check.RemoveFirst();
+
+                    foreach (Point off in new Point[] {new Point(0, -1), new Point(0, 1),new Point(-1, 0), new Point(1, 0)})
+                    {
+                        Point next = new Point(cur.X + off.X, cur.Y + off.Y);
+                        if (next.X >= 0 && next.Y >= 0 && next.X < data.Width && next.Y < data.Height)
+                        {
+                            if (bits[next.X + next.Y * data.Stride / 4] == floodFrom)
+                            {
+                                check.AddLast(next);
+                                bits[next.X + next.Y * data.Stride / 4] = floodTo;
+                            }
+                        }
+                    }
+                }
+            }
+
+            Marshal.Copy(bits, 0, data.Scan0, bits.Length);
+            bitmap.UnlockBits(data);
+        }
+
+
+
+
 
 
     }
