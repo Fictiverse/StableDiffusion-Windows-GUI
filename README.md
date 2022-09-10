@@ -15,10 +15,12 @@ A windows interface for stable diffusion
 
 
 
+![image](https://user-images.githubusercontent.com/111762798/189494405-91373756-be16-4ff0-a78d-2a3a6a30e0bf.png)
+![image](https://user-images.githubusercontent.com/111762798/189494445-63b3ce05-9138-4a0a-9e43-61da5aab4f67.png)
+![image](https://user-images.githubusercontent.com/111762798/189496346-0035bf87-ab83-4d09-b333-c484a4e25b62.png)
+![image](https://user-images.githubusercontent.com/111762798/189496199-5785e0a6-11f4-4e5f-a2cd-d3331a095855.png)
+![ezgif-2-d9d52b5db4](https://user-images.githubusercontent.com/111762798/189496301-b39aeb10-f278-41c6-91df-8bf438e74dbf.gif)
 
-![image](https://user-images.githubusercontent.com/111762798/187033362-c13d93f9-0d90-432c-96c3-06841f52762e.png)
-![image](https://user-images.githubusercontent.com/111762798/187033368-375d3bf8-be7b-4f1c-baf1-a63428e31e32.png)
-![A](https://user-images.githubusercontent.com/111762798/187033465-4179de8f-2403-40af-99ca-3e61e40b978f.JPG)
 
 
 # Instructions:
