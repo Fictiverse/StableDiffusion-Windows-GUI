@@ -14,11 +14,8 @@ A windows interface for stable diffusion
 **4** - Enjoy
 
 
+![a](https://user-images.githubusercontent.com/111762798/189497241-9a744d0b-0cde-4b6a-8e87-4c4ee5627a25.gif)
 
-![image](https://user-images.githubusercontent.com/111762798/189494405-91373756-be16-4ff0-a78d-2a3a6a30e0bf.png)
-![image](https://user-images.githubusercontent.com/111762798/189494445-63b3ce05-9138-4a0a-9e43-61da5aab4f67.png)
-![image](https://user-images.githubusercontent.com/111762798/189496346-0035bf87-ab83-4d09-b333-c484a4e25b62.png)
-![image](https://user-images.githubusercontent.com/111762798/189496199-5785e0a6-11f4-4e5f-a2cd-d3331a095855.png)
 ![ezgif-2-d9d52b5db4](https://user-images.githubusercontent.com/111762798/189496301-b39aeb10-f278-41c6-91df-8bf438e74dbf.gif)
 
 
