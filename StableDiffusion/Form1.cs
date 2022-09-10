@@ -114,11 +114,13 @@ namespace StableDiffusion
             }
 
             trackBarIteration.Value = ClampTrackbar(trackBarIteration, LoadIteration());
-            trackBarN_iter.Value = ClampTrackbar(trackBarN_iter, LoadIteration());
-            trackBarN_samples.Value = ClampTrackbar(trackBarN_samples, LoadIteration());
-            trackBarGuidance.Value = ClampTrackbar(trackBarGuidance, LoadIteration());
-            trackBarChannels.Value = ClampTrackbar(trackBarChannels, LoadIteration());
-            trackBarStrength.Value = ClampTrackbar(trackBarStrength, LoadIteration());
+            trackBarN_iter.Value = ClampTrackbar(trackBarN_iter, LoadN_iter());
+            trackBarN_samples.Value = ClampTrackbar(trackBarN_samples, LoadN_samples());
+            trackBarGuidance.Value = ClampTrackbar(trackBarGuidance, LoadGuidance());
+            trackBarChannels.Value = ClampTrackbar(trackBarChannels, LoadChannels());
+            trackBarStrength.Value = ClampTrackbar(trackBarStrength, LoadStrength());
+
+
 
             //MessageBox.Show(trackBarN_samples.Value.ToString());
             labelIteration.Text = (trackBarIteration.Value * 25).ToString();
@@ -230,25 +232,25 @@ namespace StableDiffusion
                 {
                     n_iter = s[i + 1];
                     int value = (int)ConvertStringToInt(n_iter);
-                    trackBarN_iter.Value = ClampTrackbar(trackBarN_iter, LoadIteration());
+                    trackBarN_iter.Value = ClampTrackbar(trackBarN_iter, LoadN_iter());
                 }
                 else if (s[i] == "--n_samples")
                 {
                     n_samples = s[i + 1];
                     int value = Convert.ToInt16(ConvertStringToInt(n_samples));
-                    trackBarN_samples.Value = ClampTrackbar(trackBarN_samples, LoadIteration());
+                    trackBarN_samples.Value = ClampTrackbar(trackBarN_samples, LoadN_samples());
                 }
                 else if (s[i] == "--scale")
                 {
                     scale = s[i + 1].Replace(".", ",");
                     int value = Convert.ToInt16(Convert.ToDouble(scale) * 2);
-                    trackBarGuidance.Value = ClampTrackbar(trackBarGuidance, LoadIteration());
+                    trackBarGuidance.Value = ClampTrackbar(trackBarGuidance, LoadGuidance());
                 }
                 else if (s[i] == "--C")
                 {
                     scale = s[i + 1];
                     int value = Convert.ToInt16(Convert.ToDouble(scale) * 2);
-                    trackBarChannels.Value = ClampTrackbar(trackBarChannels, LoadIteration());
+                    trackBarChannels.Value = ClampTrackbar(trackBarChannels, LoadChannels());
                 }
             }
 

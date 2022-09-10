@@ -42,14 +42,25 @@ namespace StableDiffusion
         Bitmap initImage = new Bitmap(512, 512);
 
         int brushSize = 32;
+        bool smoothPencil = false;
+
+
         bool isDrawing;
         Color DrawColor = Color.White;
         Color PickColor = Color.White;
 
+        EnumDrawMod DrawMod;
+
+
+
+        bool faceRectangleSet = false;
+        Rectangle faceRectangle = new Rectangle(0, 0, 512, 512);
 
         Point footerVisibleLocation = new Point(0,0);
         Point footerHiddenLocation = new Point(0,0);
+
         List<Bitmap> undoinitImage = new List<Bitmap>();
+
         bool isDrawingClear = true;
 
         public event EventHandler ImageClearEvent;
@@ -172,7 +183,6 @@ namespace StableDiffusion
         }
 
 
-        EnumDrawMod DrawMod;
 
 
         private void buttonPencil_Click(object sender, EventArgs e)
@@ -251,10 +261,6 @@ namespace StableDiffusion
         /// <summary> /////////////////////////////////////////////////////////////////////////////
         ///                          Drawing on picturebox1
         /// </summary>/////////////////////////////////////////////////////////////////////////////
-
-        bool faceRectangleSet = false;
-        Rectangle faceRectangle = new Rectangle(0, 0, 512, 512);
-
 
         // painting
         private void pictureBox1_Paint(object sender, PaintEventArgs e)
@@ -452,7 +458,6 @@ namespace StableDiffusion
             ClearMemory();
             Clipboard.SetImage(initImage);
         }
-        bool smoothPencil = true;
 
         private void pictureBox1_MouseMove(object sender, MouseEventArgs e)
         {
@@ -1104,14 +1109,17 @@ namespace StableDiffusion
             AddToUndoList(InitImage);
             string mainpath = System.IO.Path.GetDirectoryName(Application.ExecutablePath) + "\\Crop\\samples\\00000.png";
             Image backImg = initImage;
+            try
+            {
+                FileStream fs = new FileStream(mainpath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
+                Image mrkImg = (Bitmap)System.Drawing.Image.FromStream(fs).Clone();
+                mrkImg = ResizeImage(mrkImg, new Size(faceRectangle.Width, faceRectangle.Width));
+                Graphics g = Graphics.FromImage(initImage);
+                g.DrawImage(mrkImg, faceRectangle.X, faceRectangle.Y);
+                fs.Dispose();
+            }
+            catch { }
 
-            Bitmap mrkImg = new Bitmap(faceRectangle.Width, faceRectangle.Height);
-            mrkImg = (Bitmap)Image.FromFile(mainpath);
-            //Image mrkImg = ResizeImage3(Image.FromFile(mainpath), new Size(faceRectangle.Width,faceRectangle.Width));
-            
-
-            Graphics g = Graphics.FromImage(initImage);
-            g.DrawImage(mrkImg, faceRectangle.X, faceRectangle.Y);
             pictureBox1.Refresh();
         }
     }
