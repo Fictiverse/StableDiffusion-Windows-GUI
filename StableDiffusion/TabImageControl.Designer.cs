@@ -30,6 +30,7 @@
         {
             this.components = new System.ComponentModel.Container();
             this.panelTabImages = new System.Windows.Forms.Panel();
+            this.buttonSaveEditedImage = new System.Windows.Forms.Button();
             this.panelBrowseInpaint = new System.Windows.Forms.FlowLayoutPanel();
             this.pictureBoxInpaint1 = new System.Windows.Forms.PictureBox();
             this.pictureBoxInpaint2 = new System.Windows.Forms.PictureBox();
@@ -96,8 +97,27 @@
             this.panelTabImages.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panelTabImages.Location = new System.Drawing.Point(0, 0);
             this.panelTabImages.Name = "panelTabImages";
-            this.panelTabImages.Size = new System.Drawing.Size(680, 910);
+            this.panelTabImages.Size = new System.Drawing.Size(680, 809);
             this.panelTabImages.TabIndex = 22;
+            // 
+            // buttonSaveEditedImage
+            // 
+            this.buttonSaveEditedImage.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(60)))), ((int)(((byte)(40)))));
+            this.buttonSaveEditedImage.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.buttonSaveEditedImage.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.buttonSaveEditedImage.FlatAppearance.BorderSize = 0;
+            this.buttonSaveEditedImage.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.buttonSaveEditedImage.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.buttonSaveEditedImage.ForeColor = System.Drawing.Color.Silver;
+            this.buttonSaveEditedImage.Image = global::StableDiffusion.Properties.Resources.save1;
+            this.buttonSaveEditedImage.Location = new System.Drawing.Point(309, 0);
+            this.buttonSaveEditedImage.Margin = new System.Windows.Forms.Padding(3, 0, 3, 0);
+            this.buttonSaveEditedImage.Name = "buttonSaveEditedImage";
+            this.buttonSaveEditedImage.Size = new System.Drawing.Size(45, 40);
+            this.buttonSaveEditedImage.TabIndex = 69;
+            this.buttonSaveEditedImage.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.buttonSaveEditedImage.UseVisualStyleBackColor = false;
+            this.buttonSaveEditedImage.Click += new System.EventHandler(this.buttonSaveEditedImage_Click);
             // 
             // panelBrowseInpaint
             // 
@@ -106,7 +126,7 @@
             this.panelBrowseInpaint.Controls.Add(this.pictureBoxInpaint2);
             this.panelBrowseInpaint.Controls.Add(this.pictureBoxInpaint3);
             this.panelBrowseInpaint.Controls.Add(this.pictureBoxInpaint4);
-            this.panelBrowseInpaint.Location = new System.Drawing.Point(3, 686);
+            this.panelBrowseInpaint.Location = new System.Drawing.Point(3, 696);
             this.panelBrowseInpaint.Margin = new System.Windows.Forms.Padding(5);
             this.panelBrowseInpaint.Name = "panelBrowseInpaint";
             this.panelBrowseInpaint.Size = new System.Drawing.Size(509, 110);
@@ -132,6 +152,7 @@
             this.pictureBoxInpaint2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.pictureBoxInpaint2.TabIndex = 1;
             this.pictureBoxInpaint2.TabStop = false;
+            this.pictureBoxInpaint2.Click += new System.EventHandler(this.pictureBoxInpaint2_Click);
             // 
             // pictureBoxInpaint3
             // 
@@ -142,6 +163,7 @@
             this.pictureBoxInpaint3.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.pictureBoxInpaint3.TabIndex = 2;
             this.pictureBoxInpaint3.TabStop = false;
+            this.pictureBoxInpaint3.Click += new System.EventHandler(this.pictureBoxInpaint3_Click);
             // 
             // pictureBoxInpaint4
             // 
@@ -152,6 +174,7 @@
             this.pictureBoxInpaint4.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.pictureBoxInpaint4.TabIndex = 3;
             this.pictureBoxInpaint4.TabStop = false;
+            this.pictureBoxInpaint4.Click += new System.EventHandler(this.pictureBoxInpaint4_Click);
             // 
             // listViewInitImages
             // 
@@ -211,6 +234,7 @@
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 10F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 10F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 10F));
+            this.tableLayoutPanel1.Controls.Add(this.buttonSaveEditedImage, 6, 0);
             this.tableLayoutPanel1.Controls.Add(this.buttonPickColor, 0, 0);
             this.tableLayoutPanel1.Controls.Add(this.buttonFillColor, 0, 0);
             this.tableLayoutPanel1.Controls.Add(this.buttonPencil, 0, 0);
@@ -256,7 +280,7 @@
             this.buttonFillColor.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.buttonFillColor.ForeColor = System.Drawing.Color.Silver;
             this.buttonFillColor.Image = global::StableDiffusion.Properties.Resources.color;
-            this.buttonFillColor.Location = new System.Drawing.Point(54, 0);
+            this.buttonFillColor.Location = new System.Drawing.Point(3, 0);
             this.buttonFillColor.Margin = new System.Windows.Forms.Padding(3, 0, 3, 0);
             this.buttonFillColor.Name = "buttonFillColor";
             this.buttonFillColor.Size = new System.Drawing.Size(45, 40);
@@ -275,7 +299,7 @@
             this.buttonPencil.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.buttonPencil.ForeColor = System.Drawing.Color.Silver;
             this.buttonPencil.Image = global::StableDiffusion.Properties.Resources.paintbrush;
-            this.buttonPencil.Location = new System.Drawing.Point(3, 0);
+            this.buttonPencil.Location = new System.Drawing.Point(54, 0);
             this.buttonPencil.Margin = new System.Windows.Forms.Padding(3, 0, 3, 0);
             this.buttonPencil.Name = "buttonPencil";
             this.buttonPencil.Size = new System.Drawing.Size(45, 40);
@@ -293,6 +317,7 @@
             this.buttonFace.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonFace.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.buttonFace.ForeColor = System.Drawing.Color.Silver;
+            this.buttonFace.Image = global::StableDiffusion.Properties.Resources.blend;
             this.buttonFace.Location = new System.Drawing.Point(156, 0);
             this.buttonFace.Margin = new System.Windows.Forms.Padding(3, 0, 3, 0);
             this.buttonFace.Name = "buttonFace";
@@ -640,7 +665,7 @@
             this.BackColor = System.Drawing.Color.Black;
             this.Controls.Add(this.panelTabImages);
             this.Name = "TabImageControl";
-            this.Size = new System.Drawing.Size(680, 910);
+            this.Size = new System.Drawing.Size(680, 809);
             this.panelTabImages.ResumeLayout(false);
             this.panelBrowseInpaint.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxInpaint1)).EndInit();
@@ -700,5 +725,6 @@
         private PictureBox pictureBoxInpaint3;
         private PictureBox pictureBoxInpaint4;
         private System.Windows.Forms.Timer timer1;
+        private Button buttonSaveEditedImage;
     }
 }

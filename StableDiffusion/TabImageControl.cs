@@ -1107,20 +1107,119 @@ namespace StableDiffusion
         private void pictureBoxInpaint1_Click(object sender, EventArgs e)
         {
             AddToUndoList(InitImage);
-            string mainpath = System.IO.Path.GetDirectoryName(Application.ExecutablePath) + "\\Crop\\samples\\00000.png";
-            Image backImg = initImage;
+
+            DrawMaskToInitImage(System.IO.Path.GetDirectoryName(Application.ExecutablePath) + "\\Crop\\samples\\00000.png");
+            pictureBox1.Refresh();
+        }
+
+
+        private void pictureBoxInpaint2_Click(object sender, EventArgs e)
+        {
+            AddToUndoList(InitImage);
+
+            DrawMaskToInitImage(System.IO.Path.GetDirectoryName(Application.ExecutablePath) + "\\Crop\\samples\\00001.png");
+            pictureBox1.Refresh();
+        }
+
+        private void pictureBoxInpaint3_Click(object sender, EventArgs e)
+        {
+            AddToUndoList(InitImage);
+
+            DrawMaskToInitImage(System.IO.Path.GetDirectoryName(Application.ExecutablePath) + "\\Crop\\samples\\00002.png");
+            pictureBox1.Refresh();
+        }
+
+        private void pictureBoxInpaint4_Click(object sender, EventArgs e)
+        {
+            AddToUndoList(InitImage);
+
+            DrawMaskToInitImage(System.IO.Path.GetDirectoryName(Application.ExecutablePath) + "\\Crop\\samples\\00003.png");
+            pictureBox1.Refresh();
+        }
+
+
+
+        private void DrawMaskToInitImage(string CropedPath)
+        {
             try
             {
-                FileStream fs = new FileStream(mainpath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
+                FileStream fs = new FileStream(CropedPath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
+
                 Image mrkImg = (Bitmap)System.Drawing.Image.FromStream(fs).Clone();
                 mrkImg = ResizeImage(mrkImg, new Size(faceRectangle.Width, faceRectangle.Width));
+                mrkImg = MakeTransparent((Bitmap)mrkImg);
+                TextureBrush imageBrush = new TextureBrush(mrkImg);
+                
+                imageBrush.WrapMode = WrapMode.Clamp;//causes the image to get smaller/larger if movement is tried
+                Point xDisplayCenterRelative = new Point(faceRectangle.Width / 2, faceRectangle.Height / 2); //Find the relative center location of DisplayArea
+                Point xImageCenterRelative = new Point(faceRectangle.Width / 2, faceRectangle.Width / 2); //Find the relative center location of Image
+                Point xOffSetRelative = new Point(xDisplayCenterRelative.X - xImageCenterRelative.X, xDisplayCenterRelative.Y - xImageCenterRelative.Y); //Find the relative offset
+                Point xAbsolutePixel = xOffSetRelative + new Size(faceRectangle.Location); //Find the absolute location
+                imageBrush.TranslateTransform(xAbsolutePixel.X, xAbsolutePixel.Y);
+
                 Graphics g = Graphics.FromImage(initImage);
-                g.DrawImage(mrkImg, faceRectangle.X, faceRectangle.Y);
+                g.FillRectangle(imageBrush, faceRectangle);
                 fs.Dispose();
             }
             catch { }
 
-            pictureBox1.Refresh();
+        }
+
+
+
+        private Bitmap MakeTransparent(Bitmap bitmap, float fallof = 0.5f)
+        {
+            Bitmap mImage = new Bitmap(bitmap);
+            Point center = new Point(mImage.Size.Width / 2, mImage.Size.Height / 2);
+            for (int x = mImage.Size.Width - 1; x >= 0; x--)
+            {
+                for (int y = mImage.Size.Height - 1; y >= 0; y--)
+                {
+                    Point p = new Point(x, y);
+                    double distance = GetDistance(p.X, p.Y, center.X, center.Y)/ (mImage.Size.Width / 2);
+
+                    double ifallof = 1 / (1 - fallof);
+                    distance = (distance - fallof) * ifallof;
+
+
+                    distance = distance * 256;
+
+                    int d = Math.Clamp((int)distance, 0, 255);
+                    Color pixelcolor = mImage.GetPixel(x,y);
+
+                    mImage.SetPixel(p.X, p.Y, Color.FromArgb(255-d, pixelcolor.R, pixelcolor.G, pixelcolor.B) );
+ 
+                }
+            }
+            return mImage;
+        }
+
+
+        private static double GetDistance(double x1, double y1, double x2, double y2)
+        {
+            return Math.Sqrt(Math.Pow((x2 - x1), 2) + Math.Pow((y2 - y1), 2));
+        }
+
+        int safeSave = 0;
+        private void buttonSaveEditedImage_Click(object sender, EventArgs e)
+        {
+            
+            if (listBoxInitImages.SelectedItems.Count == 1)
+            {
+                string mainpath = System.IO.Path.GetDirectoryName(Application.ExecutablePath) + "\\InitImages\\"+ listBoxInitImages.SelectedItem;
+
+
+                initImage.Save(mainpath + "\\" + DateTime.Now.ToFileTime() + ".png");
+            }
+            else
+            {
+                string mainpath = System.IO.Path.GetDirectoryName(Application.ExecutablePath) + "\\InitImages\\Result";
+                System.IO.Directory.CreateDirectory(mainpath);
+                initImage.Save(mainpath + "\\" + DateTime.Now.ToFileTime() + "_" + safeSave + ".png");
+            }
+
+            RefreshInitImagesList();
+            safeSave++;
         }
     }
 }
