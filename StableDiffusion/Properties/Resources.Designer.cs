@@ -93,6 +93,16 @@ namespace StableDiffusion.Properties {
         /// <summary>
         ///   Recherche une ressource localisée de type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap blend {
+            get {
+                object obj = ResourceManager.GetObject("blend", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une ressource localisée de type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap blend_tool {
             get {
                 object obj = ResourceManager.GetObject("blend-tool", resourceCulture);
