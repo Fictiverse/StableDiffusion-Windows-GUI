@@ -368,63 +368,83 @@ namespace StableDiffusion
             return newImage;
         }
 
-
-        public static System.Drawing.Image ResizeImage3(System.Drawing.Image imgToResize, Size size)
+        public static Size GetJpegImageSize(string filename)
         {
-            //Get the image current width  
-            int sourceWidth = imgToResize.Width;
-            //Get the image current height  
-            int sourceHeight = imgToResize.Height;
-            float nPercent = 0;
-            float nPercentW = 0;
-            float nPercentH = 0;
-            //Calulate  width with new desired size  
-            nPercentW = ((float)size.Width / (float)sourceWidth);
-            //Calculate height with new desired size  
-            nPercentH = ((float)size.Height / (float)sourceHeight);
-            if (nPercentH < nPercentW)
-                nPercent = nPercentH;
-            else
-                nPercent = nPercentW;
-            //New Width  
-            int destWidth = (int)(sourceWidth * nPercent);
-            //New Height  
-            int destHeight = (int)(sourceHeight * nPercent);
-            Bitmap b = new Bitmap(destWidth, destHeight);
-            Graphics g = Graphics.FromImage((System.Drawing.Image)b);
-            g.InterpolationMode = InterpolationMode.HighQualityBicubic;
-            // Draw image with new width and height  
-            g.DrawImage(imgToResize, 0, 0, destWidth, destHeight);
-            g.Dispose();
-            return (System.Drawing.Image)b;
-        }
-
-
-        public static Bitmap ResizeImage2(Image image, int width, int height)
-        {
-            var destRect = new Rectangle(0, 0, width, height);
-            var destImage = new Bitmap(width, height);
-
-            destImage.SetResolution(image.HorizontalResolution, image.VerticalResolution);
-
-            using (var graphics = Graphics.FromImage(destImage))
+            FileStream stream = null;
+            BinaryReader rdr = null;
+            try
             {
-                graphics.CompositingMode = CompositingMode.SourceCopy;
-                graphics.CompositingQuality = CompositingQuality.HighQuality;
-                graphics.InterpolationMode = InterpolationMode.HighQualityBicubic;
-                graphics.SmoothingMode = SmoothingMode.HighQuality;
-                graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
-
-                using (var wrapMode = new ImageAttributes())
+                stream = File.OpenRead(filename);
+                rdr = new BinaryReader(stream);
+                // keep reading packets until we find one that contains Size info
+                for (; ; )
                 {
-                    wrapMode.SetWrapMode(WrapMode.TileFlipXY);
-                    graphics.DrawImage(image, destRect, 0, 0, image.Width, image.Height, GraphicsUnit.Pixel, wrapMode);
+                    byte code = rdr.ReadByte();
+                    if (code != 0xFF) throw new ApplicationException(
+                            "Unexpected value in file " + filename);
+                    code = rdr.ReadByte();
+                    switch (code)
+                    {
+                        // filler byte
+                        case 0xFF:
+                            stream.Position--;
+                            break;
+                        // packets without data
+                        case 0xD0:
+                        case 0xD1:
+                        case 0xD2:
+                        case 0xD3:
+                        case 0xD4:
+                        case 0xD5:
+                        case 0xD6:
+                        case 0xD7:
+                        case 0xD8:
+                        case 0xD9:
+                            break;
+                        // packets with size information
+                        case 0xC0:
+                        case 0xC1:
+                        case 0xC2:
+                        case 0xC3:
+                        case 0xC4:
+                        case 0xC5:
+                        case 0xC6:
+                        case 0xC7:
+                        case 0xC8:
+                        case 0xC9:
+                        case 0xCA:
+                        case 0xCB:
+                        case 0xCC:
+                        case 0xCD:
+                        case 0xCE:
+                        case 0xCF:
+                            ReadBEUshort(rdr);
+                            rdr.ReadByte();
+                            ushort h = ReadBEUshort(rdr);
+                            ushort w = ReadBEUshort(rdr);
+                            return new Size(w, h);
+                        // irrelevant variable-length packets
+                        default:
+                            int len = ReadBEUshort(rdr);
+                            stream.Position += len - 2;
+                            break;
+                    }
                 }
             }
-
-            return destImage;
+            finally
+            {
+                if (rdr != null) rdr.Close();
+                if (stream != null) stream.Close();
+            }
         }
 
+        private static ushort ReadBEUshort(BinaryReader rdr)
+        {
+            ushort hi = rdr.ReadByte();
+            hi <<= 8;
+            ushort lo = rdr.ReadByte();
+            return (ushort)(hi | lo);
+        }
 
         public static Bitmap CropFaceFromImage(Bitmap source, Rectangle section)
         {

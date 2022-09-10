@@ -118,10 +118,9 @@ namespace StableDiffusion
         {
             InitializeComponent();
 
-
             listBoxPreset.Items.Clear();
 
-            //string[] presetDirs = Directory.GetDirectories(System.IO.Path.GetDirectoryName(Application.ExecutablePath) + "\\Result");
+            System.IO.Directory.CreateDirectory(System.IO.Path.GetDirectoryName(Application.ExecutablePath) + "\\Result");
             var presetDirs = new DirectoryInfo(System.IO.Path.GetDirectoryName(Application.ExecutablePath) + "\\Result").GetDirectories().OrderBy(f => f.LastWriteTime).ToList();
             foreach (DirectoryInfo dir in presetDirs)
             {
@@ -130,11 +129,6 @@ namespace StableDiffusion
             presetpaths = presetDirs.Count;
 
             listBoxPreset.SelectedItem = LoadSelectedFolder();
-            /*
-            List<string> presets = LoadPresets();
-            foreach (var str in presets)
-                listBoxPreset.Items.Add(str);
-            */
 
         }
 
