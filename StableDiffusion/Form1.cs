@@ -1,6 +1,7 @@
 ﻿using StableDiffusion.Properties;
 using System;
 using System.Diagnostics;
+using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using System.Globalization;
@@ -13,11 +14,30 @@ using static StableDiffusion.myFunctions;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.Window;
 
+
+
 namespace StableDiffusion
 {
+
+
+    public enum EnumTab { Browse, Prompt,Image, Sequence, Morph}
+
+    public enum EnumScript {txt2txt, img2img, imgs2imgs, imgMorph}
+
+
+
     public partial class Form1 : Form
     {
 
+        public EnumTab currentTab;
+        public EnumScript currentScript;
+        
+        TabBrowseControl tabBrowse = new TabBrowseControl();
+        TabPromptControl tabPrompt = new TabPromptControl();
+        TabImageControl tabImage = new TabImageControl();
+        TabSequenceControl tabSequence = new TabSequenceControl();
+        TabMorphControl tabMorph = new TabMorphControl();
+        
 
 
         Process newProcess = null;
@@ -35,17 +55,35 @@ namespace StableDiffusion
         string imgs2imgsPath = "scripts/imgs2imgs.py";
         string inpaintPath = "scripts/inpaint.py";
 
-
         string separator = ", ";
         public Form1()
         {
             InitializeComponent();
 
             // init form visuals            
-            this.Size = new Size(1043, 743);
+            //this.Size = new Size(1043, 823);
 
 
+            panelMainTab.Visible = false;
 
+
+            tabBrowse.Location = panelMainTab.Location;
+            this.Controls.Add(tabBrowse);
+
+            tabPrompt.Location = panelMainTab.Location;
+            this.Controls.Add(tabPrompt);
+
+            tabImage.Location = panelMainTab.Location;
+            this.Controls.Add(tabImage);
+
+            tabSequence.Location = panelMainTab.Location;
+            this.Controls.Add(tabSequence);
+
+            tabMorph.Location = panelMainTab.Location;
+            this.Controls.Add(tabMorph);
+            
+
+            SwitchTab(EnumTab.Prompt);
 
             // init default values
 
@@ -57,11 +95,8 @@ namespace StableDiffusion
                 isEnvValid = IsEnvPathValid(envpath);
             }
 
-            //txt2imgPath = LoadTxt2imgPath();
-            //img2imgPath = LoadImg2imgPath();
-            //inpaintPath= LoadInpaintPath();
+            tabImage.environmentPath = envpath;
 
-            lastOutputPath =  System.IO.Path.GetDirectoryName(Application.ExecutablePath) + "\\Result";
 
             textBoxPrompt.Text = LoadPrompt();
 
@@ -78,12 +113,12 @@ namespace StableDiffusion
                 textBoxSeed.Text = "Random";
             }
 
-            trackBarIteration.Value = ClampTrackbar(LoadIteration(), trackBarIteration.Minimum, trackBarIteration.Maximum, trackBarIteration.Value);
-            trackBarN_iter.Value = ClampTrackbar(LoadN_iter(), trackBarN_iter.Minimum, trackBarN_iter.Maximum, trackBarN_iter.Value);
-            trackBarN_samples.Value = ClampTrackbar(LoadN_samples(), trackBarN_samples.Minimum, trackBarN_samples.Maximum, trackBarN_samples.Value);
-            trackBarGuidance.Value = ClampTrackbar(LoadGuidance(), trackBarGuidance.Minimum, trackBarGuidance.Maximum, trackBarGuidance.Value);
-            trackBarChannels.Value = ClampTrackbar(LoadChannels(), trackBarChannels.Minimum, trackBarChannels.Maximum, trackBarChannels.Value);
-            trackBarStrength.Value = ClampTrackbar(LoadStrength(), trackBarStrength.Minimum, trackBarStrength.Maximum, trackBarStrength.Value);
+            trackBarIteration.Value = ClampTrackbar(trackBarIteration, LoadIteration());
+            trackBarN_iter.Value = ClampTrackbar(trackBarN_iter, LoadIteration());
+            trackBarN_samples.Value = ClampTrackbar(trackBarN_samples, LoadIteration());
+            trackBarGuidance.Value = ClampTrackbar(trackBarGuidance, LoadIteration());
+            trackBarChannels.Value = ClampTrackbar(trackBarChannels, LoadIteration());
+            trackBarStrength.Value = ClampTrackbar(trackBarStrength, LoadIteration());
 
             //MessageBox.Show(trackBarN_samples.Value.ToString());
             labelIteration.Text = (trackBarIteration.Value * 25).ToString();
@@ -103,73 +138,129 @@ namespace StableDiffusion
 
 
 
+            tabPrompt.PresetChangedEvent += new EventHandler(PresetChangedEvent);
 
+            tabImage.ImageClearEvent += new EventHandler(ImageClearEvent);
+            tabImage.ImageLoadedEvent += new EventHandler(ImageLoadedEvent);
 
-            listBoxPreset.Items.Clear();
-            List<string> presets = LoadPresets();
-            foreach (var str in presets)
-                listBoxPreset.Items.Add(str);
+            tabBrowse.SetSelectedStylesFromBrowser += new EventHandler(SetSelectedStylesFromBrowser);
+            tabBrowse.SetPromptFromBrowser += new EventHandler(SetPromptFromBrowser);
+            tabBrowse.SetSettingsFromBrowser += new EventHandler(SetSettingsFromBrowser); 
+            tabBrowse.NewInitImageAdded += new EventHandler(NewInitImageAdded);
+        }
 
-            listBoxGenericStyles.Items.Clear();
-            List<string> gStyles = LoadGenericStyles();
-            foreach (var str in gStyles)
-                listBoxGenericStyles.Items.Add(str);
+        string selectedPreset = "";
+        protected void PresetChangedEvent(object sender, EventArgs e)
+        {
+            selectedPreset=tabPrompt.Preset.ToString();
+            tabBrowse.SelectPreset(selectedPreset);
+        }
 
-            listBoxSelectedStyles.Items.Clear();
-            List<string> sStyles = LoadSelectedStyles();
-            foreach (var str in sStyles)
-                listBoxSelectedStyles.Items.Add(str);
-
-            // init default tab
-            SelectedPanelTab = panelTabPrompt;
-
-
-            // init drawing area
-            using (Graphics graph = Graphics.FromImage(DrawArea))
-            {
-                Rectangle ImageSize = new Rectangle(0, 0, 512, 512);
-                graph.FillRectangle(Brushes.Black, ImageSize);
+        protected void ImageClearEvent(object sender, EventArgs e)
+        {
+            if (currentScript == EnumScript.img2img || currentScript == EnumScript.imgMorph)
+            {      
+                SwitchScriptSelector(EnumScript.txt2txt);
             }
-            pictureBox1.Image = DrawArea;
+        }
 
-
-
-            // init Gradiant
-            Color c = Color.Gray;
-            Graphics g = panelGradiant.CreateGraphics();
-            LinearGradientBrush linearGradientBrush = new LinearGradientBrush(panelGradiant.ClientRectangle, Color.Black, Color.White, 0.0);
-            ColorBlend cblend = new ColorBlend(3);
-            cblend.Colors = new Color[3] { Color.Black, c, Color.White };
-            cblend.Positions = new float[3] { 0f, 0.5f, 1f };
-            linearGradientBrush.InterpolationColors = cblend;
-            g.FillRectangle(linearGradientBrush, panelGradiant.ClientRectangle);
-
-
-            // mousewheel events
-            this.pictureBox1.MouseWheel += new MouseEventHandler(pictureBox1_MouseWheel);
-            this.pictureBox1.MouseMove += new MouseEventHandler(pictureBox1_MouseWheel);
-
-
-            // init images folders
-            System.IO.Directory.CreateDirectory(System.IO.Path.GetDirectoryName(Application.ExecutablePath) + "\\InitImages");
-            String path = System.IO.Path.GetDirectoryName(Application.ExecutablePath) + "\\InitImages";
-
-            string[] subdirs = Directory.GetDirectories(path);
-            foreach (string dir in subdirs)
+        protected void ImageLoadedEvent(object sender, EventArgs e)
+        {
+            if (currentTab == EnumTab.Image)
             {
-                string new_string = dir.Split('\\').Last();
-                listBoxInitImages.Items.Add(new_string);
+                SwitchScriptSelector(EnumScript.img2img);
             }
-            listViewInitImages.View = View.Details;
+            else if (currentTab == EnumTab.Morph)
+            {
+                SwitchScriptSelector(EnumScript.imgMorph);
+            }
+
+        }
+
+        protected void SetPromptFromBrowser(object sender, EventArgs e)
+        {
+
+             textBoxPrompt.Text = tabBrowse.Prompt;
+        }
+        protected void SetSelectedStylesFromBrowser(object sender, EventArgs e)
+        {
+
+            tabPrompt.Styles = tabBrowse.SelectedStyles;
+        }
+
+        protected void SetSettingsFromBrowser(object sender, EventArgs e)
+        {
+            string settings = tabBrowse.Settings;
+            string seed = "";
+            string ddim_steps = "";
+            string n_iter = "";
+            string n_samples = "";
+            string scale = "";
 
 
-            //populateInitImages();
+            string[] s = settings.Split(' ');
+
+            for (int i = 0; i < s.Length; i++)
+            {
+                if (s[i] == "--seed")
+                {
+                    seed = s[i + 1];
+                    if (IsDigitsOnly(seed))
+                    {
+                        textBoxSeed.Text = seed;
+                        buttonSeed.BackColor = Color.FromArgb(40, 30, 50);
+                        textBoxSeed.Enabled = true;
+                        isRandomSeed = false;
+                    }
+                    else
+                    {
+                        isRandomSeed = true;
+                        buttonSeed.BackColor = Color.FromArgb(20, 60, 30);
+                        textBoxSeed.Enabled = false;
+                        textBoxSeed.Text = "Random";
+                    }
+                }
+                else if (s[i] == "--ddim_steps")
+                {
+                    ddim_steps = s[i + 1];
+                    int value = Convert.ToInt16(Convert.ToDouble(ConvertStringToInt(ddim_steps)) / 25);
+                    trackBarIteration.Value = ClampTrackbar(trackBarIteration, LoadIteration());
+                }
+                else if (s[i] == "--n_iter")
+                {
+                    n_iter = s[i + 1];
+                    int value = (int)ConvertStringToInt(n_iter);
+                    trackBarN_iter.Value = ClampTrackbar(trackBarN_iter, LoadIteration());
+                }
+                else if (s[i] == "--n_samples")
+                {
+                    n_samples = s[i + 1];
+                    int value = Convert.ToInt16(ConvertStringToInt(n_samples));
+                    trackBarN_samples.Value = ClampTrackbar(trackBarN_samples, LoadIteration());
+                }
+                else if (s[i] == "--scale")
+                {
+                    scale = s[i + 1].Replace(".", ",");
+                    int value = Convert.ToInt16(Convert.ToDouble(scale) * 2);
+                    trackBarGuidance.Value = ClampTrackbar(trackBarGuidance, LoadIteration());
+                }
+                else if (s[i] == "--C")
+                {
+                    scale = s[i + 1];
+                    int value = Convert.ToInt16(Convert.ToDouble(scale) * 2);
+                    trackBarChannels.Value = ClampTrackbar(trackBarChannels, LoadIteration());
+                }
+            }
+
 
 
 
         }
-
-
+        protected void NewInitImageAdded(object sender, EventArgs e)
+        {
+            SwitchTab(EnumTab.Image);
+            tabImage.RefreshInitImagesList();
+        }
 
         private bool IsEnvPathValid(string path)
         {
@@ -222,164 +313,139 @@ namespace StableDiffusion
         ///                          Tabs control
         /// </summary>/////////////////////////////////////////////////////////////////////////////
 
-        bool TabPrompt = true;
-        bool TabImage = false;
-        bool TabSequence = false;
-        bool TabMorph = false;
-
-        bool isTabSequenceSelected = false;
-        bool isTabMorphSelected = false;
-        Panel SelectedPanelTab = new Panel();
 
 
+        private void SwitchTab(EnumTab tab)
+        {
+            currentTab = tab;
+
+            tabBrowse.IsVisible = currentTab == EnumTab.Browse;
+            tabPrompt.IsVisible = currentTab == EnumTab.Prompt;
+            tabImage.IsVisible = currentTab == EnumTab.Image;
+            tabSequence.IsVisible = currentTab == EnumTab.Sequence;
+            tabMorph.IsVisible = currentTab == EnumTab.Morph;
+
+            ChangeTab(buttonTabBrowse, currentTab == EnumTab.Browse, 1);
+            ChangeTab(buttonTabPrompt, currentTab == EnumTab.Prompt);
+            ChangeTab(buttonTabImage, currentTab == EnumTab.Image);
+            ChangeTab(buttonTabSequence, currentTab == EnumTab.Sequence);
+            ChangeTab(buttonTabMorph, currentTab == EnumTab.Morph);
+
+        }
+
+        private void ChangeTab(System.Windows.Forms.Button btn, bool enabled, int color =0)
+        {
+
+            if (enabled)
+            {
+                btn.BackColor = Color.FromArgb(20, 60, 30);
+            }
+            else
+            {
+                if(color == 0)
+                    btn.BackColor = Color.FromArgb(45, 35, 55);
+                else if (color == 1)
+                    btn.BackColor = Color.FromArgb(35, 45, 65);
+            }
+
+        }
+
+
+        private void buttonTabBrowse_Click(object sender, EventArgs e)
+        {
+            DrawArea = tabImage.InitImage;
+            SwitchTab(EnumTab.Browse);
+            tabImage.StopInpaint();
+        }
 
         private void buttonTabPrompt_Click(object sender, EventArgs e)
         {
-            TabPrompt = true;
-            TabImage = false;
-            TabSequence = false;
-            TabMorph = false;
-
-            switchTab(buttonTabPrompt, TabPrompt);
-            switchTab(buttonTabImage, TabImage);
-            switchTab(buttonTabSequence, TabSequence);
-            switchTab(buttonTabMorph, TabMorph);
-
-            switchTabPosition(SelectedPanelTab, panelTabPrompt);
-
-            SelectedPanelTab = panelTabPrompt;
-            if (isInpainting)
+            DrawArea = tabImage.InitImage;
+            SwitchTab(EnumTab.Prompt);
+            tabImage.StopInpaint();
+            if (!tabImage.isClear)
             {
-                StopInpaint();
+                SwitchScriptSelector(EnumScript.img2img);
             }
-
-            if (!isDrawingClear)
-                SwitchScriptSelector(1);
             else
-                SwitchScriptSelector(0);
+                SwitchScriptSelector(EnumScript.txt2txt);
+
+
 
         }
 
         private void buttonTabImage_Click(object sender, EventArgs e)
         {
-            TabPrompt = false;
-            TabImage = true;
-            TabSequence = false;
-            TabMorph = false;
-
-            switchTab(buttonTabPrompt, TabPrompt);
-            switchTab(buttonTabImage, TabImage);
-            switchTab(buttonTabSequence, TabSequence);
-            switchTab(buttonTabMorph, TabMorph);
-
-            switchTabPosition(SelectedPanelTab, panelTabImages);
-
-            SelectedPanelTab = panelTabImages;
-
-            if (!isDrawingClear)
-                SwitchScriptSelector(1);
+            SwitchTab(EnumTab.Image);
+            tabImage.StopInpaint();
+            if (!tabImage.isClear)
+            {
+                tabImage.InitImage = DrawArea;
+                SwitchScriptSelector(EnumScript.img2img);
+            }
             else
-                SwitchScriptSelector(0);
-
+                SwitchScriptSelector(EnumScript.txt2txt);
 
         }
 
         private void buttonTabSequence_Click(object sender, EventArgs e)
         {
-            TabPrompt = false;
-            TabImage = false;
-            TabSequence = true;
-            TabMorph = false;
-
-            switchTab(buttonTabPrompt, TabPrompt);
-            switchTab(buttonTabImage, TabImage);
-            switchTab(buttonTabSequence, TabSequence);
-            switchTab(buttonTabMorph, TabMorph);
-
-            switchTabPosition(SelectedPanelTab, panelTabSequence);
-
-            SelectedPanelTab = panelTabSequence;
-
-            if (isInpainting)
-            {
-                StopInpaint();
-            }
-
-
-            SwitchScriptSelector(2);
-
+            DrawArea = tabImage.InitImage;
+            SwitchTab(EnumTab.Sequence);
+            tabImage.StopInpaint();
+            SwitchScriptSelector(EnumScript.imgs2imgs);
 
         }
 
 
         private void buttonTabMorph_Click(object sender, EventArgs e)
         {
-            TabPrompt = false;
-            TabImage = false;
-            TabSequence = false;
-            TabMorph = true;
-
-            switchTab(buttonTabPrompt, TabPrompt);
-            switchTab(buttonTabImage, TabImage);
-            switchTab(buttonTabSequence, TabSequence);
-            switchTab(buttonTabMorph, TabMorph);
-
-            switchTabPosition(SelectedPanelTab, panelTabSequence);
-
-            SelectedPanelTab = panelTabSequence;
-
-            if (isInpainting)
+            DrawArea = tabImage.InitImage;
+            SwitchTab(EnumTab.Morph);
+            tabImage.StopInpaint();
+            if (!tabImage.isClear)
             {
-                StopInpaint();
+                tabMorph.Drawing = DrawArea;
+                SwitchScriptSelector(EnumScript.imgMorph);
             }
-
-            if (!isDrawingClear)
-                SwitchScriptSelector(3);
             else
-                SwitchScriptSelector(0);
+                SwitchScriptSelector(EnumScript.txt2txt);
 
         }
 
 
-
-        public void SwitchScriptSelector(int i)
+        
+        private void SwitchScriptSelector(EnumScript s)
         {
-            switch (i)
+            currentScript = s;
+            switch (s)
             {
-                case 0:
+                case EnumScript.txt2txt:
                     panelSelectedPrompt.BackColor = Color.FromArgb(20, 60, 30);
                     panelSelectedImage.BackColor = Color.FromArgb(15, 10, 15);
                     panelSelectedSequence.BackColor = Color.FromArgb(15, 10, 15);
                     panelSelectedMorph.BackColor = Color.FromArgb(15, 10, 15);
-                    isTabSequenceSelected = false;
-                    isTabMorphSelected = false;
                     break;
 
-                case 1:
+                case EnumScript.img2img:
                     panelSelectedPrompt.BackColor = Color.FromArgb(15, 10, 15);
                     panelSelectedImage.BackColor = Color.FromArgb(20, 60, 30);
                     panelSelectedSequence.BackColor = Color.FromArgb(15, 10, 15);
                     panelSelectedMorph.BackColor = Color.FromArgb(15, 10, 15);
-                    isTabSequenceSelected = false;
-                    isTabMorphSelected = false;
                     break;
 
-                case 2:
+                case EnumScript.imgs2imgs:
                     panelSelectedPrompt.BackColor = Color.FromArgb(15, 10, 15);
                     panelSelectedImage.BackColor = Color.FromArgb(15, 10, 15);
                     panelSelectedSequence.BackColor = Color.FromArgb(20, 60, 30);
                     panelSelectedMorph.BackColor = Color.FromArgb(15, 10, 15);
-                    isTabSequenceSelected = true;
-                    isTabMorphSelected = false;
                     break;
 
-                case 3:
+                case EnumScript.imgMorph:
                     panelSelectedPrompt.BackColor = Color.FromArgb(15, 10, 15);
                     panelSelectedImage.BackColor = Color.FromArgb(15, 10, 15);
                     panelSelectedSequence.BackColor = Color.FromArgb(15, 10, 15);
                     panelSelectedMorph.BackColor = Color.FromArgb(20, 60, 30);
-                    isTabSequenceSelected = false;
-                    isTabMorphSelected = true;
                     break;
 
                 default:
@@ -387,32 +453,6 @@ namespace StableDiffusion
                     break;
             }
         }
-
-
-        private void switchTab(System.Windows.Forms.Button btn, bool enabled)
-        {
-            if (enabled)
-                btn.BackColor = Color.FromArgb(20, 60, 30);
-            else
-            {
-                btn.BackColor = Color.FromArgb(45, 35, 55);
-            }
-
-        }
-
-        private void switchTabPosition(System.Windows.Forms.Panel panel1, System.Windows.Forms.Panel panel2)
-        {
-            Point panel1pos = panel1.Location;
-            Point panel2pos = panel2.Location;
-
-            panel1.Location = new Point(panel2pos.X, panel2pos.Y);
-            panel2.Location = new Point(panel1pos.X, panel1pos.Y);
-
-        }
-
-
-
-
 
 
 
@@ -429,6 +469,7 @@ namespace StableDiffusion
         // start
         private void buttonStart_Click(object sender, EventArgs e)
         {
+
             if (!File.Exists(envpath + "\\scripts\\txt2img.py"))
             {
                 MessageBox.Show(envpath + "\\scripts\\txt2img.py not found");
@@ -443,19 +484,22 @@ namespace StableDiffusion
 
             if (isLaunched)
             {
-                if (isTabSequenceSelected)
+                switch (currentScript)
                 {
-                    startImages2Images();
+                    case EnumScript.txt2txt:
+                        startText2Image();
+                        break;
+                    case EnumScript.img2img:
+                        startImage2Image();
+                        break;
+                    case EnumScript.imgs2imgs:
+                        startImages2Images();
+                        break;
+                    case EnumScript.imgMorph:
+                        startImage2Morph();
+                        break;
                 }
-                else if (isDrawingClear)
-                {
-                    startText2Image();
-                }
-                else
-                {
-                    startImage2Image(isTabMorphSelected);
-                }
-
+                AddToPromptList();
                 sec = 0;
                 timerSec.Start();
                 buttonStart.BackColor = Color.FromArgb(20, 60, 30);
@@ -511,15 +555,10 @@ namespace StableDiffusion
             
             // making prompt with styles
             string text = textBoxPrompt.Text;
-
-            string style = "";
-            foreach (var item in listBoxSelectedStyles.Items)
-            {
-                style = style + separator + item;
-            }
-            text = text + style;
+            text = text + ", " + tabPrompt.Styles;
             text = " --prompt \"" + text + "\"";
 
+            string size = " --W " + textBoxSizeW.Text + " --H " + textBoxSizeH.Text ;
             string iteration = " --ddim_steps " + labelIteration.Text;
 
             string n_iter = " --n_iter " + labelN_iter.Text;
@@ -528,35 +567,27 @@ namespace StableDiffusion
 
             string n_samples = " --n_samples " + labelN_samples.Text;
             string guidance = " --scale " + labelGuidance.Text.Replace(",", "."); ;
-            //string channels = " --C " + trackBarChannels.Value;
+            //string channels = " --C " +  labelChannels.Text;
             string channels = "";
 
             string plms = " --plms";
             if(!isPlmsActivated)
                 plms = "";
 
-
             string outdir = System.IO.Path.GetDirectoryName(Application.ExecutablePath) + "\\Result";
             System.IO.Directory.CreateDirectory(outdir);
-            if (listBoxPreset.SelectedItems.Count > 0)
-            {
-                outdir = outdir + "\\" + listBoxPreset.SelectedItem;
-                System.IO.Directory.CreateDirectory(outdir);
-            }
-            else
-            {
-                outdir = outdir + "\\NoPreset";
-                System.IO.Directory.CreateDirectory(outdir);
-            }
+            outdir = outdir + "\\" + tabPrompt.Preset;
+            System.IO.Directory.CreateDirectory(outdir);
             outdir = CreateResultDirectory(outdir);
             lastOutputPath = outdir;
             outdir.Replace("\\", "/");
             outdir = " --outdir \"" + outdir + "\"";
 
             // making python line
-            string gen = "python "+ txt2imgPath + text + seed + iteration + n_iter + n_samples + guidance + channels + plms + outdir + " --skip_grid ";
+            string gen = "python "+ txt2imgPath + text + size + seed + iteration + n_iter + n_samples + guidance + channels + plms + outdir + " --skip_grid ";
 
-            SavePromptInTxtFile(lastOutputPath, gen);
+
+            SavePromptInTxtFile(lastOutputPath, textBoxPrompt.Text, tabPrompt.Styles, seed + iteration + n_iter + n_samples + guidance + channels + plms);
 
             Clipboard.SetText(gen);
 
@@ -571,10 +602,10 @@ namespace StableDiffusion
 
         bool isPlmsActivated = false;
         // start img2image script
-        private void startImage2Image(bool isTabMorph = false)
+        private void startImage2Image()
         {
-            var i = new Bitmap(DrawArea);
-            i.Save(envpath + "\\current.png");
+            //var i = new Bitmap(DrawArea);
+            //i.Save(envpath + "\\current.png");
 
             // kill old process
             if (newProcess != null && !newProcess.HasExited)
@@ -606,13 +637,7 @@ namespace StableDiffusion
 
             // making prompt with styles
             string text = textBoxPrompt.Text;
-
-            string style = "";
-            foreach (var item in listBoxSelectedStyles.Items)
-            {
-                style = style + separator + item;
-            }
-            text = text + style;
+            text = text + ", " + tabPrompt.Styles;
             text = " --prompt \"" + text + "\"";
 
             string iteration = " --ddim_steps " + labelIteration.Text;
@@ -633,37 +658,33 @@ namespace StableDiffusion
             string imgpath = envpath + "\\current.png";
             string initImage = "  --init-img " + imgpath;
 
-
             string script = img2imgPath;
-
-            if (isTabMorphSelected)
-            {
-                n_iter = " --n_iter " + 1;
-                n_samples = " --n_samples " + 1;
-                script = img2morphPath;
-            }
-
 
             string outdir = System.IO.Path.GetDirectoryName(Application.ExecutablePath) + "\\Result";
             System.IO.Directory.CreateDirectory(outdir);
-            if (listBoxPreset.SelectedItems.Count > 0)
-            {
-                outdir = outdir + "\\" + listBoxPreset.SelectedItem;
-                System.IO.Directory.CreateDirectory(outdir);
-            }
-            else
-            {
-                outdir = outdir + "\\NoPreset";
-                System.IO.Directory.CreateDirectory(outdir);
-            }
+            outdir = outdir + "\\" + tabPrompt.Preset;
+            System.IO.Directory.CreateDirectory(outdir);
             outdir = CreateResultDirectory(outdir);
             lastOutputPath = outdir;
             outdir.Replace("\\", "/");
             outdir = " --outdir \"" + outdir + "\"";
+
+            if (tabImage.isFaceRectangleSet)
+            {
+                imgpath = System.IO.Path.GetDirectoryName(Application.ExecutablePath) + "\\croped.png";
+
+                initImage = "  --init-img \"" + imgpath + "\"";
+
+                outdir = System.IO.Path.GetDirectoryName(Application.ExecutablePath) + "\\Crop";
+                System.IO.Directory.CreateDirectory(outdir);
+                clearFolder(outdir);
+                outdir = " --outdir \"" + outdir + "\"";
+            }
+
             // making python line
             string gen = "python "+ script + " --skip_grid " + outdir + text + seed + initImage + iteration + str + n_iter + n_samples + guidance + channels + plms;
 
-            SavePromptInTxtFile(lastOutputPath, gen);
+            SavePromptInTxtFile(lastOutputPath, textBoxPrompt.Text, tabPrompt.Styles, seed + iteration + n_iter + n_samples + guidance + channels + plms, tabImage.InitImage);
 
             Clipboard.SetText(gen);
 
@@ -713,31 +734,42 @@ namespace StableDiffusion
 
             // making prompt with styles
             string text = textBoxPrompt.Text;
-
-            string style = "";
-            foreach (var item in listBoxSelectedStyles.Items)
-            {
-                style = style + " | " + item;
-            }
-            text = text + style;
+            text = text + ", " + tabPrompt.Styles;
             text = " --prompt \"" + text + "\"";
 
-            string iteration = " --ddim_steps " + trackBarIteration.Value * 25;
-            string n_iter = " --n_iter " + trackBarN_iter.Value;
-            string n_samples = " --n_samples " + trackBarN_samples.Value;
-            string guidance = " --scale " + (float)trackBarChannels.Value / 2;
-            string channels = " --C " + trackBarChannels.Value;
+            string iteration = " --ddim_steps " + labelIteration.Text;
+
+            string n_iter = " --n_iter " + labelN_iter.Text;
+            if (trackBarN_iter.Value == 0)
+                n_iter = " --n_iter 999999";
+
+            string n_samples = " --n_samples " + labelN_samples.Text;
+            string guidance = " --scale " + labelGuidance.Text.Replace(",", "."); ;
+            string channels = " --C " + labelChannels.Text;
+
             string plms = " --plms";
             if (!isPlmsActivated)
                 plms = "";
             string str = " --strength " + ((float)trackBarStrength.Value / 20).ToString(CultureInfo.InvariantCulture);
 
+            string imgpath = envpath + "\\current.png";
+            
+            string initImage = "  --init-img " + imgpath.Replace("\\", "/"); 
 
-            string imgpath = "inputs/sequence/";
+            //string imgpath = "inputs/sequence/";
             string initDir = "  --inputdir " + imgpath;
 
+            string outdir = System.IO.Path.GetDirectoryName(Application.ExecutablePath) + "\\Result";
+            System.IO.Directory.CreateDirectory(outdir);
+            outdir = outdir + "\\" + tabPrompt.Preset;
+            System.IO.Directory.CreateDirectory(outdir);
+            outdir = CreateResultDirectory(outdir);
+            lastOutputPath = outdir;
+            outdir.Replace("\\", "/");
+            outdir = " --outdir \"" + outdir + "\"";
+
             // making python line
-            string gen = "python " + imgs2imgsPath + text + seed + initDir + iteration + str + n_iter + n_samples + guidance + channels + plms;
+            string gen = "python " + imgs2imgsPath + text + seed + initDir + iteration + str + n_iter + n_samples + guidance + channels + outdir + initImage + plms;
 
             Clipboard.SetText(gen);
 
@@ -752,21 +784,84 @@ namespace StableDiffusion
 
 
 
-
-        // start inpaint script
-        private void startInpaint()
+        private void startImage2Morph()
         {
+            var i = new Bitmap(DrawArea);
+            i.Save(envpath + "\\current.png");
+
             // kill old process
             if (newProcess != null && !newProcess.HasExited)
                 KillProcessAndChildrens(newProcess.Id);
 
+            //clean prompt
+            textBoxPrompt.Text = Regex.Replace(textBoxPrompt.Text, @"^\s*$(\n|\r|\r\n)", "", RegexOptions.Singleline);
+
             //get env drive letter
             string drive = envpath.Substring(0, 1);
 
-            string iteration = " --steps " + trackBarIteration.Value * 25;
+
+            // seed routine
+            string seed = " --seed " + textBoxSeed.Text;
+
+            if (isRandomSeed)
+            {
+                Random rnd = new Random();
+                seed = " --seed " + rnd.Next(1, 100000000);
+            }
+            else
+            {
+                if (!IsDigitsOnly(textBoxSeed.Text))
+                {
+                    seed = " --seed 404";
+                    textBoxSeed.Text = "404";
+                }
+            }
+
+            // making prompt with styles
+            string text = textBoxPrompt.Text;
+            text = text + ", " + tabPrompt.Styles;
+            text = " --prompt \"" + text + "\"";
+
+            string iteration = " --ddim_steps " + labelIteration.Text;
+
+            string n_iter = " --n_iter 1";
+            string n_samples = " --n_samples 1";
+
+            string guidance = " --scale " + labelGuidance.Text.Replace(",", "."); ;
+            string channels = " --C " + labelChannels.Text;
+
+
+            string plms = " --plms";
+            if (!isPlmsActivated)
+                plms = "";
+            string str = " --strength " + ((float)trackBarStrength.Value / 20).ToString(CultureInfo.InvariantCulture);
+            string imgpath = envpath + "\\current.png";
+            string initImage = "  --init-img " + imgpath;
+
+            string tx = " --tx " + tabMorph.TX;
+            string ty = " --ty " + tabMorph.TY;
+            string angle = " --angle " + tabMorph.Angle;
+            string zoom = " --zoom " + tabMorph.Zoom;
+
+            string script = img2imgPath;
+
+
+            script = img2morphPath;
+
+
+            string outdir = System.IO.Path.GetDirectoryName(Application.ExecutablePath) + "\\Result";
+            System.IO.Directory.CreateDirectory(outdir);
+            outdir = outdir + "\\" + tabPrompt.Preset;
+            System.IO.Directory.CreateDirectory(outdir);
+            outdir = CreateResultDirectory(outdir);
+            lastOutputPath = outdir;
+            outdir.Replace("\\", "/");
+            outdir = " --outdir \"" + outdir + "\"";
 
             // making python line
-            string gen = "python " + inpaintPath + " --indir inputs/inpainting/  --outdir outputs/inpainting_results" + iteration;
+            string gen = "python " + script + " --skip_grid " +tx + ty + angle + zoom + outdir + text + seed + initImage + iteration + str + n_iter + n_samples + guidance + channels + plms;
+
+            SavePromptInTxtFile(lastOutputPath, textBoxPrompt.Text, tabPrompt.Styles, seed + iteration + n_iter + n_samples + guidance + channels + plms, (Bitmap)DrawArea.Clone());
 
             Clipboard.SetText(gen);
 
@@ -775,8 +870,10 @@ namespace StableDiffusion
             //psi.Verb = "runas";
             psi.FileName = @"C:\Windows\System32\cmd.exe";
             psi.Arguments = @" %windir%\System32\cmd.exe /K " + AnacondaPath + "\\Scripts\\activate.bat " + AnacondaPath + "&conda activate " + envName + "&" + drive + ":&cd " + envpath + "&" + gen;
-            try{newProcess = Process.Start(psi);}catch (Exception) { }
+            try { newProcess = Process.Start(psi); } catch (Exception) { }
+
         }
+
 
 
 
@@ -805,504 +902,30 @@ namespace StableDiffusion
         // open outputs folder
         private void buttonOutFolder_Click(object sender, EventArgs e)
         {
-            System.Diagnostics.Process.Start(Environment.GetEnvironmentVariable("WINDIR") + @"\explorer.exe", lastOutputPath);
-            /*
-            if (isTabSequenceSelected)
+
+            if (!Directory.Exists(lastOutputPath))
             {
-                System.Diagnostics.Process.Start("explorer.exe", envpath + "\\outputs\\imgs2imgs\\samples");
-            }
-            else if (isDrawingClear)
-            {
-                System.Diagnostics.Process.Start("explorer.exe", envpath + "\\outputs\\txt2img-samples\\samples");
+                string outdir = System.IO.Path.GetDirectoryName(Application.ExecutablePath) + "\\Result";
+                outdir = outdir + "\\" + tabPrompt.Preset;
+                System.Diagnostics.Process.Start(Environment.GetEnvironmentVariable("WINDIR") + @"\explorer.exe", outdir);
             }
             else
             {
-                System.Diagnostics.Process.Start("explorer.exe", envpath + "\\outputs\\img2img-samples\\samples");
-            }
-            */
-        }
 
-        // clear outputs folder
-        private void buttonClearOutputFolder_Click(object sender, EventArgs e)
-        {
-            /*
-            if (isTabSequenceSelected)
-            {
-                clearFolder(envpath + "\\outputs\\imgs2imgs\\samples");
-            }
-            if (isDrawingClear)
-            {
-               clearFolder(envpath + "\\outputs\\txt2img-samples\\samples");
-            }
-            else
-            {
-                clearFolder(envpath + "\\outputs\\img2img-samples\\samples");
-            }
-            */
-        }
-
-
-
-
-
-
-
-
-
-        /// <summary> /////////////////////////////////////////////////////////////////////////////
-        ///                          Drawing on picturebox1
-        /// </summary>/////////////////////////////////////////////////////////////////////////////
-
-
-        int brushSize = 4;
-        bool isDrawing;
-        Color DrawColor = Color.White;
-        Color PickColor = Color.White;
-
-        List<Bitmap> undoDrawArea = new List<Bitmap>();
-
-
-        // painting
-        private void pictureBox1_Paint(object sender, PaintEventArgs e)
-        {
-            if (isPencilEnabled || isInpainting)
-            {
-                Point local = pictureBox1.PointToClient(Cursor.Position);
-
-                using (SolidBrush brush = new SolidBrush(DrawColor))
-                {
-                    e.Graphics.FillEllipse(brush, local.X - brushSize, local.Y - brushSize, brushSize * 2, brushSize * 2);
-                }
-            }
-        }
-
-        private void pictureBox1_MouseDown(object sender, MouseEventArgs e)
-        {
-
-            // save for undo
-            AddToUndoList(DrawArea);
-
-            isDrawing = true;
-
-
-        }
-
-        public void AddToUndoList(Bitmap image)
-        {
-            // save for undo
-            undoDrawArea.Add((Bitmap)image.Clone());
-
-            if (undoDrawArea.Count > 33)
-            {
-
-                undoDrawArea.RemoveAt(0);
-            }
-        }
-
-
-        private void pictureBox1_MouseUp(object sender, MouseEventArgs e)
-        {
-
-            if (isPencilEnabled || isInpainting)
-            {
-                Bitmap new_Image = new Bitmap(DrawArea.Width, DrawArea.Height, PixelFormat.Format24bppRgb);
-                new_Image = DrawArea;
-                Graphics g = Graphics.FromImage(new_Image);
-
-                int dX = e.X;
-                int dY = e.Y;
-
-                if (new_Image.Width < 512)
-                {
-                    dX = e.X- ((512- new_Image.Width)/2);
-                }
-                if (new_Image.Height < 512)
-                {
-                    dY = e.Y - ((512 - new_Image.Height) / 2);
-                }
-
-                using (SolidBrush brush = new SolidBrush(DrawColor))
-                {
-                    FillCircle(g, brush, dX, dY, brushSize);
-                    pictureBox1.Image = DrawArea;
-                    g.Dispose();
-                }
-            }
-
-            isDrawing = false;
-            if (!isInpainting)
-            {
-                var i = new Bitmap(DrawArea);
-                i.Save(envpath + "\\current.png");
-            }
-
-            setClearImage(false);
-
-
-        }
-
-
-        private void pictureBox1_MouseMove(object sender, MouseEventArgs e)
-        {
-            if (isPencilEnabled || isInpainting)
-            {
-
-                Bitmap new_Image = new Bitmap(DrawArea.Width, DrawArea.Height, PixelFormat.Format24bppRgb);
-                //Bitmap new_Image = (Bitmap)DrawArea.Clone();
-
-                new_Image = DrawArea;
-                Graphics g = Graphics.FromImage(new_Image);
-
-                int dX = e.X;
-                int dY = e.Y;
-
-                if (new_Image.Width < 512)
-                {
-                    dX = e.X - ((512 - new_Image.Width) / 2);
-                }
-                if (new_Image.Height < 512)
-                {
-                    dY = e.Y - ((512 - new_Image.Height) / 2);
-                }
-
-
-                if (isDrawing == true)
-                {
-                    using (SolidBrush brush = new SolidBrush(DrawColor))
-                    {
-                        FillCircle(g, brush, dX, dY, brushSize);
-                        g.Dispose();
-                    }
-                }
-
-                pictureBox1.Refresh();
-
-                // prevent heavy Ram usage;
-                ClearMemory();
+                System.Diagnostics.Process.Start(Environment.GetEnvironmentVariable("WINDIR") + @"\explorer.exe", lastOutputPath);
             }
 
 
         }
 
-        private void buttonPencilRedo_Click(object sender, EventArgs e)
-        {
-            if (undoDrawArea.Count>0)
-            {
-                Bitmap bmp = (Bitmap)undoDrawArea[undoDrawArea.Count - 1].Clone();
-
-                //Bitmap bmp = (Bitmap)PreviewsDrawArea[previousIteration].Clone();
-                DrawArea = (Bitmap)bmp.Clone();
-                pictureBox1.Image = DrawArea;
-
-                undoDrawArea.RemoveAt(undoDrawArea.Count - 1);
-            }
-
-            // prevent heavy Ram usage;
-            ClearMemory();
-        }
-
-
-
-
-
-        // change brush size
-        private void pictureBox1_MouseWheel(object sender, MouseEventArgs e)
-        {
-            if (e.Delta != 0)
-                if (e.Delta > 0)
-                {
-                    brushSize = brushSize + 2;
-                }
-                else
-                {
-                    brushSize = brushSize - 2;
-                    if (brushSize < 4)
-                    { brushSize = 4; }
-                }
-        }
-
-
-        // gradiant bar
-        double gradiantX = 0;
-        bool isGradiantUpdating = false;
-
-        private void panelGradiant_Paint(object sender, PaintEventArgs e)
-        {
-            Graphics g = panelGradiant.CreateGraphics();
-
-            LinearGradientBrush linearGradientBrush = new LinearGradientBrush(panelGradiant.ClientRectangle, Color.Black, Color.White, 0.0);
-
-            ColorBlend cblend = new ColorBlend(3);
-            cblend.Colors = new Color[3] { Color.Black, PickColor, Color.White };
-            cblend.Positions = new float[3] { 0f, 0.5f, 1f };
-
-            linearGradientBrush.InterpolationColors = cblend;
-
-            Point local = panelGradiant.PointToClient(Cursor.Position);
-            Pen blackPen = new Pen(Color.Black, 3);
-
-            g.FillRectangle(linearGradientBrush, panelGradiant.ClientRectangle);
-            g.DrawLine(blackPen, local.X, local.Y - 100, local.X, local.Y + 100);
-        }
-
-        private void panelGradiant_MouseMove(object sender, MouseEventArgs e)
-        {
-            if (isGradiantUpdating)
-                updateGradiant(sender, e);
-
-            panelGradiant.Refresh();
-        }
-
-
-        private void panelGradiant_MouseDown(object sender, MouseEventArgs e)
-        {
-            isGradiantUpdating = true;
-            updateGradiant(sender, e);
-        }
-        private void panelGradiant_MouseUp(object sender, MouseEventArgs e)
-        {
-            isGradiantUpdating = false;
-        }
-
-        private void updateGradiant(object sender, MouseEventArgs e)
-        {
-            if (isGradiantUpdating)
-            {
-                gradiantX = (float)e.X / panelGradiant.Width;
-
-                Color[] colorList = new Color[3] { Color.Black, PickColor, Color.White };
-                DrawColor = InterpolateColor(colorList, gradiantX);
-
-                panelCpick.BackColor = DrawColor;
-            }
-        }
-
-
-
-
-        // inpainting options
-
-        bool isInpainting = false;
-        Color lastDrawColor = Color.White;
-        int lastBrushSize = 4;
-
-        private void buttonInpaint_Click(object sender, EventArgs e)
-        {
-
-            if (!isDrawingClear)
-            {
-                EnablePencil(false);
-                isInpainting = !isInpainting;
-
-                // create output directory if needed
-                string inpaintingpath = envpath + "\\inputs\\inpainting\\";
-                System.IO.Directory.CreateDirectory(inpaintingpath);
-                System.IO.Directory.CreateDirectory(envpath + "\\outputs\\inpainting_results");
-
-                if (isInpainting)
-                {
-                    buttonInpaint.BackColor = Color.FromArgb(20, 60, 30);
-
-                    // saving current brush
-                    lastDrawColor = DrawColor;
-                    lastBrushSize = brushSize;
-
-                    // Green color for mask
-                    DrawColor = Color.FromArgb(0, 255, 0);
-
-                    clearFolder(inpaintingpath);
-
-                    // saving image to inpaint
-                    using (Bitmap bmp = new Bitmap(DrawArea))
-                    {
-                        bmp.Save(inpaintingpath + "\\current.png", ImageFormat.Png);
-                    }
-
-
-                }
-                else
-                {
-                    buttonInpaint.BackColor = Color.FromArgb(45, 35, 55);
-
-                    // creating mask image
-                    Bitmap mask = new Bitmap(ChangeToColor(DrawArea));
-                    mask.Save(inpaintingpath + "\\current_mask.png");
-
-                    // restoring original Drawing
-                    DrawArea = LoadBitmap(inpaintingpath + "\\current.png");
-                    pictureBox1.Image = DrawArea;
-
-                    // open output folder
-                    System.Diagnostics.Process.Start("explorer.exe", envpath + "\\outputs\\inpainting_results");
-
-                    // restore brush
-                    DrawColor = lastDrawColor;
-                    brushSize = lastBrushSize;
-
-                    // start inpaint script
-                    startInpaint();
-
-                }
-            }
-
-        }
-
-
-        public void StopInpaint()
-        {
-            isInpainting = false;
-            buttonInpaint.BackColor = Color.FromArgb(45, 35, 55);
-
-            string inpaintingpath = envpath + "\\inputs\\inpainting\\";
-
-            // restoring original Drawing
-            DrawArea = LoadBitmap(inpaintingpath + "\\current.png");
-            pictureBox1.Image = DrawArea;
-
-            // restore brush
-            DrawColor = lastDrawColor;
-            brushSize = lastBrushSize;
-        }
-
-
-
-        // Clear drawing area
-        bool isDrawingClear = true;
 
         private void buttonClearImage_Click(object sender, EventArgs e)
         {
-            // save for undo
-            AddToUndoList(DrawArea);
-
-            // reseting selected image
-            listBoxInitImages.ClearSelected();
-            listViewInitImages.Items.Clear();
-
-            // draw black square
-            using (Graphics graph = Graphics.FromImage(DrawArea))
+            tabImage.ClearImage();
+            if (currentTab == EnumTab.Image || currentTab == EnumTab.Morph)
             {
-                Rectangle ImageSize = new Rectangle(0, 0, 512, 512);
-                graph.FillRectangle(Brushes.Black, ImageSize);
+                SwitchScriptSelector(EnumScript.txt2txt);
             }
-
-            pictureBox1.Image = DrawArea;
-
-            setClearImage(true);
-        }
-
-
-        // Load image from file to drawing area
-        private void buttonOpenImage_Click(object sender, EventArgs e)
-        {
-            EnablePencil(false);
-            StopInpaint();
-            var fd = new OpenFileDialog();
-            fd.Filter = "Image Files|*.jpg;*.jpeg;*.png;*.bmp;*.tif;...";
-
-            if (fd.ShowDialog() == DialogResult.OK)
-            {
-                Bitmap bm = (Bitmap)FixedSize((Image)OpenImage(fd.FileName), 512, 512);
-
-
-                // resize image
-                if (bm.Height > bm.Width)
-                {
-                    float ratio = (float)bm.Width / (float)bm.Height;
-                    double w = (512 * ratio);
-                    w = (Math.Round(w / 64)) * 64;
-                    bm = (Bitmap)ResizeImage(bm, new Size((int)w , 512 ) , false);
-                }
-                else
-                {
-                    float ratio = bm.Width / bm.Height;
-
-                    double h = (512 * ratio);
-                    h = (Math.Round(h / 64)) * 64;
-                    bm = (Bitmap)ResizeImage(bm, new Size( 512, (int)h ) , false);
-                }
-
-                //bm = (Bitmap)ResizeImage(bm, new Size(512, 512), false);
-                pictureBox1.Image = bm;
-
-                DrawArea = bm;
-                bm.Save(envpath + "\\current.png");
-                setClearImage(false);
-            }
-
-            // prevent heavy Ram usage;
-            ClearMemory();
-        }
-
-        private void buttonPastImage_Click(object sender, EventArgs e)
-        {
-            if (Clipboard.ContainsImage())
-            {
-                Bitmap bm = (Bitmap)FixedSize(Clipboard.GetImage(), 512, 512);
-
-
-                // resize image
-                if (bm.Height > bm.Width)
-                {
-                    float ratio = (float)bm.Width / (float)bm.Height;
-                    double w = (512 * ratio);
-                    w = (Math.Round(w / 64)) * 64;
-                    bm = (Bitmap)ResizeImage(bm, new Size((int)w, 512), false);
-                }
-                else
-                {
-                    float ratio = bm.Width / bm.Height;
-
-                    double h = (512 * ratio);
-                    h = (Math.Round(h / 64)) * 64;
-                    bm = (Bitmap)ResizeImage(bm, new Size(512, (int)h), false);
-                }
-
-                //bm = (Bitmap)ResizeImage(bm, new Size(512, 512), false);
-                pictureBox1.Image = bm;
-
-                DrawArea = bm;
-                bm.Save(envpath + "\\current.png");
-                setClearImage(false);
-            }
-
-        }
-        public void setClearImage(bool value)
-        {
-            isDrawingClear = value;
-
-            //buttonStrength.Enabled = !value;
-            //trackBarStrength.Enabled = !value;
-
-
-            if (isTabSequenceSelected)
-            {
-
-            }
-            else if (isDrawingClear)
-            {
-                SwitchScriptSelector(0);
-            }
-            else
-            {
-                SwitchScriptSelector(1);
-            }
-
-        }
-
-
-        private void buttonImage_DragEnter(object sender, DragEventArgs e)
-        {
-            e.Effect = DragDropEffects.All;
-        }
-
-
-
-        private void listBoxInitImages_SelectedIndexChanged(object sender, EventArgs e)
-        {
-
-            if (listBoxInitImages.SelectedItems.Count > 0)
-                populateInitImages(listViewInitImages, listBoxInitImages.SelectedItem.ToString());
-
         }
 
 
@@ -1445,7 +1068,7 @@ namespace StableDiffusion
                     SaveStrength(trackBarStrength.Value);
 
                     SavePrompt(textBoxPrompt.Text);
-                    SaveSelectedStyles(listBoxSelectedStyles);
+                    SaveSelectedStyles(tabPrompt.listboxSelected);
 
 
                     System.Media.SystemSounds.Hand.Play();
@@ -1461,144 +1084,6 @@ namespace StableDiffusion
 
 
 
-
-
-
-
-
-
-        private void listBoxPreset_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            if (listBoxPreset.SelectedItems.Count > 0)
-            {
-                textBoxPresetStyle.Enabled = true;
-                buttonAddPresetStyle.Enabled = true;
-                buttonRemovePresetStyle.Enabled = true;
-
-                listBoxPresetStyles.Items.Clear();
-                List<string> subStyles = LoadSubStyles(listBoxPreset.SelectedItem.ToString());
-                foreach (var str in subStyles)
-                    listBoxPresetStyles.Items.Add(str);
-            }
-            else
-            {
-                textBoxPresetStyle.Enabled = false;
-                buttonAddPresetStyle.Enabled = false;
-                buttonRemovePresetStyle.Enabled = false;
-            }
-
-        }
-
-
-
-
-
-
-        private void listViewInitImages_SelectedIndexChanged(object sender, EventArgs e)
-        {
-
-            if (listViewInitImages.SelectedItems.Count > 0)
-            {
-                if (isInpainting)
-                {
-                    StopInpaint();
-                }
-
-                undoDrawArea.Clear();
-
-                string path = listViewInitImages.SelectedItems[0].SubItems[0].Text;
-                pictureBox1.Image = System.Drawing.Image.FromFile(path);
-
-                DrawArea = LoadBitmap(path);
-                pictureBox1.Image = DrawArea;
-                DrawArea.Save(envpath + "\\current.png");
-
-                setClearImage(false);
-
-
-            }
-
-            foreach (ListViewItem i in listViewInitImages.SelectedItems)
-            {
-                i.Selected = false;
-            }
-
-            // prevent heavy Ram usage;
-            ClearMemory();
-
-            //string selected = listViewInitImages.SelectedItems[0].SubItems[0].Text;
-        }
-
-        private void buttonImage_DragDrop(object sender, DragEventArgs e)
-        {
-            List<string> ImageExtensions = new List<string> { ".JPG", ".JPEG", ".JPE", ".BMP", ".GIF", ".PNG" };
-
-            string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
-            foreach (var f in files)
-            {
-                if (ImageExtensions.Contains(Path.GetExtension(f).ToUpperInvariant()))
-                {
-                    MessageBox.Show(f);
-                    DrawArea = new Bitmap(f);
-                    pictureBox1.Image = DrawArea;
-                    DrawArea.Save(envpath + "\\current.png");
-                    break;
-                }
-            }
-        }
-
-        private void panelC_MouseClick(object sender, MouseEventArgs e)
-        {
-            Color c = (sender as Panel).BackColor;
-            Graphics g = panelGradiant.CreateGraphics();
-
-
-            LinearGradientBrush linearGradientBrush =
-               new LinearGradientBrush(panelGradiant.ClientRectangle, Color.Black, Color.White, 0.0);
-
-            ColorBlend cblend = new ColorBlend(3);
-            cblend.Colors = new Color[3] { Color.Black, c, Color.White };
-            cblend.Positions = new float[3] { 0f, 0.5f, 1f };
-
-            linearGradientBrush.InterpolationColors = cblend;
-
-            g.FillRectangle(linearGradientBrush, panelGradiant.ClientRectangle);
-
-            PickColor = c;
-            DrawColor = c;
-            panelCpick.BackColor = c;
-        }
-
-
-        bool isPencilEnabled = false;
-        private void buttonPencil_Click(object sender, EventArgs e)
-        {
-            if (isInpainting)
-            {
-                StopInpaint();
-            }
-                isPencilEnabled = !isPencilEnabled;
-            EnablePencil(isPencilEnabled);
-        }
-
-        public void EnablePencil(bool isEnabled)
-        {
-            isPencilEnabled = isEnabled;
-
-            if (isPencilEnabled)
-            {
-                flowLayoutPanelPaintTools.Enabled = true;
-                pictureBox1.Cursor = Cursors.Cross;
-                buttonPencil.BackColor = Color.FromArgb(20, 60, 30);
-            }
-            else
-            {
-                flowLayoutPanelPaintTools.Enabled = false;
-                pictureBox1.Cursor = Cursors.Default;
-                buttonPencil.BackColor = Color.FromArgb(45, 35, 55);
-            }
-
-        }
 
 
         private void buttonSavePrompt_Click(object sender, EventArgs e)
@@ -1622,196 +1107,137 @@ namespace StableDiffusion
 
 
 
-
-
-
-        private void buttonShuffleSelectedStyles_Click(object sender, EventArgs e)
+        public void ScreenshotTaken(Bitmap img)
         {
-            ListBox.ObjectCollection list = listBoxSelectedStyles.Items;
-            Random rng = new Random();
-            int n = list.Count;
-            //begin updating
-            listBoxSelectedStyles.BeginUpdate();
-            while (n > 1)
+            tabImage.InitImage = (Bitmap)ResizeImage(img, new Size(512, 512));
+            //MessageBox.Show("dd");
+            // Do whatever you need to do with the string
+        }
+
+
+
+        private void textBoxPrompt_Validated(object sender, EventArgs e)
+        {
+            AddToPromptList();
+        }
+
+        int iPromptList = 0;
+        private void buttonText_Click(object sender, EventArgs e)
+        {
+            if (promptsList.Count > iPromptList)
             {
-                n--;
-                int k = rng.Next(n + 1);
-                object value = list[k];
-                list[k] = list[n];
-                list[n] = value;
+                textBoxPrompt.Text = promptsList[iPromptList];
+                iPromptList++;
             }
-            listBoxSelectedStyles.EndUpdate();
-            listBoxSelectedStyles.Invalidate();
-        }
-
-        private void buttonRemoveStyleSelectedStyles_Click(object sender, EventArgs e)
-        {
-            ListBox.SelectedObjectCollection  selectedItems = listBoxSelectedStyles.SelectedItems;
-            if (listBoxSelectedStyles.SelectedIndex != -1)
+            else
             {
-                for (int i = selectedItems.Count - 1; i >= 0; i--)
-                    listBoxSelectedStyles.Items.Remove(selectedItems[i]);
-            }
-        }
-
-
-        private void buttonRemoveStyles_Click(object sender, EventArgs e)
-        {
-            listBoxSelectedStyles.Items.Clear();
-        }
-
-
-
-        private void buttonAddSelectedPreset_Click(object sender, EventArgs e)
-        {
-            foreach (string item in listBoxPresetStyles.SelectedItems)
-            {
-                listBoxSelectedStyles.Items.Add(item);
-            }
-            RemoveDuplicate(listBoxSelectedStyles);
-        }
-
-        private void buttonAddAllSelectedPreset_Click(object sender, EventArgs e)
-        {
-            foreach (string item in listBoxPresetStyles.Items)
-            {
-                listBoxSelectedStyles.Items.Add(item);
-            }
-
-
-            RemoveDuplicate(listBoxSelectedStyles);
-        }
-
-        private void buttonAddSelectedToPreset_Click(object sender, EventArgs e)
-        {
-            foreach (string item in listBoxGenericStyles.SelectedItems)
-            {
-                listBoxPresetStyles.Items.Add(item);
-            }
-            RemoveDuplicate(listBoxPresetStyles);
-        }
-
-        private void buttonAddSelectedToStyles_Click(object sender, EventArgs e)
-        {
-            foreach (string item in listBoxGenericStyles.SelectedItems)
-            {
-                listBoxSelectedStyles.Items.Add(item);
-            }
-            RemoveDuplicate(listBoxSelectedStyles);
-        }
-
-        private void buttonAddSelectedStylesToGeneric_Click(object sender, EventArgs e)
-        {
-            foreach (string item in listBoxSelectedStyles.SelectedItems)
-            {
-                listBoxGenericStyles.Items.Add(item);
-            }
-            RemoveDuplicate(listBoxGenericStyles);
-        }
-
-        private void buttonAddSelectedStylesToPreset_Click(object sender, EventArgs e)
-        {
-            foreach (string item in listBoxSelectedStyles.SelectedItems)
-            {
-                listBoxPresetStyles.Items.Add(item);
-            }
-            RemoveDuplicate(listBoxPresetStyles);
-        }
-
-        private void buttonAddStyle_Click(object sender, EventArgs e)
-        {
-
-
-            if (sender == buttonAddPreset)
-            {
-                listBoxPreset.Items.Add(textBoxPreset.Text);
-                RemoveDuplicate(listBoxPreset);
-                CreatePreset(textBoxPreset.Text);
-                //AddPreset(textBoxPreset.Text);
-            }
-            else if (sender == buttonAddPresetStyle)
-            {
-                listBoxPresetStyles.Items.Add(textBoxPresetStyle.Text);
-                RemoveDuplicate(listBoxPresetStyles);
-            }
-            else if (sender == buttonAddGenericStyle)
-            {
-                listBoxGenericStyles.Items.Add(textBoxGenericStyle.Text);
-                RemoveDuplicate(listBoxGenericStyles);
-            }
-
-        }
-
-
-        private void CreatePreset(string preset)
-        {
-            SavePreset(listBoxPreset);
-            SaveSubStyles(listBoxPresetStyles, preset.Replace(" ", "_"));
-
-        }
-
-        private void buttonSavePresets_Click(object sender, EventArgs e)
-        {
-            SavePreset(listBoxPreset);
-            if (listBoxPreset.SelectedItems.Count > 0)
-            {
-                SaveSubStyles(listBoxPresetStyles, listBoxPreset.SelectedItem.ToString());
-            }
-
-        }
-
-        private void buttonSaveGenericStyles_Click(object sender, EventArgs e)
-        {
-            SaveGenericStyles(listBoxGenericStyles);
-        }
-
-        private void buttonSaveSelectedStyles_Click(object sender, EventArgs e)
-        {
-            SaveSelectedStyles(listBoxSelectedStyles);
-        }
-
-        private void buttonRemovePreset_Click(object sender, EventArgs e)
-        {
-            if (listBoxPreset.SelectedItems.Count > 0)
-            {
-                DialogResult dialogResult = MessageBox.Show("Do you really want to delete "+ listBoxPreset.SelectedItems[0] + " preset ?", listBoxPreset.SelectedItems[0]+" will be removed !", MessageBoxButtons.YesNo);
-                if (dialogResult == DialogResult.Yes)
+                iPromptList = 0;
+                if (promptsList.Count > 0)
                 {
-                    string preset = listBoxPreset.SelectedItems[0].ToString();
-                    listBoxPreset.Items.Remove(preset);
-                    IniFile SettingFile = new IniFile("Settings.ini");
-                    preset = preset.Replace(" ", "_");
-                    SettingFile.DeleteKey(preset, "Styles");
-                    listBoxPresetStyles.Items.Clear();
-                    SavePreset(listBoxPreset);
+                    textBoxPrompt.Text = promptsList[0];
                 }
-                else if (dialogResult == DialogResult.No){}
-            }         
-        }
 
-        private void buttonRemovePresetStyle_Click(object sender, EventArgs e)
-        {
-            ListBox.SelectedObjectCollection selectedItems = listBoxPresetStyles.SelectedItems;
-            if (listBoxPresetStyles.SelectedIndex != -1)
-            {
-                for (int i = selectedItems.Count - 1; i >= 0; i--)
-                    listBoxPresetStyles.Items.Remove(selectedItems[i]);
+
             }
+
+            if (promptsList.Count > 5)
+            {
+                promptsList.Remove(promptsList[0]);
+            }
+
+
         }
 
-        private void buttonRemoveGenericStyle_Click(object sender, EventArgs e)
+        private void AddToPromptList()
         {
-            ListBox.SelectedObjectCollection selectedItems = listBoxGenericStyles.SelectedItems;
-            if (listBoxGenericStyles.SelectedIndex != -1)
+            if (textBoxPrompt.Text.Any(x => !char.IsLetter(x)))
             {
-                for (int i = selectedItems.Count - 1; i >= 0; i--)
-                    listBoxGenericStyles.Items.Remove(selectedItems[i]);
+                promptsList.Add(textBoxPrompt.Text);
+                RemoveListDuplicate(promptsList);
             }
 
         }
 
 
+        List<string> promptsList = new List<string>();
 
+        private void buttonClearText_Click(object sender, EventArgs e)
+        {
+            AddToPromptList();
+            textBoxPrompt.Clear();
+        }
+
+
+
+
+
+
+
+
+
+
+
+        int shape = 0;
+        private void buttonSizeShape_Click(object sender, EventArgs e)
+        {
+            shape++;
+
+            switch (shape)
+            {
+                case 0:
+                    buttonSizeShape.Image = Resources.rounded_black_square_shapeS_;
+                    textBoxSizeW.Text = "512";
+                    textBoxSizeH.Text = "512";
+                    break;
+                case 1:
+                    buttonSizeShape.Image = Resources.rounded_rectangleH;
+                    textBoxSizeW.Text = "320";
+                    textBoxSizeH.Text = "640";
+                    break;
+                case 2:
+                    buttonSizeShape.Image = Resources.rounded_black_square_shapeS_;
+                    textBoxSizeW.Text = "512";
+                    textBoxSizeH.Text = "512";
+                    break;
+                case 3:
+                    buttonSizeShape.Image = Resources.rounded_rectangleV;
+                    textBoxSizeW.Text = "640";
+                    textBoxSizeH.Text = "320";
+                    break;
+                default:
+                    buttonSizeShape.Image = Resources.rounded_black_square_shapeS_;
+                    textBoxSizeW.Text = "512";
+                    textBoxSizeH.Text = "512";
+                    shape = 0;
+                    break;
+
+
+            }
+        }
+
+        private void buttonSize_Click(object sender, EventArgs e)
+        {
+            textBoxSizeW.Text = "512";
+            textBoxSizeH.Text = "512";
+        }
+
+        private void textBoxSize_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar) && (e.KeyChar != '.'))
+            {
+                e.Handled = true;
+            }
+        }
+
+        private void textBoxSize_Validating(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            
+            int value = Int32.Parse((sender as System.Windows.Forms.TextBox).Text);
+
+            int factor = 64;
+            int nearestMultiple = Math.Max( (int)Math.Round((value / (double)factor),MidpointRounding.AwayFromZero) * factor, factor);
+            (sender as System.Windows.Forms.TextBox).Text = nearestMultiple.ToString();
+        }
 
 
     }
