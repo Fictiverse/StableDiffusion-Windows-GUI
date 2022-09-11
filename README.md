@@ -31,8 +31,8 @@ A windows interface for stable diffusion
 
 ![image](https://user-images.githubusercontent.com/111762798/187480424-91b2db7e-cdbb-4a70-a8c6-380e62507b14.png)
 
-- First button add all styles of the selected preset on the **Selected Style column**
-- Second button add only selected styles of the selected preset on the **Selected Style column**
+- First button add all styles of the selected preset on the **Selected Styles column**
+- Second button add only selected styles of the selected preset on the **Selected Styles column**
 
 - Third button add selected generic styles to **Peset column**
 - Fourth button add selected generic styles to **Selected Styles column**
