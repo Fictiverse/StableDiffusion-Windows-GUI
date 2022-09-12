@@ -120,7 +120,11 @@ namespace StableDiffusion
             //Copy all the files & Replaces any files with the same name
             foreach (string newPath in Directory.GetFiles(sourcePath, "*.*", System.IO.SearchOption.AllDirectories))
             {
-                System.IO.File.Copy(newPath, newPath.Replace(sourcePath, targetPath), true);
+                try
+                {
+                    System.IO.File.Copy(newPath, newPath.Replace(sourcePath, targetPath), true);
+                } catch{}
+
             }
 
             if (Directory.Exists(sourcePath)) Directory.Delete(sourcePath, true);
@@ -332,8 +336,34 @@ namespace StableDiffusion
 
 
 
+        public static Bitmap ResizeImage(Image image, Size size, bool preserveAspectRatio = true)
+        {
+            int width = size.Width;
+            int height = size.Height;  
+            var destRect = new Rectangle(0, 0, width, height);
+            var destImage = new Bitmap(width, height);
 
-        public static Image ResizeImage(Image image, Size size, bool preserveAspectRatio = true)
+            destImage.SetResolution(image.HorizontalResolution, image.VerticalResolution);
+
+            using (var graphics = Graphics.FromImage(destImage))
+            {
+                graphics.CompositingMode = CompositingMode.SourceCopy;
+                graphics.CompositingQuality = CompositingQuality.HighQuality;
+                graphics.InterpolationMode = InterpolationMode.HighQualityBicubic;
+                graphics.SmoothingMode = SmoothingMode.HighQuality;
+                graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
+
+                using (var wrapMode = new ImageAttributes())
+                {
+                    wrapMode.SetWrapMode(WrapMode.TileFlipXY);
+                    graphics.DrawImage(image, destRect, 0, 0, image.Width, image.Height, GraphicsUnit.Pixel, wrapMode);
+                }
+            }
+
+            return destImage;
+        }
+
+        public static Image ResizeImage2(Image image, Size size, bool preserveAspectRatio = true)
         {
             int newWidth;
             int newHeight;

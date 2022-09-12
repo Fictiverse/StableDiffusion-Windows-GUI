@@ -333,7 +333,7 @@
             // 
             this.flowLayoutPanel4.Controls.Add(this.flowLayoutPanelSeed);
             this.flowLayoutPanel4.Controls.Add(this.flowLayoutPanel1);
-            this.flowLayoutPanel4.Location = new System.Drawing.Point(359, 521);
+            this.flowLayoutPanel4.Location = new System.Drawing.Point(359, 518);
             this.flowLayoutPanel4.Margin = new System.Windows.Forms.Padding(0, 3, 0, 3);
             this.flowLayoutPanel4.Name = "flowLayoutPanel4";
             this.flowLayoutPanel4.Size = new System.Drawing.Size(158, 104);

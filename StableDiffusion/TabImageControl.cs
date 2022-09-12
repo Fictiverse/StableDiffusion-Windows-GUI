@@ -54,7 +54,7 @@ namespace StableDiffusion
 
 
         bool faceRectangleSet = false;
-        Rectangle faceRectangle = new Rectangle(0, 0, 512, 512);
+        Rectangle faceRectangle = new Rectangle(0, 0, 0, 0);
 
         Point footerVisibleLocation = new Point(0,0);
         Point footerHiddenLocation = new Point(0,0);
@@ -81,7 +81,7 @@ namespace StableDiffusion
 
                 initImage = value;
                 pictureBox1.Image = value;
-                initImage.Save(envPath + "\\current.png");
+                initImage.Save(System.IO.Path.GetDirectoryName(Application.ExecutablePath) + "\\initimage.png");
                 isDrawingClear = false;
                 ImageLoadedEvent(this, e);
 
@@ -226,6 +226,8 @@ namespace StableDiffusion
         private void SwitchTab(EnumDrawMod mod)
         {
             DrawMod = mod;
+            faceRectangleSet = false;
+
             ChangeTab(buttonPencil, DrawMod == EnumDrawMod.Pencil);
             ChangeTab(buttonPickColor, DrawMod == EnumDrawMod.ColorPick);
             ChangeTab(buttonFillColor, DrawMod == EnumDrawMod.Fill);
@@ -298,9 +300,6 @@ namespace StableDiffusion
                 case EnumDrawMod.Face:
 
                     Rectangle r = new Rectangle();
-
-
-
 
                     if (isMouseInsideinitImage)
                     {
@@ -426,30 +425,39 @@ namespace StableDiffusion
                     break;
 
                 case EnumDrawMod.Face:
+                    switch (e.Button)
+                    {
 
-                    Point local = new Point(e.X, e.Y);
-                    local = ClampPoint(local, brushSize);
-
-
-                    faceRectangle.Location = new Point(local.X- brushSize, local.Y- brushSize);
-                    faceRectangle.Height = brushSize * 2;
-                    faceRectangle.Width = brushSize * 2;
-
-                    //Bitmap cropedImage = new Bitmap(faceRectangle.Width, faceRectangle.Height);
-                    Bitmap cropedImage = initImage.Clone(new System.Drawing.Rectangle(faceRectangle.X, faceRectangle.Y, faceRectangle.Width, faceRectangle.Height), initImage.PixelFormat);
+                        case MouseButtons.Left:
+                            Point local = new Point(e.X, e.Y);
+                            local = ClampPoint(local, brushSize);
 
 
-                    //cropedImage = CropFaceFromImage(initImage, faceRectangle);
-                    ResizeImage(cropedImage, new Size(512,512)).Save("croped.png");
+                            faceRectangle.Location = new Point(local.X - brushSize, local.Y - brushSize);
+                            faceRectangle.Height = brushSize * 2;
+                            faceRectangle.Width = brushSize * 2;
 
-                    faceRectangleSet = true;
+                            //Bitmap cropedImage = new Bitmap(faceRectangle.Width, faceRectangle.Height);
+                            Bitmap cropedImage = initImage.Clone(new System.Drawing.Rectangle(faceRectangle.X, faceRectangle.Y, faceRectangle.Width, faceRectangle.Height), initImage.PixelFormat);
+
+
+                            //cropedImage = CropFaceFromImage(initImage, faceRectangle);
+                            ResizeImage(cropedImage, new Size(512, 512)).Save("croped.png");
+
+                            faceRectangleSet = true;
+                            break;
+
+                        case MouseButtons.Right:
+                            faceRectangleSet = false;
+                            break;
+                    }
 
                     break;
             }
 
             pictureBox1.Refresh();
             //var i = new Bitmap(initImage);
-            initImage.Save(envPath + "\\current.png");
+            initImage.Save(System.IO.Path.GetDirectoryName(Application.ExecutablePath) + "\\initimage.png");
 
 
             isDrawing = false;
@@ -681,7 +689,7 @@ namespace StableDiffusion
                 pictureBox1.Image = bm;
 
                 initImage = bm;
-                bm.Save(envPath + "\\current.png");
+                bm.Save(System.IO.Path.GetDirectoryName(Application.ExecutablePath) + "\\initimage.png");
                 isDrawingClear = false ;
                 ImageLoadedEvent(this, e);
             }
@@ -708,7 +716,7 @@ namespace StableDiffusion
                 {
                     initImage = new Bitmap(f);
                     pictureBox1.Image = initImage;
-                    initImage.Save(envPath + "\\current.png");
+                    initImage.Save(System.IO.Path.GetDirectoryName(Application.ExecutablePath) + "\\initimage.png");
                     break;
                 }
             }
@@ -744,7 +752,7 @@ namespace StableDiffusion
                 pictureBox1.Image = bm;
 
                 initImage = bm;
-                bm.Save(envPath + "\\current.png");
+                bm.Save(System.IO.Path.GetDirectoryName(Application.ExecutablePath) + "\\initimage.png");
                 isDrawingClear = false;
                 ImageLoadedEvent(this, e);
             }
@@ -786,7 +794,7 @@ namespace StableDiffusion
 
                 initImage = LoadBitmap(path);
                 pictureBox1.Image = initImage;
-                initImage.Save(envPath + "\\current.png");
+                initImage.Save(System.IO.Path.GetDirectoryName(Application.ExecutablePath) + "\\initimage.png");
 
                 isDrawingClear = false;
                 ImageLoadedEvent(this, e);
@@ -1011,57 +1019,52 @@ namespace StableDiffusion
 
         private void ToolStripMenuItemMoveI_MouseHover(object sender, EventArgs e)
         {
-            ToolStripMenuItem item;
-            ToolStripMenuItem submenu = (sender as ToolStripMenuItem);
-
-            submenu.DropDownItems.Clear();
-
-            String path = System.IO.Path.GetDirectoryName(Application.ExecutablePath) + "\\InitImages";
-
-            var initImageList = new DirectoryInfo(path).GetDirectories().OrderBy(f => f.LastWriteTime).ToList();
-            foreach (DirectoryInfo dir in initImageList)
+            if (listViewInitImages.SelectedItems.Count > 0)
             {
-                if (listBoxInitImages.SelectedItem.ToString() != dir.Name)
+
+                ToolStripMenuItem item;
+                ToolStripMenuItem submenu = (sender as ToolStripMenuItem);
+
+                submenu.DropDownItems.Clear();
+
+                String path = System.IO.Path.GetDirectoryName(Application.ExecutablePath) + "\\InitImages";
+
+                var initImageList = new DirectoryInfo(path).GetDirectories().OrderBy(f => f.LastWriteTime).ToList();
+                foreach (DirectoryInfo dir in initImageList)
                 {
-                    item = new ToolStripMenuItem();
-                    item.Text = dir.Name;
-                    submenu.DropDownItems.Add(item);
-                    item.Click += new EventHandler(subToolStripMenuItemMoveI_Click);
+                    if (listBoxInitImages.SelectedItem.ToString() != dir.Name)
+                    {
+                        item = new ToolStripMenuItem();
+                        item.Text = dir.Name;
+                        submenu.DropDownItems.Add(item);
+                        item.Click += new EventHandler(subToolStripMenuItemMoveI_Click);
+                    }
                 }
             }
-
-            /*
-            ListBox itemlist = listBoxInitImages;
-            foreach (string preset in itemlist.Items)
-            {
-                if (listBoxInitImages.SelectedItem.ToString() != preset)
-                {
-                    item = new ToolStripMenuItem();
-                    item.Text = preset;
-                    submenu.DropDownItems.Add(item);
-                    item.Click += new EventHandler(subToolStripMenuItemMoveI_Click);
-                }
-
-            }*/
 
         }
 
         private void subToolStripMenuItemMoveI_Click(object sender, EventArgs e)
         {
-            string sourceImage = listViewInitImages.SelectedItems[0].SubItems[0].Text;
-            string destinationDir = System.IO.Path.GetDirectoryName(Application.ExecutablePath) + "\\InitImages\\" + (sender as ToolStripMenuItem).Text + "\\" + Path.GetFileName(listViewInitImages.SelectedItems[0].Text);
+            if (listViewInitImages.Items.Count > 0)
+            {
+                if (listViewInitImages.SelectedItems.Count > 0)
+                {
+                    string sourceImage = listViewInitImages.SelectedItems[0].SubItems[0].Text;
+                    string destinationDir = System.IO.Path.GetDirectoryName(Application.ExecutablePath) + "\\InitImages\\" + (sender as ToolStripMenuItem).Text + "\\" + Path.GetFileName(listViewInitImages.SelectedItems[0].Text);
 
-            selectedInitImagePath = listViewInitImages.SelectedItems[0].SubItems[0].Text;
-            int selectedIndex = listBoxInitImages.SelectedIndices[0];
+                    selectedInitImagePath = listViewInitImages.SelectedItems[0].SubItems[0].Text;
+                    int selectedIndex = listBoxInitImages.SelectedIndices[0];
 
-            System.GC.Collect();
-            System.GC.WaitForPendingFinalizers();
+                    System.GC.Collect();
+                    System.GC.WaitForPendingFinalizers();
 
 
-            System.IO.File.Copy(sourceImage, destinationDir, true);
-            System.IO.File.Delete(sourceImage);
-            listBoxInitImages.SelectedItem = (sender as ToolStripMenuItem).Text;
-
+                    System.IO.File.Copy(sourceImage, destinationDir, true);
+                    System.IO.File.Delete(sourceImage);
+                    listBoxInitImages.SelectedItem = (sender as ToolStripMenuItem).Text;
+                }
+            }
         }
 
         int cropedResultNbr = 0;

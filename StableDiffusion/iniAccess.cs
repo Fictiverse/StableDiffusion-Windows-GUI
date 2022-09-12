@@ -13,6 +13,30 @@ namespace StableDiffusion
     class iniAccess
     {
 
+        public static void SaveAnacondaPath(string value)
+        {
+            IniFile SettingFile = new IniFile("Settings.ini");
+            SettingFile.Write("AnacondaPath", value, "Settings");
+        }
+        public static string LoadAnacondaPath()
+        {
+            IniFile SettingFile = new IniFile("Settings.ini");
+            return SettingFile.Read("AnacondaPath", "Settings");
+        }
+
+
+        public static void SaveEnvName(string value)
+        {
+            IniFile SettingFile = new IniFile("Settings.ini");
+            SettingFile.Write("EnvName", value, "Settings");
+        }
+        public static string LoadEnvName()
+        {
+            IniFile SettingFile = new IniFile("Settings.ini");
+            return SettingFile.Read("EnvName", "Settings");
+        }
+
+
         public static void SaveEnvPath(string value)
         {
             IniFile SettingFile = new IniFile("Settings.ini");
@@ -49,6 +73,53 @@ namespace StableDiffusion
         }
 
 
+        public static void SaveImgs2imgsPath(string value)
+        {
+            IniFile SettingFile = new IniFile("Settings.ini");
+            SettingFile.Write("imgs2imgsPath", value, "Settings");
+        }
+        public static string LoadImgs2imgsPath()
+        {
+            IniFile SettingFile = new IniFile("Settings.ini");
+            return SettingFile.Read("imgs2imgsPath", "Settings");
+        }
+
+
+        public static void SaveImg2morphPath(string value)
+        {
+            IniFile SettingFile = new IniFile("Settings.ini");
+            SettingFile.Write("img2morphPath", value, "Settings");
+        }
+        public static string LoadImg2morphPath()
+        {
+            IniFile SettingFile = new IniFile("Settings.ini");
+            return SettingFile.Read("img2morphPath", "Settings");
+        }
+
+
+
+        public static void SaveShowConsole(bool value)
+        {
+            IniFile SettingFile = new IniFile("Settings.ini");
+            SettingFile.Write("ShowConsole", value.ToString(), "Settings");
+        }
+        public static bool LoadShowConsole()
+        {
+            IniFile SettingFile = new IniFile("Settings.ini");
+            try
+            {
+                return Convert.ToBoolean(SettingFile.Read("ShowConsole", "Settings"));
+            }
+            catch
+            {
+                return false;
+            }
+
+        }
+
+
+
+
         public static void SaveInpaintPath(string value)
         {
             IniFile SettingFile = new IniFile("Settings.ini");
@@ -71,13 +142,16 @@ namespace StableDiffusion
         public static string LoadPrompt()
         {
             IniFile SettingFile = new IniFile("Settings.ini");
-            return SettingFile.Read("Prompt", "Settings");
+            try
+            {
+                return SettingFile.Read("Prompt", "Settings");
+            }
+            catch
+            {
+                SettingFile.Write("Prompt", "A cute Astronaut taking a photo on the moon", "Settings");
+                return "A cute Astronaut taking a photo on the moon";
+            }
         }
-
-
-
-
-
 
 
         public static void SaveSeed(string value)
@@ -88,7 +162,15 @@ namespace StableDiffusion
         public static string LoadSeed()
         {
             IniFile SettingFile = new IniFile("Settings.ini");
-            return SettingFile.Read("Seed", "Settings");
+            try
+            {
+                return SettingFile.Read("Seed", "Settings");
+            }
+            catch
+            {
+                SettingFile.Write("Seed", "404", "Settings");
+                return "404";
+            }
         }
 
 
@@ -102,13 +184,21 @@ namespace StableDiffusion
         public static Int16 LoadIteration()
         {
             IniFile SettingFile = new IniFile("Settings.ini");
-            return Convert.ToInt16(Convert.ToDouble(ConvertStringToInt(SettingFile.Read("Iteration", "Settings"))) / 25);
+            try
+            {
+                return Convert.ToInt16(Convert.ToDouble(ConvertStringToInt(SettingFile.Read("Iteration", "Settings"))) / 25);
+            }
+            catch
+            {
+                SettingFile.Write("Iteration", "1", "Settings");
+                return 1;
+            }
         }
 
 
 
 
-            public static void SaveN_iter(decimal value)
+        public static void SaveN_iter(decimal value)
         {
             IniFile SettingFile = new IniFile("Settings.ini");
             SettingFile.Write("N_iter", value.ToString(), "Settings");
@@ -117,7 +207,15 @@ namespace StableDiffusion
         public static Int16 LoadN_iter()
         {
             IniFile SettingFile = new IniFile("Settings.ini");
-            return Convert.ToInt16(ConvertStringToInt(SettingFile.Read("N_iter", "Settings")));
+            try
+            {
+                return Convert.ToInt16(ConvertStringToInt(SettingFile.Read("N_iter", "Settings")));
+            }
+            catch
+            {
+                SettingFile.Write("N_iter", "4", "Settings");
+                return 4;
+            }
         }
 
 
@@ -131,7 +229,15 @@ namespace StableDiffusion
         public static Int16 LoadN_samples()
         {
             IniFile SettingFile = new IniFile("Settings.ini");
-            return Convert.ToInt16(ConvertStringToInt(SettingFile.Read("N_samples", "Settings")));
+            try
+            {
+                return Convert.ToInt16(ConvertStringToInt(SettingFile.Read("N_samples", "Settings")));
+            }
+            catch
+            {
+                SettingFile.Write("N_samples", "1", "Settings");
+                return 1;
+            }
 
         }
 
@@ -146,7 +252,15 @@ namespace StableDiffusion
         public static Int16 LoadGuidance()
         {
             IniFile SettingFile = new IniFile("Settings.ini");
-            return Convert.ToInt16(Convert.ToDouble(SettingFile.Read("Guidance", "Settings")) * 2);
+            try
+            {
+                return Convert.ToInt16(Convert.ToDouble(SettingFile.Read("Guidance", "Settings")) * 2);
+            }
+            catch
+            {
+                SettingFile.Write("Guidance", "7,5", "Settings");
+                return 15;
+            }
         }
 
 
@@ -159,8 +273,15 @@ namespace StableDiffusion
         public static Int16 LoadChannels()
         {
             IniFile SettingFile = new IniFile("Settings.ini");
-
-            return Convert.ToInt16(Convert.ToDouble(ConvertStringToInt(SettingFile.Read("Channels", "Settings"))) / 4);
+            try
+            {
+                return Convert.ToInt16(Convert.ToDouble(ConvertStringToInt(SettingFile.Read("Channels", "Settings"))) / 4);
+            }
+            catch
+            {
+                SettingFile.Write("Channels", "16", "Settings");
+                return 4;
+            }
         }
 
         public static void SaveStrength(decimal value)
@@ -172,8 +293,16 @@ namespace StableDiffusion
 
         public static Int16 LoadStrength()
         {
-            IniFile SettingFile = new IniFile("Settings.ini");
-            return Convert.ToInt16(ConvertStringToInt(SettingFile.Read("Strength", "Settings")) * 20);
+            IniFile SettingFile = new IniFile("Settings.ini"); 
+            try
+            {
+                return Convert.ToInt16(ConvertStringToInt(SettingFile.Read("Strength", "Settings")) * 20);
+            }
+            catch
+            {
+                SettingFile.Write("Strength", "0,75", "Settings");
+                return 15;
+            }
         }
 
 
@@ -199,7 +328,14 @@ namespace StableDiffusion
         public static string LoadSelectedPreset()
         {
             IniFile SettingFile = new IniFile("Settings.ini");
-            return SettingFile.Read("SelectedPreset", "Settings");
+            try
+            {
+                return SettingFile.Read("SelectedPreset", "Settings");
+            }
+            catch
+            {
+                return "";
+            }
         }
 
 
