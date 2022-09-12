@@ -6,23 +6,28 @@ using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using System.Globalization;
 using System.IO;
+using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
+using System.Threading;
+using System.Threading.Channels;
 using System.Windows.Forms;
 using static StableDiffusion.iniAccess;
 using static StableDiffusion.myFunctions;
+using static System.Net.Mime.MediaTypeNames;
+using static System.Net.WebRequestMethods;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.Window;
-
-
+using Application = System.Windows.Forms.Application;
+using File = System.IO.File;
 
 namespace StableDiffusion
 {
 
 
-    public enum EnumTab { Browse, Prompt,Image, Sequence, Morph}
+    public enum EnumTab {Settings, Browse, Prompt, Image, Sequence, Morph}
 
-    public enum EnumScript {txt2txt, img2img, imgs2imgs, imgMorph}
+    public enum EnumScript {txt2img, img2img, imgs2imgs, imgMorph}
 
 
 
@@ -31,31 +36,29 @@ namespace StableDiffusion
 
         public EnumTab currentTab;
         public EnumScript currentScript;
-        
+
         TabBrowseControl tabBrowse = new TabBrowseControl();
         TabPromptControl tabPrompt = new TabPromptControl();
         TabImageControl tabImage = new TabImageControl();
         TabSequenceControl tabSequence = new TabSequenceControl();
         TabMorphControl tabMorph = new TabMorphControl();
-        
+
 
 
         Process newProcess = null;
         ProcessStartInfo psi = new ProcessStartInfo();
 
-        Bitmap DrawArea = new Bitmap(512,512);
+        Bitmap initImage = new Bitmap(512, 512);
 
-        string AnacondaPath = "";
-        string envName = "";
-        string envpath = "";
-
-        string txt2imgPath = "scripts/txt2img.py";
-        string img2imgPath = "scripts/img2img.py";
-        string img2morphPath = "scripts/img2morph.py";
-        string imgs2imgsPath = "scripts/imgs2imgs.py";
-        string inpaintPath = "scripts/inpaint.py";
 
         string separator = ", ";
+
+
+        bool isPlmsActivated = false;
+
+
+        bool showConsole = false;
+
         public Form1()
         {
             InitializeComponent();
@@ -64,24 +67,21 @@ namespace StableDiffusion
             //this.Size = new Size(1043, 823);
 
 
-            panelMainTab.Visible = false;
-
-
-            tabBrowse.Location = panelMainTab.Location;
+            tabBrowse.Location = tabSettings.Location;
             this.Controls.Add(tabBrowse);
 
-            tabPrompt.Location = panelMainTab.Location;
+            tabPrompt.Location = tabSettings.Location;
             this.Controls.Add(tabPrompt);
 
-            tabImage.Location = panelMainTab.Location;
+            tabImage.Location = tabSettings.Location;
             this.Controls.Add(tabImage);
 
-            tabSequence.Location = panelMainTab.Location;
+            tabSequence.Location = tabSettings.Location;
             this.Controls.Add(tabSequence);
 
-            tabMorph.Location = panelMainTab.Location;
+            tabMorph.Location = tabSettings.Location;
             this.Controls.Add(tabMorph);
-            
+
 
             SwitchTab(EnumTab.Prompt);
 
@@ -89,14 +89,17 @@ namespace StableDiffusion
 
             bool isEnvValid = false;
 
-            envpath = LoadEnvPath();
-            while (!isEnvValid)
-            {
-                isEnvValid = IsEnvPathValid(envpath);
-            }
 
-            tabImage.environmentPath = envpath;
+            textBoxAnacondaPath.Text = LoadAnacondaPath();
+            textBoxEnvName.Text = LoadEnvName();
+            textBoxEnvPath.Text = LoadEnvPath();
 
+            textBoxTxt2imgScript.Text = LoadTxt2imgPath();
+            textBoxImg2imgScript.Text = LoadImg2imgPath();
+            textBoxImgs2imgsScript.Text = LoadImgs2imgsPath();
+            textBoxImg2MorphScript.Text = LoadImg2morphPath();
+
+            showConsole = LoadShowConsole();
 
             textBoxPrompt.Text = LoadPrompt();
 
@@ -113,7 +116,7 @@ namespace StableDiffusion
                 textBoxSeed.Text = "Random";
             }
 
-            trackBarIteration.Value = ClampTrackbar(trackBarIteration, LoadIteration());
+            trackBarSteps.Value = ClampTrackbar(trackBarSteps, LoadIteration());
             trackBarN_iter.Value = ClampTrackbar(trackBarN_iter, LoadN_iter());
             trackBarN_samples.Value = ClampTrackbar(trackBarN_samples, LoadN_samples());
             trackBarGuidance.Value = ClampTrackbar(trackBarGuidance, LoadGuidance());
@@ -123,7 +126,7 @@ namespace StableDiffusion
 
 
             //MessageBox.Show(trackBarN_samples.Value.ToString());
-            labelIteration.Text = (trackBarIteration.Value * 25).ToString();
+            labelIteration.Text = (trackBarSteps.Value * 25).ToString();
 
             if (trackBarN_iter.Value == 0)
             {
@@ -134,7 +137,7 @@ namespace StableDiffusion
                 labelN_iter.Text = trackBarN_iter.Value.ToString();
             }
             labelN_samples.Text = (trackBarN_samples.Value).ToString();
-            labelGuidance.Text = ((float)trackBarGuidance.Value / 2).ToString(); 
+            labelGuidance.Text = ((float)trackBarGuidance.Value / 2).ToString();
             labelChannels.Text = ((float)trackBarChannels.Value * 4).ToString();
             labelStrength.Text = ((float)trackBarStrength.Value / 20).ToString();
 
@@ -147,22 +150,22 @@ namespace StableDiffusion
 
             tabBrowse.SetSelectedStylesFromBrowser += new EventHandler(SetSelectedStylesFromBrowser);
             tabBrowse.SetPromptFromBrowser += new EventHandler(SetPromptFromBrowser);
-            tabBrowse.SetSettingsFromBrowser += new EventHandler(SetSettingsFromBrowser); 
+            tabBrowse.SetSettingsFromBrowser += new EventHandler(SetSettingsFromBrowser);
             tabBrowse.NewInitImageAdded += new EventHandler(NewInitImageAdded);
         }
 
         string selectedPreset = "";
         protected void PresetChangedEvent(object sender, EventArgs e)
         {
-            selectedPreset=tabPrompt.Preset.ToString();
+            selectedPreset = tabPrompt.Preset.ToString();
             tabBrowse.SelectPreset(selectedPreset);
         }
 
         protected void ImageClearEvent(object sender, EventArgs e)
         {
             if (currentScript == EnumScript.img2img || currentScript == EnumScript.imgMorph)
-            {      
-                SwitchScriptSelector(EnumScript.txt2txt);
+            {
+                SwitchScriptSelector(EnumScript.txt2img);
             }
         }
 
@@ -182,7 +185,7 @@ namespace StableDiffusion
         protected void SetPromptFromBrowser(object sender, EventArgs e)
         {
 
-             textBoxPrompt.Text = tabBrowse.Prompt;
+            textBoxPrompt.Text = tabBrowse.Prompt;
         }
         protected void SetSelectedStylesFromBrowser(object sender, EventArgs e)
         {
@@ -226,7 +229,7 @@ namespace StableDiffusion
                 {
                     ddim_steps = s[i + 1];
                     int value = Convert.ToInt16(Convert.ToDouble(ConvertStringToInt(ddim_steps)) / 25);
-                    trackBarIteration.Value = ClampTrackbar(trackBarIteration, LoadIteration());
+                    trackBarSteps.Value = ClampTrackbar(trackBarSteps, LoadIteration());
                 }
                 else if (s[i] == "--n_iter")
                 {
@@ -264,51 +267,109 @@ namespace StableDiffusion
             tabImage.RefreshInitImagesList();
         }
 
-        private bool IsEnvPathValid(string path)
+
+
+
+
+
+
+
+
+
+
+        private void buttonBrowseAnacondaPath_Click(object sender, EventArgs e)
         {
-            string pth = path;
-            if (!Directory.Exists(path))
+            FolderBrowserDialog fbd = new FolderBrowserDialog();
+            fbd.SelectedPath = textBoxAnacondaPath.Text;
+            if (fbd.ShowDialog() == DialogResult.OK)
             {
-                MessageBox.Show("Please setup your Stable Diffusion location");
-                FolderBrowserDialog fbd = new FolderBrowserDialog();
-
-                if (fbd.ShowDialog() == DialogResult.OK)
-                {
-                    pth = fbd.SelectedPath;
-
-                    string envfolder = new DirectoryInfo(System.IO.Directory.GetParent(pth).ToString()).Name;
-
-                    if (envfolder == "envs")
-                    {
-                        string ename = new DirectoryInfo(pth).Name;
-                        envName = ename;
-                        AnacondaPath = Directory.GetParent(Directory.GetParent(pth).ToString()).ToString();
-                        envpath = pth;
-                        SaveEnvPath(envpath);
-                        return true;
-                    }
-                    else
-                        return false;
-                }
-                else
-                    return false;
-            }
-            else
-            {
-                string envfolder = new DirectoryInfo(System.IO.Directory.GetParent(pth).ToString()).Name;
-
-                if (envfolder == "envs")
-                {
-                    string ename = new DirectoryInfo(pth).Name;
-                    envName = ename;
-                    AnacondaPath = Directory.GetParent(Directory.GetParent(pth).ToString()).ToString();
-                    envpath = path;
-                    return true;
-                }
-                else
-                    return false;
+                textBoxAnacondaPath.Text = fbd.SelectedPath;
+                SaveAnacondaPath(textBoxAnacondaPath.Text);
             }
         }
+
+        private void buttonBrowseEnvs_Click(object sender, EventArgs e)
+        {
+            FolderBrowserDialog fbd = new FolderBrowserDialog();
+            fbd.SelectedPath = textBoxAnacondaPath.Text + "\\envs\\";
+            if (fbd.ShowDialog() == DialogResult.OK)
+            {
+                textBoxEnvName.Text = new DirectoryInfo(fbd.SelectedPath).Name;
+                SaveEnvName(textBoxEnvName.Text);
+                if (textBoxEnvPath.Text.Length == 0)
+                {
+                    textBoxEnvPath.Text = fbd.SelectedPath;
+                    SaveEnvPath(textBoxEnvPath.Text);
+                }
+            }
+        }
+
+        private void buttonBrowseEnvPath_Click(object sender, EventArgs e)
+        {
+            FolderBrowserDialog fbd = new FolderBrowserDialog();
+            fbd.SelectedPath = textBoxAnacondaPath.Text + "\\envs\\";
+            if (fbd.ShowDialog() == DialogResult.OK)
+            {
+                textBoxEnvPath.Text = fbd.SelectedPath;
+                SaveEnvPath(textBoxEnvPath.Text);
+            }
+        }
+
+
+        private void buttonBrowseTxt2imgScript_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog fd = new OpenFileDialog();
+            fd.InitialDirectory = textBoxEnvPath.Text + "\\Scripts\\";
+            fd.Filter = "Python script (*.py)|*.py";
+            fd.Title = "Please select the txt2txt.py file";
+            if (fd.ShowDialog() == DialogResult.OK)
+            {
+                textBoxTxt2imgScript.Text = fd.FileName;
+                SaveTxt2imgPath(textBoxTxt2imgScript.Text);
+            }
+
+        }
+
+        private void buttonBrowseImg2imgScript_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog fd = new OpenFileDialog();
+            fd.InitialDirectory = textBoxEnvPath.Text + "\\Scripts\\";
+            fd.Filter = "Python script (*.py)|*.py";
+            fd.Title = "Please select the txt2txt.py file";
+            if (fd.ShowDialog() == DialogResult.OK)
+            {
+                textBoxImg2imgScript.Text = fd.FileName;
+                SaveImg2imgPath(textBoxImg2imgScript.Text);
+            }
+        }
+
+        private void buttonBrowseImgs2imgsScript_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog fd = new OpenFileDialog();
+            fd.InitialDirectory = textBoxEnvPath.Text + "\\Scripts\\";
+            fd.Filter = "Python script (*.py)|*.py";
+            fd.Title = "Please select the txt2txt.py file";
+            if (fd.ShowDialog() == DialogResult.OK)
+            {
+                textBoxImgs2imgsScript.Text = fd.FileName;
+                SaveImgs2imgsPath(textBoxImgs2imgsScript.Text);
+            }
+        }
+
+        private void buttonBrowseImg2morphScript_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog fd = new OpenFileDialog();
+            fd.InitialDirectory = textBoxEnvPath.Text + "\\Scripts\\";
+            fd.Filter = "Python script (*.py)|*.py";
+            fd.Title = "Please select the txt2txt.py file";
+            if (fd.ShowDialog() == DialogResult.OK)
+            {
+                textBoxImg2MorphScript.Text = fd.FileName;
+                SaveImg2morphPath(textBoxImg2MorphScript.Text);
+            }
+        }
+
+
 
 
         /// <summary> /////////////////////////////////////////////////////////////////////////////
@@ -321,12 +382,14 @@ namespace StableDiffusion
         {
             currentTab = tab;
 
+            tabSettings.Visible = currentTab == EnumTab.Settings;
             tabBrowse.IsVisible = currentTab == EnumTab.Browse;
             tabPrompt.IsVisible = currentTab == EnumTab.Prompt;
             tabImage.IsVisible = currentTab == EnumTab.Image;
             tabSequence.IsVisible = currentTab == EnumTab.Sequence;
             tabMorph.IsVisible = currentTab == EnumTab.Morph;
 
+            ChangeTab(buttonSettings, currentTab == EnumTab.Settings);
             ChangeTab(buttonTabBrowse, currentTab == EnumTab.Browse, 1);
             ChangeTab(buttonTabPrompt, currentTab == EnumTab.Prompt);
             ChangeTab(buttonTabImage, currentTab == EnumTab.Image);
@@ -335,7 +398,7 @@ namespace StableDiffusion
 
         }
 
-        private void ChangeTab(System.Windows.Forms.Button btn, bool enabled, int color =0)
+        private void ChangeTab(System.Windows.Forms.Button btn, bool enabled, int color = 0)
         {
 
             if (enabled)
@@ -344,7 +407,7 @@ namespace StableDiffusion
             }
             else
             {
-                if(color == 0)
+                if (color == 0)
                     btn.BackColor = Color.FromArgb(45, 35, 55);
                 else if (color == 1)
                     btn.BackColor = Color.FromArgb(35, 45, 65);
@@ -352,17 +415,21 @@ namespace StableDiffusion
 
         }
 
+        private void buttonSettings_Click(object sender, EventArgs e)
+        {
+            initImage = tabImage.InitImage;
+            SwitchTab(EnumTab.Settings);
+        }
 
         private void buttonTabBrowse_Click(object sender, EventArgs e)
         {
-            DrawArea = tabImage.InitImage;
+            initImage = tabImage.InitImage;
             SwitchTab(EnumTab.Browse);
-            tabImage.StopInpaint();
         }
 
         private void buttonTabPrompt_Click(object sender, EventArgs e)
         {
-            DrawArea = tabImage.InitImage;
+            initImage = tabImage.InitImage;
             SwitchTab(EnumTab.Prompt);
             tabImage.StopInpaint();
             if (!tabImage.isClear)
@@ -370,7 +437,7 @@ namespace StableDiffusion
                 SwitchScriptSelector(EnumScript.img2img);
             }
             else
-                SwitchScriptSelector(EnumScript.txt2txt);
+                SwitchScriptSelector(EnumScript.txt2img);
 
 
 
@@ -382,17 +449,17 @@ namespace StableDiffusion
             tabImage.StopInpaint();
             if (!tabImage.isClear)
             {
-                tabImage.InitImage = DrawArea;
+                tabImage.InitImage = initImage;
                 SwitchScriptSelector(EnumScript.img2img);
             }
             else
-                SwitchScriptSelector(EnumScript.txt2txt);
+                SwitchScriptSelector(EnumScript.txt2img);
 
         }
 
         private void buttonTabSequence_Click(object sender, EventArgs e)
         {
-            DrawArea = tabImage.InitImage;
+            initImage = tabImage.InitImage;
             SwitchTab(EnumTab.Sequence);
             tabImage.StopInpaint();
             SwitchScriptSelector(EnumScript.imgs2imgs);
@@ -402,27 +469,27 @@ namespace StableDiffusion
 
         private void buttonTabMorph_Click(object sender, EventArgs e)
         {
-            DrawArea = tabImage.InitImage;
+            initImage = tabImage.InitImage;
             SwitchTab(EnumTab.Morph);
             tabImage.StopInpaint();
             if (!tabImage.isClear)
             {
-                tabMorph.Drawing = DrawArea;
+                tabMorph.Drawing = initImage;
                 SwitchScriptSelector(EnumScript.imgMorph);
             }
             else
-                SwitchScriptSelector(EnumScript.txt2txt);
+                SwitchScriptSelector(EnumScript.txt2img);
 
         }
 
 
-        
+
         private void SwitchScriptSelector(EnumScript s)
         {
             currentScript = s;
             switch (s)
             {
-                case EnumScript.txt2txt:
+                case EnumScript.txt2img:
                     panelSelectedPrompt.BackColor = Color.FromArgb(20, 60, 30);
                     panelSelectedImage.BackColor = Color.FromArgb(15, 10, 15);
                     panelSelectedSequence.BackColor = Color.FromArgb(15, 10, 15);
@@ -469,257 +536,197 @@ namespace StableDiffusion
 
         string lastOutputPath = "";
         // start
-        private void buttonStart_Click(object sender, EventArgs e)
+
+
+        private CancellationTokenSource cts = new CancellationTokenSource();
+        CancellationToken token;
+        private async void buttonLaunchAsync_Click(object sender, EventArgs e)
         {
-
-            if (!File.Exists(envpath + "\\scripts\\txt2img.py"))
-            {
-                MessageBox.Show(envpath + "\\scripts\\txt2img.py not found");
-                return;
-            }
-            if (!File.Exists(envpath + "\\scripts\\img2img.py"))
-            {
-                MessageBox.Show(envpath + "\\scripts\\img2img.py not found");
-                return;
-            }
             isLaunched = !isLaunched;
-
             if (isLaunched)
             {
+                sec = 0;
+
+                if (!File.Exists(textBoxAnacondaPath.Text+ "\\Scripts\\activate.bat"))
+                {
+                    MessageBox.Show(textBoxAnacondaPath.Text + "\\Scripts\\activate.bat not found!\nPlease locate a proper Anaconda/Miniconda directory.", "Invalid Anaconda Path",MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    SwitchTab(EnumTab.Settings);
+                    textBoxAnacondaPath.Focus();
+                    isLaunched = false;
+                    return;
+                }
+                if (!System.IO.Directory.Exists(textBoxEnvPath.Text))
+                {
+                    MessageBox.Show("Stable Diffusion folder not found, please locate the directory.");
+                    SwitchTab(EnumTab.Settings);
+                    textBoxEnvName.Focus();
+                    isLaunched = false;
+
+                    return;
+                }
                 switch (currentScript)
                 {
-                    case EnumScript.txt2txt:
-                        startText2Image();
+                    case EnumScript.txt2img:
+                        if (!File.Exists(textBoxTxt2imgScript.Text))
+                        {
+                            MessageBox.Show(textBoxTxt2imgScript.Text + " not found, please locate the txt2img script.", "txt2img script not found", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            SwitchTab(EnumTab.Settings);
+                            textBoxTxt2imgScript.Focus();
+                            isLaunched = false;
+                            return;
+                        }
                         break;
                     case EnumScript.img2img:
-                        startImage2Image();
+                        if (!File.Exists(textBoxImg2imgScript.Text))
+                        {
+                            MessageBox.Show(textBoxImg2imgScript.Text + " not found, please locate the img2img.py script.");
+                            SwitchTab(EnumTab.Settings);
+                            textBoxImg2imgScript.Focus();
+                            isLaunched = false;
+                            return;
+                        }
                         break;
                     case EnumScript.imgs2imgs:
-                        startImages2Images();
+                        if (!File.Exists(textBoxImgs2imgsScript.Text))
+                        {
+                            MessageBox.Show(textBoxImgs2imgsScript.Text + " not found, please locate the img2img.py script.");
+                            SwitchTab(EnumTab.Settings);
+                            textBoxImgs2imgsScript.Focus();
+                            isLaunched = false;
+                            return;
+                        }
                         break;
                     case EnumScript.imgMorph:
-                        startImage2Morph();
+                        if (!File.Exists(textBoxImg2MorphScript.Text))
+                        {
+                            MessageBox.Show(textBoxImg2MorphScript.Text + " not found, please locate the img2img.py script.");
+                            SwitchTab(EnumTab.Settings);
+                            textBoxImg2MorphScript.Focus();
+                            isLaunched = false;
+                            return;
+                        }
                         break;
                 }
+
+
                 AddToPromptList();
-                sec = 0;
-                timerSec.Start();
-                buttonStart.BackColor = Color.FromArgb(20, 60, 30);
-                buttonStart.Image = Resources.stop_button;
-                buttonStart.Text = sec.ToString();
+                buttonLaunchAsync.BackColor = Color.FromArgb(20, 60, 30);
+                buttonLaunchAsync.Image = Resources.stop_button;
+
+
+                CheckForIllegalCrossThreadCalls = false;
+
+
+                cts.Dispose();
+                cts = new CancellationTokenSource();
+                token = cts.Token;
+
+                string args = "";
+
+                args = PrepareScriptAndGetArgs();
+                await AsyncLaunch(args, token);
+
             }
             else
             {
-                timerSec.Stop();
-                buttonStart.BackColor = Color.FromArgb(45, 35, 55);
-                buttonStart.Image = Resources.play_button;
-                buttonStart.Text = "";
-                KillProcessAndChildrens(newProcess.Id);
+                if (cts != null)
+                    cts.Cancel();
+
+                richTextBoxConsole.Clear();
+                buttonLaunchAsync.BackColor = Color.FromArgb(45, 35, 55);
+                buttonLaunchAsync.Image = Resources.play_button;
+                buttonLaunchAsync.Text = "";
             }
 
+
+
+
+        }
+
+        public Task AsyncLaunch(string args, CancellationToken token)
+        {
+            Task t1 = Task.Run(async () =>
+            {
+                Process process = new Process();
+
+                Thread.Sleep(200);
+                try
+                {
+                    var processStartInfo = new ProcessStartInfo(@"C:\Windows\System32\cmd.exe", args);
+
+                    processStartInfo.ErrorDialog = false;
+                    processStartInfo.UseShellExecute = false;
+                    processStartInfo.RedirectStandardError = true;
+                    processStartInfo.RedirectStandardInput = true;
+                    processStartInfo.RedirectStandardOutput = true;
+                    processStartInfo.CreateNoWindow = !showConsole;
+                    //Execute the process
+
+                    process.StartInfo = processStartInfo;
+
+                    //process.OutputDataReceived += (sender, args) => UpdateText(args.Data);
+                    //process.ErrorDataReceived += (sender, args) => UpdateErrorText(args.Data);
+                    process.OutputDataReceived += new DataReceivedEventHandler(SortOutputHandler);
+                    process.ErrorDataReceived += new DataReceivedEventHandler(SortErrorHandler);
+                    process.Start();
+                    process.BeginOutputReadLine();
+                    process.BeginErrorReadLine();
+
+                    while (true)
+                    {
+                        token.ThrowIfCancellationRequested();
+                        Thread.Sleep(100);
+
+                    }
+                    //process.WaitForExit();
+
+                }
+                catch (OperationCanceledException)
+                {
+                    KillProcessAndChildrens(process.Id);
+                    Thread.Sleep(200);
+                }
+                catch (Exception ex)
+                {
+                    richTextBoxConsole.Text = ex.Message;
+                }
+            },
+            token);
+            return Task.CompletedTask;
         }
 
 
 
-        // start txt2image script
-        private void startText2Image()
+
+        private string PrepareScriptAndGetArgs()
         {
-            // kill old process
-            if (newProcess != null && !newProcess.HasExited)
-                KillProcessAndChildrens(newProcess.Id);
-
-
-
-
-            //clean prompt
-            textBoxPrompt.Text = Regex.Replace(textBoxPrompt.Text, @"^\s*$(\n|\r|\r\n)", "", RegexOptions.Singleline);
-
-            //get env drive letter
-            string drive = envpath.Substring(0, 1);
-
-
-            // seed routine
-            string seed = " --seed " + textBoxSeed.Text;
-
-            if (isRandomSeed)
-            {
-                Random rnd = new Random();
-                seed = " --seed " + rnd.Next(1, 100000000);
-            }
-            else
-            {
-                if (!IsDigitsOnly(textBoxSeed.Text))
-                {
-                    seed = " --seed 404";
-                    textBoxSeed.Text = "404";
-                }
-            }
-            
-            // making prompt with styles
-            string text = textBoxPrompt.Text;
-            text = text + ", " + tabPrompt.Styles;
-            text = " --prompt \"" + text + "\"";
-
-            string size = " --W " + textBoxSizeW.Text + " --H " + textBoxSizeH.Text ;
-            string iteration = " --ddim_steps " + labelIteration.Text;
-
-            string n_iter = " --n_iter " + labelN_iter.Text;
-            if (trackBarN_iter.Value == 0)
-                n_iter = " --n_iter 999999";
-
-            string n_samples = " --n_samples " + labelN_samples.Text;
-            string guidance = " --scale " + labelGuidance.Text.Replace(",", "."); ;
-            //string channels = " --C " +  labelChannels.Text;
-            string channels = "";
-
-            string plms = " --plms";
-            if(!isPlmsActivated)
-                plms = "";
-
-            string outdir = System.IO.Path.GetDirectoryName(Application.ExecutablePath) + "\\Result";
-            System.IO.Directory.CreateDirectory(outdir);
-            outdir = outdir + "\\" + tabPrompt.Preset;
-            System.IO.Directory.CreateDirectory(outdir);
-            outdir = CreateResultDirectory(outdir);
-            lastOutputPath = outdir;
-            outdir.Replace("\\", "/");
-            outdir = " --outdir \"" + outdir + "\"";
-
-            // making python line
-            string gen = "python "+ txt2imgPath + text + size + seed + iteration + n_iter + n_samples + guidance + channels + plms + outdir + " --skip_grid ";
-
-
-            SavePromptInTxtFile(lastOutputPath, textBoxPrompt.Text, tabPrompt.Styles, seed + iteration + n_iter + n_samples + guidance + channels + plms);
-
-            Clipboard.SetText(gen);
-
-            // start script
-            psi.UseShellExecute = true;
-            //psi.Verb = "runas";
-            psi.FileName = @"C:\Windows\System32\cmd.exe";
-            psi.Arguments = @" %windir%\System32\cmd.exe /K " + AnacondaPath + "\\Scripts\\activate.bat " + AnacondaPath + "&conda activate " + envName + "&" + drive + ":&cd " + envpath + "&" + gen;
-            try{ newProcess = Process.Start(psi);} catch (Exception) { }
-
-        }
-
-        bool isPlmsActivated = false;
-        // start img2image script
-        private void startImage2Image()
-        {
-            //var i = new Bitmap(DrawArea);
-            //i.Save(envpath + "\\current.png");
-
-            // kill old process
-            if (newProcess != null && !newProcess.HasExited)
-                KillProcessAndChildrens(newProcess.Id);
-
-            //clean prompt
-            textBoxPrompt.Text = Regex.Replace(textBoxPrompt.Text, @"^\s*$(\n|\r|\r\n)", "", RegexOptions.Singleline);
-
-            //get env drive letter
-            string drive = envpath.Substring(0, 1);
-
-
-            // seed routine
-            string seed = " --seed " + textBoxSeed.Text;
-
-            if (isRandomSeed)
-            {
-                Random rnd = new Random();
-                seed = " --seed " + rnd.Next(1, 100000000);
-            }
-            else
-            {
-                if (!IsDigitsOnly(textBoxSeed.Text))
-                {
-                    seed = " --seed 404";
-                    textBoxSeed.Text = "404";
-                }
-            }
-
-            // making prompt with styles
-            string text = textBoxPrompt.Text;
-            text = text + ", " + tabPrompt.Styles;
-            text = " --prompt \"" + text + "\"";
-
-            string iteration = " --ddim_steps " + labelIteration.Text;
-
-            string n_iter = " --n_iter " + labelN_iter.Text;
-            if (trackBarN_iter.Value == 0)
-                n_iter = " --n_iter 999999";
-
-            string n_samples = " --n_samples " + labelN_samples.Text;
-            string guidance = " --scale " + labelGuidance.Text.Replace(",", "."); ;
-            string channels = " --C " + labelChannels.Text;
-
-
-            string plms = " --plms";
-            if (!isPlmsActivated)
-                plms = "";
-            string str = " --strength " + ((float)trackBarStrength.Value / 20).ToString(CultureInfo.InvariantCulture);
-            string imgpath = envpath + "\\current.png";
-            string initImage = "  --init-img " + imgpath;
-
-            string script = img2imgPath;
-
-            string outdir = System.IO.Path.GetDirectoryName(Application.ExecutablePath) + "\\Result";
-            System.IO.Directory.CreateDirectory(outdir);
-            outdir = outdir + "\\" + tabPrompt.Preset;
-            System.IO.Directory.CreateDirectory(outdir);
-            outdir = CreateResultDirectory(outdir);
-            lastOutputPath = outdir;
-            outdir.Replace("\\", "/");
-            outdir = " --outdir \"" + outdir + "\"";
-
+            string textScript = currentScript.ToString();
             if (tabImage.isFaceRectangleSet)
+                textScript = textScript + " Crop";
+            richTextBoxConsole.Clear();
+            richTextBoxConsole.AppendText("Starting : " + textScript);
+            richTextBoxConsole.AppendText(Environment.NewLine);
+
+            string script = "";
+            switch (currentScript)
             {
-                imgpath = System.IO.Path.GetDirectoryName(Application.ExecutablePath) + "\\croped.png";
-
-                initImage = "  --init-img \"" + imgpath + "\"";
-
-                outdir = System.IO.Path.GetDirectoryName(Application.ExecutablePath) + "\\Crop";
-                System.IO.Directory.CreateDirectory(outdir);
-                clearFolder(outdir);
-                outdir = " --outdir \"" + outdir + "\"";
+                case EnumScript.txt2img:
+                    script = textBoxTxt2imgScript.Text;
+                    break;
+                case EnumScript.img2img:
+                    script = textBoxImg2imgScript.Text;
+                    break;
+                case EnumScript.imgs2imgs:
+                    script = textBoxImgs2imgsScript.Text;
+                    break;
+                case EnumScript.imgMorph:
+                    script = textBoxImg2MorphScript.Text;
+                    break;
             }
 
-            // making python line
-            string gen = "python "+ script + " --skip_grid " + outdir + text + seed + initImage + iteration + str + n_iter + n_samples + guidance + channels + plms;
 
-            SavePromptInTxtFile(lastOutputPath, textBoxPrompt.Text, tabPrompt.Styles, seed + iteration + n_iter + n_samples + guidance + channels + plms, tabImage.InitImage);
-
-            Clipboard.SetText(gen);
-
-            // start script
-            psi.UseShellExecute = true;
-            //psi.Verb = "runas";
-            psi.FileName = @"C:\Windows\System32\cmd.exe";
-            psi.Arguments = @" %windir%\System32\cmd.exe /K "+AnacondaPath+ "\\Scripts\\activate.bat " + AnacondaPath + "&conda activate "+envName+"&" + drive + ":&cd " + envpath + "&" + gen;
-            try{ newProcess = Process.Start(psi);}catch (Exception) { }
-
-        }
-
-
-
-
-
-        // start imgs2imgs script
-        private void startImages2Images()
-        {
-            // kill old process
-            if (newProcess != null && !newProcess.HasExited)
-                KillProcessAndChildrens(newProcess.Id);
-
-            //clean prompt
-            textBoxPrompt.Text = Regex.Replace(textBoxPrompt.Text, @"^\s*$(\n|\r|\r\n)", "", RegexOptions.Singleline);
-
-            //get env drive letter
-            string drive = envpath.Substring(0, 1);
-
-
-            // seed routine
+            // seed
             string seed = " --seed " + textBoxSeed.Text;
-
             if (isRandomSeed)
             {
                 Random rnd = new Random();
@@ -734,167 +741,199 @@ namespace StableDiffusion
                 }
             }
 
-            // making prompt with styles
-            string text = textBoxPrompt.Text;
-            text = text + ", " + tabPrompt.Styles;
-            text = " --prompt \"" + text + "\"";
+            // prompt + styles
+            textBoxPrompt.Text = Regex.Replace(textBoxPrompt.Text, @"^\s*$(\n|\r|\r\n)", "", RegexOptions.Singleline);
 
+            string prompt = textBoxPrompt.Text;
+            prompt = prompt + ", " + tabPrompt.Styles;
+            prompt = " --prompt \"" + prompt.Replace("\"", "") + "\"";
+
+            // Size
+            string size = "";
+            if (currentScript == EnumScript.txt2img)
+                size = " --W " + textBoxSizeW.Text + " --H " + textBoxSizeH.Text;
+
+            //steps
             string iteration = " --ddim_steps " + labelIteration.Text;
 
+            // N_iter
             string n_iter = " --n_iter " + labelN_iter.Text;
             if (trackBarN_iter.Value == 0)
                 n_iter = " --n_iter 999999";
 
+            // N_samples
             string n_samples = " --n_samples " + labelN_samples.Text;
+
+            // N scale
             string guidance = " --scale " + labelGuidance.Text.Replace(",", "."); ;
+
+            // Channels
             string channels = " --C " + labelChannels.Text;
+            if (currentScript == EnumScript.txt2img)
+                channels = "";
 
-            string plms = " --plms";
-            if (!isPlmsActivated)
-                plms = "";
-            string str = " --strength " + ((float)trackBarStrength.Value / 20).ToString(CultureInfo.InvariantCulture);
+            // Strength
+            string strength = " --strength " + ((float)trackBarStrength.Value / 20).ToString(CultureInfo.InvariantCulture);
+            if (currentScript == EnumScript.txt2img)
+                strength = "";
 
-            string imgpath = envpath + "\\current.png";
-            
-            string initImage = "  --init-img " + imgpath.Replace("\\", "/"); 
+            // Plms
+            string plms = "";
+            if (isPlmsActivated)
+                plms = " --plms";
 
-            //string imgpath = "inputs/sequence/";
-            string initDir = "  --inputdir " + imgpath;
+            // Init Image
+            string initImage = "  --init-img " + System.IO.Path.GetDirectoryName(Application.ExecutablePath) + "\\initimage.png";
+            if (currentScript == EnumScript.txt2img)
+                initImage = "";
 
+            // Outdir
             string outdir = System.IO.Path.GetDirectoryName(Application.ExecutablePath) + "\\Result";
             System.IO.Directory.CreateDirectory(outdir);
             outdir = outdir + "\\" + tabPrompt.Preset;
             System.IO.Directory.CreateDirectory(outdir);
             outdir = CreateResultDirectory(outdir);
             lastOutputPath = outdir;
-            outdir.Replace("\\", "/");
             outdir = " --outdir \"" + outdir + "\"";
 
-            // making python line
-            string gen = "python " + imgs2imgsPath + text + seed + initDir + iteration + str + n_iter + n_samples + guidance + channels + outdir + initImage + plms;
 
-            Clipboard.SetText(gen);
+            // Morph specific args
+            string morphArgs = "";
+            if (currentScript == EnumScript.imgMorph)
+            {
+                string tx = " --tx " + tabMorph.TX;
+                string ty = " --ty " + tabMorph.TY;
+                string angle = " --angle " + tabMorph.Angle;
+                string zoom = " --zoom " + tabMorph.Zoom;
+                morphArgs = tx + ty + angle + zoom;
+            }
 
-            // start script
-            psi.UseShellExecute = true;
-            //psi.Verb = "runas";
-            psi.FileName = @"C:\Windows\System32\cmd.exe";
-            psi.Arguments = @" %windir%\System32\cmd.exe /K " + AnacondaPath + "\\Scripts\\activate.bat " + AnacondaPath + "&conda activate " + envName + "&" + drive + ":&cd " + envpath + "&" + gen;
-            try { newProcess = Process.Start(psi); } catch (Exception) { }
 
+
+            // InpaintZone enabled
+            if (currentScript == EnumScript.img2img && tabImage.isFaceRectangleSet)
+            {
+                // N_iter
+                n_iter = " --n_iter 4";
+
+                // N_samples
+                n_samples = " --n_samples 1";
+
+                // Init Image
+                initImage = "  --init-img \""
+                    + (System.IO.Path.GetDirectoryName(Application.ExecutablePath) + "\\croped.png")
+                    + "\"";
+
+                string cropOutDir = System.IO.Path.GetDirectoryName(Application.ExecutablePath) + "\\Crop";
+                System.IO.Directory.CreateDirectory(cropOutDir);
+                clearFolder(cropOutDir);
+
+                outdir = " --outdir \"" + cropOutDir + "\"";
+            }
+
+
+            // save settings to output folder
+            if (currentScript == EnumScript.txt2img)
+                SavePromptInTxtFile(lastOutputPath, textBoxPrompt.Text, tabPrompt.Styles, seed + iteration + n_iter + n_samples + guidance + channels + plms);
+            else
+                SavePromptInTxtFile(lastOutputPath, textBoxPrompt.Text, tabPrompt.Styles, seed + iteration + n_iter + n_samples + guidance + channels + plms, tabImage.InitImage);
+
+
+
+            // making cmd args
+            string gen = "python " + script + prompt + size + seed + iteration + n_iter + n_samples + guidance + channels + strength + plms + outdir + initImage + morphArgs + " --skip_grid ";
+
+            //Clipboard.SetText(gen);
+
+            string drive = textBoxEnvPath.Text.Substring(0, 1);
+
+            string args = @" %windir%\System32\cmd.exe /K "
+            + textBoxAnacondaPath.Text + "\\Scripts\\activate.bat "
+            + textBoxAnacondaPath.Text + "&conda activate " + textBoxEnvName.Text
+            + "&" + drive + ":&cd " + textBoxEnvPath.Text + "&" + gen;
+
+            return args;
         }
 
 
 
-        private void startImage2Morph()
+
+        void SortOutputHandler(object sender, DataReceivedEventArgs e)
         {
-            var i = new Bitmap(DrawArea);
-            i.Save(envpath + "\\current.png");
-
-            // kill old process
-            if (newProcess != null && !newProcess.HasExited)
-                KillProcessAndChildrens(newProcess.Id);
-
-            //clean prompt
-            textBoxPrompt.Text = Regex.Replace(textBoxPrompt.Text, @"^\s*$(\n|\r|\r\n)", "", RegexOptions.Singleline);
-
-            //get env drive letter
-            string drive = envpath.Substring(0, 1);
-
-
-            // seed routine
-            string seed = " --seed " + textBoxSeed.Text;
-
-            if (isRandomSeed)
+            if (isLaunched)
             {
-                Random rnd = new Random();
-                seed = " --seed " + rnd.Next(1, 100000000);
+                Trace.WriteLine(e.Data);
+                this.BeginInvoke(new MethodInvoker(() =>
+                {
+                    richTextBoxConsole.SelectionColor = Color.White;
+                    richTextBoxConsole.AppendText((Environment.NewLine + e.Data) ?? string.Empty);
+                }));
             }
             else
             {
-                if (!IsDigitsOnly(textBoxSeed.Text))
-                {
-                    seed = " --seed 404";
-                    textBoxSeed.Text = "404";
-                }
+                richTextBoxConsole.Text = "Stopped";
             }
 
-            // making prompt with styles
-            string text = textBoxPrompt.Text;
-            text = text + ", " + tabPrompt.Styles;
-            text = " --prompt \"" + text + "\"";
+        }
+        void SortErrorHandler(object sender, DataReceivedEventArgs e)
+        {
+            if (isLaunched)
+            {
+                Trace.WriteLine(e.Data);
+                this.BeginInvoke(new MethodInvoker(() =>
+                {
+                    richTextBoxConsole.SelectionColor = Color.Yellow;
+                    richTextBoxConsole.AppendText((Environment.NewLine + e.Data) ?? string.Empty);
+                }));
+                if (richTextBoxConsole.Text.Contains("Enjoy"))
+                {
+                    if (cts != null)
+                    {
+                        cts.Cancel();
+                        richTextBoxConsole.Clear();
+                        //MessageBox.Show(cts.IsCancellationRequested.ToString());
+                    }
+                    //cts.CancelAfter(TimeSpan.FromSeconds(1));
+                    buttonLaunchAsync.BackColor = Color.FromArgb(45, 35, 55);
+                    buttonLaunchAsync.Image = Resources.play_button;
+                    buttonLaunchAsync.Text = "Completed";
+                    isLaunched = false;
+                }
+                if (richTextBoxConsole.Text.Contains("EnvironmentNameNotFound"))
+                {
+                    if (cts != null)
+                    {
+                        cts.Cancel();
+                        richTextBoxConsole.Clear();
+                        //MessageBox.Show(cts.IsCancellationRequested.ToString());
+                    }
+                    //cts.CancelAfter(TimeSpan.FromSeconds(1));
+                    buttonLaunchAsync.BackColor = Color.FromArgb(45, 35, 55);
+                    buttonLaunchAsync.Image = Resources.play_button;
+                    buttonLaunchAsync.Text = "EnvironmentNameNotFound";
+                    isLaunched = false;
 
-            string iteration = " --ddim_steps " + labelIteration.Text;
+                    MessageBox.Show(textBoxEnvName.Text + " is not a valid Anaconda Environment name !\n You can list all the valids envs typing \"conda info --envs\" on Anaconda Powershell Prompt", "Invalid Environment name", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    SwitchTab(EnumTab.Settings);
+                    textBoxAnacondaPath.Focus();
 
-            string n_iter = " --n_iter 1";
-            string n_samples = " --n_samples 1";
-
-            string guidance = " --scale " + labelGuidance.Text.Replace(",", "."); ;
-            string channels = " --C " + labelChannels.Text;
-
-
-            string plms = " --plms";
-            if (!isPlmsActivated)
-                plms = "";
-            string str = " --strength " + ((float)trackBarStrength.Value / 20).ToString(CultureInfo.InvariantCulture);
-            string imgpath = envpath + "\\current.png";
-            string initImage = "  --init-img " + imgpath;
-
-            string tx = " --tx " + tabMorph.TX;
-            string ty = " --ty " + tabMorph.TY;
-            string angle = " --angle " + tabMorph.Angle;
-            string zoom = " --zoom " + tabMorph.Zoom;
-
-            string script = img2imgPath;
-
-
-            script = img2morphPath;
-
-
-            string outdir = System.IO.Path.GetDirectoryName(Application.ExecutablePath) + "\\Result";
-            System.IO.Directory.CreateDirectory(outdir);
-            outdir = outdir + "\\" + tabPrompt.Preset;
-            System.IO.Directory.CreateDirectory(outdir);
-            outdir = CreateResultDirectory(outdir);
-            lastOutputPath = outdir;
-            outdir.Replace("\\", "/");
-            outdir = " --outdir \"" + outdir + "\"";
-
-            // making python line
-            string gen = "python " + script + " --skip_grid " +tx + ty + angle + zoom + outdir + text + seed + initImage + iteration + str + n_iter + n_samples + guidance + channels + plms;
-
-            SavePromptInTxtFile(lastOutputPath, textBoxPrompt.Text, tabPrompt.Styles, seed + iteration + n_iter + n_samples + guidance + channels + plms, (Bitmap)DrawArea.Clone());
-
-            Clipboard.SetText(gen);
-
-            // start script
-            psi.UseShellExecute = true;
-            //psi.Verb = "runas";
-            psi.FileName = @"C:\Windows\System32\cmd.exe";
-            psi.Arguments = @" %windir%\System32\cmd.exe /K " + AnacondaPath + "\\Scripts\\activate.bat " + AnacondaPath + "&conda activate " + envName + "&" + drive + ":&cd " + envpath + "&" + gen;
-            try { newProcess = Process.Start(psi); } catch (Exception) { }
+                }
+            }
+            else
+            {
+                richTextBoxConsole.Text = "Stopped";
+            }
 
         }
-
 
 
 
         // Timer
         private void timerSec_Tick(object sender, EventArgs e)
         {
-            buttonStart.Text = sec.ToString();
-            buttonStart.Image = Resources.stop_button;
+            buttonLaunchAsync.Text = sec.ToString();
+            buttonLaunchAsync.Image = Resources.stop_button;
             sec++;
-
-            newProcess.Refresh();  // Important
-            if (newProcess.HasExited)
-            {
-                timerSec.Stop();
-                buttonStart.BackColor = Color.FromArgb(45, 35, 55);
-                buttonStart.Text = "";
-                buttonStart.Image = Resources.play_button;
-                isLaunched = false;
-            }
         }
 
 
@@ -926,7 +965,7 @@ namespace StableDiffusion
             tabImage.ClearImage();
             if (currentTab == EnumTab.Image || currentTab == EnumTab.Morph)
             {
-                SwitchScriptSelector(EnumScript.txt2txt);
+                SwitchScriptSelector(EnumScript.txt2img);
             }
         }
 
@@ -952,9 +991,9 @@ namespace StableDiffusion
             }
         }
 
-        private void buttonIteration_Click(object sender, EventArgs e)
+        private void buttonSteps_Click(object sender, EventArgs e)
         {
-            trackBarIteration.Value = 2;
+            trackBarSteps.Value = 2;
         }
 
 
@@ -1014,9 +1053,9 @@ namespace StableDiffusion
         {
             var ctrl = sender as Control;
 
-            if (sender == trackBarIteration)
+            if (sender == trackBarSteps)
             {
-                string value = (trackBarIteration.Value * 25).ToString();
+                string value = (trackBarSteps.Value * 25).ToString();
                 labelIteration.Text = value;
             }
             else if (sender == trackBarN_iter)
@@ -1062,7 +1101,7 @@ namespace StableDiffusion
 
                 case MouseButtons.Left:
                     SaveSeed(textBoxSeed.Text);
-                    SaveIteration(trackBarIteration.Value);
+                    SaveIteration(trackBarSteps.Value);
                     SaveN_iter(trackBarN_iter.Value);
                     SaveN_samples(trackBarN_samples.Value);
                     SaveGuidance(trackBarGuidance.Value);
@@ -1240,6 +1279,107 @@ namespace StableDiffusion
             int nearestMultiple = Math.Max( (int)Math.Round((value / (double)factor),MidpointRounding.AwayFromZero) * factor, factor);
             (sender as System.Windows.Forms.TextBox).Text = nearestMultiple.ToString();
         }
+
+        private void richTextBoxConsole_TextChanged(object sender, EventArgs e)
+        {
+            richTextBoxConsole.SelectionStart = richTextBoxConsole.Text.Length;
+            richTextBoxConsole.ScrollToCaret();
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        /*
+private bool IsEnvPathValid(string path)
+{
+    string pth = path;
+    if (!Directory.Exists(path))
+    {
+        MessageBox.Show("Please setup your Stable Diffusion location");
+        FolderBrowserDialog fbd = new FolderBrowserDialog();
+
+        if (fbd.ShowDialog() == DialogResult.OK)
+        {
+            pth = fbd.SelectedPath;
+
+            string envfolder = new DirectoryInfo(System.IO.Directory.GetParent(pth).ToString()).Name;
+
+            if (envfolder == "envs")
+            {
+                string ename = new DirectoryInfo(pth).Name;
+                envName = ename;
+                AnacondaPath = Directory.GetParent(Directory.GetParent(pth).ToString()).ToString();
+                envpath = pth;
+                //get env drive letter
+                drive = envpath.Substring(0, 1);
+                SaveEnvPath(envpath);
+                return true;
+            }
+            else
+                return false;
+        }
+        else
+            return false;
+    }
+    else
+    {
+        string envfolder = new DirectoryInfo(System.IO.Directory.GetParent(pth).ToString()).Name;
+
+        if (envfolder == "envs")
+        {
+            string ename = new DirectoryInfo(pth).Name;
+            envName = ename;
+            AnacondaPath = Directory.GetParent(Directory.GetParent(pth).ToString()).ToString();
+            envpath = path;
+            //get env drive letter
+            drive = envpath.Substring(0, 1);
+            return true;
+        }
+        else
+            return false;
+    }
+}
+*/
+
+
 
 
     }

@@ -30,7 +30,6 @@
         {
             this.components = new System.ComponentModel.Container();
             this.panelTabImages = new System.Windows.Forms.Panel();
-            this.buttonSaveEditedImage = new System.Windows.Forms.Button();
             this.panelBrowseInpaint = new System.Windows.Forms.FlowLayoutPanel();
             this.pictureBoxInpaint1 = new System.Windows.Forms.PictureBox();
             this.pictureBoxInpaint2 = new System.Windows.Forms.PictureBox();
@@ -42,6 +41,7 @@
             this.ToolStripMenuItemMoveI = new System.Windows.Forms.ToolStripMenuItem();
             this.ToolStripMenuItemDeleteI = new System.Windows.Forms.ToolStripMenuItem();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+            this.buttonSaveEditedImage = new System.Windows.Forms.Button();
             this.buttonPickColor = new System.Windows.Forms.Button();
             this.buttonFillColor = new System.Windows.Forms.Button();
             this.buttonPencil = new System.Windows.Forms.Button();
@@ -99,25 +99,6 @@
             this.panelTabImages.Name = "panelTabImages";
             this.panelTabImages.Size = new System.Drawing.Size(680, 809);
             this.panelTabImages.TabIndex = 22;
-            // 
-            // buttonSaveEditedImage
-            // 
-            this.buttonSaveEditedImage.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(60)))), ((int)(((byte)(40)))));
-            this.buttonSaveEditedImage.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.buttonSaveEditedImage.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.buttonSaveEditedImage.FlatAppearance.BorderSize = 0;
-            this.buttonSaveEditedImage.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.buttonSaveEditedImage.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.buttonSaveEditedImage.ForeColor = System.Drawing.Color.Silver;
-            this.buttonSaveEditedImage.Image = global::StableDiffusion.Properties.Resources.save1;
-            this.buttonSaveEditedImage.Location = new System.Drawing.Point(309, 0);
-            this.buttonSaveEditedImage.Margin = new System.Windows.Forms.Padding(3, 0, 3, 0);
-            this.buttonSaveEditedImage.Name = "buttonSaveEditedImage";
-            this.buttonSaveEditedImage.Size = new System.Drawing.Size(45, 40);
-            this.buttonSaveEditedImage.TabIndex = 69;
-            this.buttonSaveEditedImage.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.buttonSaveEditedImage.UseVisualStyleBackColor = false;
-            this.buttonSaveEditedImage.Click += new System.EventHandler(this.buttonSaveEditedImage_Click);
             // 
             // panelBrowseInpaint
             // 
@@ -235,21 +216,40 @@
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 10F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 10F));
             this.tableLayoutPanel1.Controls.Add(this.buttonSaveEditedImage, 6, 0);
-            this.tableLayoutPanel1.Controls.Add(this.buttonPickColor, 0, 0);
-            this.tableLayoutPanel1.Controls.Add(this.buttonFillColor, 0, 0);
-            this.tableLayoutPanel1.Controls.Add(this.buttonPencil, 0, 0);
-            this.tableLayoutPanel1.Controls.Add(this.buttonFace, 2, 0);
             this.tableLayoutPanel1.Controls.Add(this.buttonOpenImage, 9, 0);
+            this.tableLayoutPanel1.Controls.Add(this.buttonFillColor, 1, 0);
             this.tableLayoutPanel1.Controls.Add(this.buttonScreenshot, 8, 0);
             this.tableLayoutPanel1.Controls.Add(this.buttonPastImage, 7, 0);
             this.tableLayoutPanel1.Controls.Add(this.buttonInpaint, 5, 0);
+            this.tableLayoutPanel1.Controls.Add(this.buttonPencil, 0, 0);
             this.tableLayoutPanel1.Controls.Add(this.buttonUndo, 4, 0);
+            this.tableLayoutPanel1.Controls.Add(this.buttonFace, 3, 0);
+            this.tableLayoutPanel1.Controls.Add(this.buttonPickColor, 2, 0);
             this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 3);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.RowCount = 1;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel1.Size = new System.Drawing.Size(518, 40);
             this.tableLayoutPanel1.TabIndex = 67;
+            // 
+            // buttonSaveEditedImage
+            // 
+            this.buttonSaveEditedImage.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(60)))), ((int)(((byte)(40)))));
+            this.buttonSaveEditedImage.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.buttonSaveEditedImage.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.buttonSaveEditedImage.FlatAppearance.BorderSize = 0;
+            this.buttonSaveEditedImage.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.buttonSaveEditedImage.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.buttonSaveEditedImage.ForeColor = System.Drawing.Color.Silver;
+            this.buttonSaveEditedImage.Image = global::StableDiffusion.Properties.Resources.save1;
+            this.buttonSaveEditedImage.Location = new System.Drawing.Point(309, 0);
+            this.buttonSaveEditedImage.Margin = new System.Windows.Forms.Padding(3, 0, 3, 0);
+            this.buttonSaveEditedImage.Name = "buttonSaveEditedImage";
+            this.buttonSaveEditedImage.Size = new System.Drawing.Size(45, 40);
+            this.buttonSaveEditedImage.TabIndex = 69;
+            this.buttonSaveEditedImage.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.buttonSaveEditedImage.UseVisualStyleBackColor = false;
+            this.buttonSaveEditedImage.Click += new System.EventHandler(this.buttonSaveEditedImage_Click);
             // 
             // buttonPickColor
             // 
@@ -280,7 +280,7 @@
             this.buttonFillColor.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.buttonFillColor.ForeColor = System.Drawing.Color.Silver;
             this.buttonFillColor.Image = global::StableDiffusion.Properties.Resources.color;
-            this.buttonFillColor.Location = new System.Drawing.Point(3, 0);
+            this.buttonFillColor.Location = new System.Drawing.Point(54, 0);
             this.buttonFillColor.Margin = new System.Windows.Forms.Padding(3, 0, 3, 0);
             this.buttonFillColor.Name = "buttonFillColor";
             this.buttonFillColor.Size = new System.Drawing.Size(45, 40);
@@ -299,7 +299,7 @@
             this.buttonPencil.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.buttonPencil.ForeColor = System.Drawing.Color.Silver;
             this.buttonPencil.Image = global::StableDiffusion.Properties.Resources.paintbrush;
-            this.buttonPencil.Location = new System.Drawing.Point(54, 0);
+            this.buttonPencil.Location = new System.Drawing.Point(3, 0);
             this.buttonPencil.Margin = new System.Windows.Forms.Padding(3, 0, 3, 0);
             this.buttonPencil.Name = "buttonPencil";
             this.buttonPencil.Size = new System.Drawing.Size(45, 40);

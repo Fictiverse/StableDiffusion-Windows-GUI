@@ -481,14 +481,22 @@ namespace StableDiffusion
             string sourceDir = System.IO.Path.GetDirectoryName(Application.ExecutablePath) + "\\Result\\" + listBoxPreset.SelectedItem + "\\" + listBoxFolderList.SelectedItem;
             string destinationDir = System.IO.Path.GetDirectoryName(Application.ExecutablePath) + "\\Result\\" + (sender as ToolStripMenuItem).Text + "\\" + listBoxFolderList.SelectedItem; ;
 
+            if (listBoxFolderList.Items.Count > 0)
+            {
+                if (listBoxFolderList.SelectedItems.Count > 0)
+                {
+                    //int selectedIndex = listBoxFolderList.SelectedIndices[0];
+                    listViewInitImages.Items.Clear();
+                    System.GC.Collect();
+                    System.GC.WaitForPendingFinalizers();
 
-            int selectedIndex = listBoxFolderList.SelectedIndices[0];
-            listViewInitImages.Items.Clear();
-            System.GC.Collect();
-            System.GC.WaitForPendingFinalizers();
+                    CopyFilesRecursively(sourceDir, destinationDir);
+                }
 
-            CopyFilesRecursively(sourceDir, destinationDir);
+            }
 
+
+            /*
             if (selectedIndex > 0)
             {
                 listBoxFolderList.SelectedIndex = selectedIndex - 1;
@@ -496,7 +504,7 @@ namespace StableDiffusion
             else if (listBoxFolderList.Items[selectedIndex + 1] != null)
             {
                 listBoxFolderList.SelectedIndex = selectedIndex + 1;
-            }
+            }*/
 
         }
 
@@ -549,39 +557,51 @@ namespace StableDiffusion
 
         private void ToolStripMenuItemCopyAll_Click(object sender, EventArgs e)
         {
+            if (listBoxFolderList.SelectedItems.Count > 0)
+            {
+                string path = System.IO.Path.GetDirectoryName(Application.ExecutablePath) + "\\Result\\" + listBoxPreset.SelectedItem + "\\" + listBoxFolderList.SelectedItem;
+                List<string> savelist = LoadPromptInTxtFile(path);
+                prompt = savelist[0];
+                selectedStyles = savelist[1];
+                settings = savelist[2];
+                SetPromptFromBrowser(this, e);
+                SetSelectedStylesFromBrowser(this, e);
+                SetSettingsFromBrowser(this, e);
+            }
 
-            string path = System.IO.Path.GetDirectoryName(Application.ExecutablePath) + "\\Result\\" + listBoxPreset.SelectedItem + "\\" + listBoxFolderList.SelectedItem;
-            List<string> savelist = LoadPromptInTxtFile(path);
-            prompt = savelist[0];
-            selectedStyles = savelist[1];
-            settings = savelist[2];
-            SetPromptFromBrowser(this, e);
-            SetSelectedStylesFromBrowser(this, e);
-            SetSettingsFromBrowser(this, e);
 
         }
         private void ToolStripMenuItemCopyPrompt_Click(object sender, EventArgs e)
         {
-            string path = System.IO.Path.GetDirectoryName(Application.ExecutablePath) + "\\Result\\" + listBoxPreset.SelectedItem + "\\" + listBoxFolderList.SelectedItem;
-            List<string> savelist = LoadPromptInTxtFile(path);
-            prompt = savelist[0];
-            SetPromptFromBrowser(this, e);
+            if (listBoxFolderList.SelectedItems.Count > 0)
+            {
+                string path = System.IO.Path.GetDirectoryName(Application.ExecutablePath) + "\\Result\\" + listBoxPreset.SelectedItem + "\\" + listBoxFolderList.SelectedItem;
+                List<string> savelist = LoadPromptInTxtFile(path);
+                prompt = savelist[0];
+                SetPromptFromBrowser(this, e);
+            }
         }
 
         private void ToolStripMenuItemCopyStyles_Click(object sender, EventArgs e)
         {
-            string path = System.IO.Path.GetDirectoryName(Application.ExecutablePath) + "\\Result\\" + listBoxPreset.SelectedItem + "\\" + listBoxFolderList.SelectedItem;
-            List<string> savelist = LoadPromptInTxtFile(path);
-            selectedStyles = savelist[1];
-            SetSelectedStylesFromBrowser(this, e);
+            if (listBoxFolderList.SelectedItems.Count > 0)
+            {
+                string path = System.IO.Path.GetDirectoryName(Application.ExecutablePath) + "\\Result\\" + listBoxPreset.SelectedItem + "\\" + listBoxFolderList.SelectedItem;
+                List<string> savelist = LoadPromptInTxtFile(path);
+                selectedStyles = savelist[1];
+                SetSelectedStylesFromBrowser(this, e);
+            }
         }
 
         private void ToolStripMenuItemCopySettings_Click(object sender, EventArgs e)
         {
-            string path = System.IO.Path.GetDirectoryName(Application.ExecutablePath) + "\\Result\\" + listBoxPreset.SelectedItem + "\\" + listBoxFolderList.SelectedItem;
-            List<string> savelist = LoadPromptInTxtFile(path);
-            settings = savelist[2];
-            SetSettingsFromBrowser(this, e);
+            if (listBoxFolderList.SelectedItems.Count > 0)
+            {
+                string path = System.IO.Path.GetDirectoryName(Application.ExecutablePath) + "\\Result\\" + listBoxPreset.SelectedItem + "\\" + listBoxFolderList.SelectedItem;
+                List<string> savelist = LoadPromptInTxtFile(path);
+                settings = savelist[2];
+                SetSettingsFromBrowser(this, e);
+            }
         }
 
 
@@ -699,15 +719,18 @@ namespace StableDiffusion
 
         private void toolStripMenuItemSetInitImage_Click(object sender, EventArgs e)
         {
+            if (listViewInitImages.Items.Count > 0 && listViewInitImages.SelectedItems.Count>0)
+            {
+                string outdir = System.IO.Path.GetDirectoryName(Application.ExecutablePath) + "\\InitImages";
+                System.IO.Directory.CreateDirectory(outdir);
+                outdir = outdir + "\\" + listBoxPreset.SelectedItem;
+                System.IO.Directory.CreateDirectory(outdir);
+                tabImage.Save(outdir + "\\" + listBoxFolderList.SelectedItem + "_" + Path.GetFileName(listViewInitImages.SelectedItems[0].Text));
+
+                NewInitImageAdded(this, e);
+            }
 
 
-            string outdir = System.IO.Path.GetDirectoryName(Application.ExecutablePath) + "\\InitImages";
-            System.IO.Directory.CreateDirectory(outdir);
-            outdir = outdir + "\\" + listBoxPreset.SelectedItem;
-            System.IO.Directory.CreateDirectory(outdir);
-            tabImage.Save(outdir + "\\" + listBoxFolderList.SelectedItem + "_" + Path.GetFileName(listViewInitImages.SelectedItems[0].Text));
-
-            NewInitImageAdded(this, e);
            
         }
 
@@ -737,15 +760,6 @@ namespace StableDiffusion
                 }
             }
         }
-
-
-
-
-
-
-
-
-
 
     }
 }
